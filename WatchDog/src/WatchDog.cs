@@ -5,8 +5,10 @@ using Microsoft.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WatchDog.src.Helpers;
 using WatchDog.src.Models;
 
 namespace WatchDog.src
@@ -30,17 +32,34 @@ namespace WatchDog.src
             var requestLog = await LogRequest(context);
             var responseLog = await LogResponse(context);
 
+            var timeSpent = responseLog.FinishTime.Subtract(requestLog.StartTime);
             //Build General WatchLog, Join from requestLog and responseLog
             var watchLog = new WatchLog
             {
-
+                IpAddress = context.Connection.RemoteIpAddress.ToString(),
+                ResponseStatus = responseLog.ResponseStatus,
+                QueryString = requestLog.QueryString,
+                Method = requestLog.Method,
+                Path = requestLog.Path,
+                Host = requestLog.Host,
+                RequestBody = requestLog.RequestBody,
+                ResponseBody = responseLog.ResponseBody,
+                TimeSpent = string.Format("{0:D1} hrs {1:D1} mins {2:D1} secs {3:D1} ms", timeSpent.Hours, timeSpent.Minutes, timeSpent.Seconds, timeSpent.Milliseconds),
+                RequestHeaders = requestLog.Headers,
+                ResponseHeaders = responseLog.Headers
             };
 
             //Save Watcg Log to Json
+            var db = JsonDBHelper.Load("FILEPATH");
+            db.Add(watchLog);
+
+            await _next.Invoke(context);
         }
 
         private async Task<RequestModel> LogRequest(HttpContext context)
         {
+            var startTime = DateTime.Now;
+            List<string> requestHeaders = new List<string>();
             context.Request.EnableBuffering();
             await using var requestStream = _recyclableMemoryStreamManager.GetStream();
             await context.Request.Body.CopyToAsync(requestStream);
@@ -58,7 +77,9 @@ namespace WatchDog.src
                 Host = context.Request.Host.ToString(),
                 Path = context.Request.Path.ToString(),
                 Method = context.Request.Method.ToString(),
-                QueryString = context.Request.QueryString.ToString()
+                QueryString = context.Request.QueryString.ToString(),
+                StartTime = startTime,
+                Headers = context.Request.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b),
             };
             context.Request.Body.Position = 0;
             return requestBodyDto;
@@ -85,6 +106,8 @@ namespace WatchDog.src
             {
                 ResponseBody = text,
                 ResponseStatus = context.Response.StatusCode,
+                FinishTime = DateTime.Now,
+                Headers = context.Response.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b),
             };
             await responseBody.CopyToAsync(originalBodyStream);
             return responseBodyDto;

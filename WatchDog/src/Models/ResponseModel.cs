@@ -8,6 +8,7 @@ namespace WatchDog.src.Models
     {
         public string ResponseBody { get; set; }
         public int ResponseStatus { get; set; }
-        public double TimeSpent { get; set; }
+        public string Headers { get; set; }
+        public DateTime FinishTime { get; set; }
     }
 }
