@@ -26,7 +26,7 @@ namespace WatchDog.src
             _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
         }
 
-        public async Task WatchAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             //Request handling comes here
             var requestLog = await LogRequest(context);
@@ -49,11 +49,9 @@ namespace WatchDog.src
                 ResponseHeaders = responseLog.Headers
             };
 
-            //Save Watcg Log to Json
+            // Save Watcg Log to Json
             var db = JsonDBHelper.Load("FILEPATH");
             db.Add(watchLog);
-
-            await _next.Invoke(context);
         }
 
         private async Task<RequestModel> LogRequest(HttpContext context)
@@ -63,17 +61,18 @@ namespace WatchDog.src
             context.Request.EnableBuffering();
             await using var requestStream = _recyclableMemoryStreamManager.GetStream();
             await context.Request.Body.CopyToAsync(requestStream);
+            var requestBody = ReadStreamInChunks(requestStream);
             _logger.LogInformation($"Http Request Information:{Environment.NewLine}" +
                                    $"Schema:{context.Request.Scheme} " +
                                    $"Host: {context.Request.Host} " +
                                    $"Method: {context.Request.Method}" +
                                    $"Path: {context.Request.Path} " +
                                    $"QueryString: {context.Request.QueryString} " +
-                                   $"Request Body: {ReadStreamInChunks(requestStream)}");
+                                   $"Request Body: {requestBody}");
             //Here we build the request body
             var requestBodyDto = new RequestModel()
             {
-                RequestBody = $"{ReadStreamInChunks(requestStream)}",
+                RequestBody = requestBody,
                 Host = context.Request.Host.ToString(),
                 Path = context.Request.Path.ToString(),
                 Method = context.Request.Method.ToString(),
