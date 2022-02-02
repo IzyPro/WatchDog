@@ -7,18 +7,18 @@ namespace WatchDog.src.Services
 {
     public interface ILoggerService
     {
-        void AddToLogs(Request log);
+        void AddToLogs(WatchLog log);
 
-        List<Request> GetAllLogs();
+        List<WatchLog> GetAllLogs();
     }
     public class LoggerService
     {
-        public void AddToLogs(Request log)
+        public void AddToLogs(WatchLog log)
         {
             LoggerStore.Logs.Add(log);
         }
 
-        public List<Request> GetAllLogs()
+        public List<WatchLog> GetAllLogs()
         {
             return LoggerStore.Logs;
         }
@@ -26,6 +26,6 @@ namespace WatchDog.src.Services
 
     public class LoggerStore
     {
-        public static List<Request> Logs = new List<Request>();
+        public static List<WatchLog> Logs = new List<WatchLog>();
     }
 }

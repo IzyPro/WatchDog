@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using WatchDog.src.Models;
 
 namespace WatchDog.src
 {
@@ -23,14 +24,22 @@ namespace WatchDog.src
             _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task WatchAsync(HttpContext context)
         {
             //Request handling comes here
-            await LogRequest(context);
-            await LogResponse(context);
+            var requestLog = await LogRequest(context);
+            var responseLog = await LogResponse(context);
+
+            //Build General WatchLog, Join from requestLog and responseLog
+            var watchLog = new WatchLog
+            {
+
+            };
+
+            //Save Watcg Log to Json
         }
 
-        private async Task LogRequest(HttpContext context)
+        private async Task<RequestModel> LogRequest(HttpContext context)
         {
             context.Request.EnableBuffering();
             await using var requestStream = _recyclableMemoryStreamManager.GetStream();
@@ -43,10 +52,19 @@ namespace WatchDog.src
                                    $"QueryString: {context.Request.QueryString} " +
                                    $"Request Body: {ReadStreamInChunks(requestStream)}");
             //Here we build the request body
+            var requestBodyDto = new RequestModel()
+            {
+                RequestBody = $"{ReadStreamInChunks(requestStream)}",
+                Host = context.Request.Host.ToString(),
+                Path = context.Request.Path.ToString(),
+                Method = context.Request.Method.ToString(),
+                QueryString = context.Request.QueryString.ToString()
+            };
             context.Request.Body.Position = 0;
+            return requestBodyDto;
         }
 
-        private async Task LogResponse(HttpContext context)
+        private async Task<ResponseModel> LogResponse(HttpContext context)
         {
             var originalBodyStream = context.Response.Body;
             await using var responseBody = _recyclableMemoryStreamManager.GetStream();
@@ -62,7 +80,14 @@ namespace WatchDog.src
                                    $"QueryString: {context.Request.QueryString} " +
                                    $"Response Body: {text}");
             //Here we build the response body
+
+            var responseBodyDto = new ResponseModel
+            {
+                ResponseBody = text,
+                ResponseStatus = context.Response.StatusCode,
+            };
             await responseBody.CopyToAsync(originalBodyStream);
+            return responseBodyDto;
         }
 
 
