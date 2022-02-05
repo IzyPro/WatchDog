@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -54,7 +56,16 @@ namespace WatchDog.src
 
             //Save Watcg Log to Json
             var db = JsonDBHelper.Load("watchlogs.json");
-            db.Add(watchLog);
+
+            //JsonDBHelper.Add(db,"", JObject.FromObject(watchLog));
+
+            using (StreamWriter file = File.CreateText("watchlogs.json"))
+            using (JsonTextWriter writer = new JsonTextWriter(file))
+            {
+                JObject.FromObject(watchLog).WriteTo(writer);
+            }
+
+            //db.Add(videogameRatings);
         }
 
         private async Task<RequestModel> LogRequest(HttpContext context)
