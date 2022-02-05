@@ -34,6 +34,7 @@ namespace WatchDog.src
 
             var timeSpent = responseLog.FinishTime.Subtract(requestLog.StartTime);
             //Build General WatchLog, Join from requestLog and responseLog
+
             var watchLog = new WatchLog
             {
                 IpAddress = context.Connection.RemoteIpAddress.ToString(),
@@ -49,8 +50,10 @@ namespace WatchDog.src
                 ResponseHeaders = responseLog.Headers
             };
 
-            // Save Watcg Log to Json
-            var db = JsonDBHelper.Load("FILEPATH");
+            Console.WriteLine("IP IS: " + watchLog.IpAddress);
+
+            //Save Watcg Log to Json
+            var db = JsonDBHelper.Load("watchlogs.json");
             db.Add(watchLog);
         }
 
@@ -58,18 +61,8 @@ namespace WatchDog.src
         {
             var startTime = DateTime.Now;
             List<string> requestHeaders = new List<string>();
-            context.Request.EnableBuffering();
-            await using var requestStream = _recyclableMemoryStreamManager.GetStream();
-            await context.Request.Body.CopyToAsync(requestStream);
-            var requestBody = ReadStreamInChunks(requestStream);
-            _logger.LogInformation($"Http Request Information:{Environment.NewLine}" +
-                                   $"Schema:{context.Request.Scheme} " +
-                                   $"Host: {context.Request.Host} " +
-                                   $"Method: {context.Request.Method}" +
-                                   $"Path: {context.Request.Path} " +
-                                   $"QueryString: {context.Request.QueryString} " +
-                                   $"Request Body: {requestBody}");
-            //Here we build the request body
+            var requestBody = string.Empty;
+
             var requestBodyDto = new RequestModel()
             {
                 RequestBody = requestBody,
@@ -80,36 +73,64 @@ namespace WatchDog.src
                 StartTime = startTime,
                 Headers = context.Request.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b),
             };
-            context.Request.Body.Position = 0;
+
+            if (context.Request.Method == "POST")
+            {
+                context.Request.EnableBuffering();
+                await using var requestStream = _recyclableMemoryStreamManager.GetStream();
+                await context.Request.Body.CopyToAsync(requestStream);
+                requestBody = ReadStreamInChunks(requestStream);
+
+                context.Request.Body.Position = 0;
+            }
+            
+            _logger.LogInformation($"Http Request Information:{Environment.NewLine}" +
+                                   $"Schema:{context.Request.Scheme} " +
+                                   $"Host: {context.Request.Host} " +
+                                   $"Method: {context.Request.Method}" +
+                                   $"Path: {context.Request.Path} " +
+                                   $"QueryString: {context.Request.QueryString} " +
+                                   $"Request Body: {requestBody}");
+
             return requestBodyDto;
         }
 
         private async Task<ResponseModel> LogResponse(HttpContext context)
         {
-            var originalBodyStream = context.Response.Body;
-            await using var responseBody = _recyclableMemoryStreamManager.GetStream();
-            context.Response.Body = responseBody;
-            await _next(context);
-            context.Response.Body.Seek(0, SeekOrigin.Begin);
-            var text = await new StreamReader(context.Response.Body).ReadToEndAsync();
-            context.Response.Body.Seek(0, SeekOrigin.Begin);
-            _logger.LogInformation($"Http Response Information:{Environment.NewLine}" +
-                                   $"Schema:{context.Request.Scheme} " +
-                                   $"Host: {context.Request.Host} " +
-                                   $"Path: {context.Request.Path} " +
-                                   $"QueryString: {context.Request.QueryString} " +
-                                   $"Response Body: {text}");
-            //Here we build the response body
-
-            var responseBodyDto = new ResponseModel
+            var responseBody = string.Empty;
+            using (var originalBodyStream = context.Response.Body)
             {
-                ResponseBody = text,
-                ResponseStatus = context.Response.StatusCode,
-                FinishTime = DateTime.Now,
-                Headers = context.Response.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b),
-            };
-            await responseBody.CopyToAsync(originalBodyStream);
-            return responseBodyDto;
+                try
+                {
+                    using (var originalResponseBody = _recyclableMemoryStreamManager.GetStream())
+                    {
+                        context.Response.Body = originalResponseBody;
+                        await _next(context);
+                        context.Response.Body.Seek(0, SeekOrigin.Begin);
+                        responseBody = await new StreamReader(context.Response.Body).ReadToEndAsync();
+                        context.Response.Body.Seek(0, SeekOrigin.Begin);
+                        _logger.LogInformation($"Http Response Information:{Environment.NewLine}" +
+                                               $"Schema:{context.Request.Scheme} " +
+                                               $"Host: {context.Request.Host} " +
+                                               $"Path: {context.Request.Path} " +
+                                               $"QueryString: {context.Request.QueryString} " +
+                                               $"Response Body: {responseBody}");
+                        var responseBodyDto = new ResponseModel
+                        {
+                            ResponseBody = responseBody,
+                            ResponseStatus = context.Response.StatusCode,
+                            FinishTime = DateTime.Now,
+                            Headers = context.Response.StatusCode != 200 || context.Response.StatusCode != 201 ? "" : context.Response.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b),
+                        };
+                        await originalResponseBody.CopyToAsync(originalBodyStream);
+                        return responseBodyDto;
+                    }
+                }
+                finally
+                {
+                    context.Response.Body = originalBodyStream;
+                }
+            }
         }
 
 

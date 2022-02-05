@@ -7,7 +7,9 @@
   <ItemGroup>
     <Folder Include="src\Interfaces\" />
 	<None Remove="src\WatchPage\index.html" />
-	<EmbeddedResource Include="src\WatchPage\index.html" />
+	<EmbeddedResource Include="src\WatchPage\index.html">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
   </ItemGroup>
 
 

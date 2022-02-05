@@ -37,7 +37,7 @@ namespace WatchDog
 
         public static IFileInfo GetFile()
         {
-            return Provider.GetFileInfo("WatchPage.index.html");
+            return Provider.GetFileInfo("src.WatchPage.index.html");
         }
     }
 }

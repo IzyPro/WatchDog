@@ -1,0 +1,11 @@
+{
+  "logs": [
+    {
+      "id": 1,
+      "firstname": "kelechi",
+      "lastname": "onyekwere",
+      "age": 19,
+      "verified": true
+    }
+  ]
+}
