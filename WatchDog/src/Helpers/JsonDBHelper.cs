@@ -20,10 +20,10 @@ namespace WatchDog.src.Helpers
 			{
 				if (!File.Exists(filePathLoaded))
 					File.Create(filePathLoaded);
-				jsonFile = File.ReadAllText(filePathLoaded);
-				jsonLocation = filePathLoaded;
-				return _dbObject = JObject.Parse(jsonFile);
-			}
+                jsonFile = File.ReadAllText(filePathLoaded);
+                jsonLocation = filePathLoaded;
+                return _dbObject = JObject.Parse(jsonFile);
+            }
 			catch (Exception ex)
 			{
 				throw new Exception(ex.Message.ToString());
