@@ -6,6 +6,7 @@ namespace WatchDog.src.Models
 {
     public class WatchLog
     {
+        public int Id { get; set; }
         public string ResponseBody { get; set; }
         public int ResponseStatus { get; set; }
         public string RequestBody { get; set; }
