@@ -53,18 +53,7 @@ namespace WatchDog.src
             };
 
             Console.WriteLine("IP IS: " + watchLog.IpAddress);
-
-            //Save Watcg Log to Json
-            var db = JsonDBHelper.Load("watchlogs.json");
-
-            //JsonDBHelper.Add(db,"", JObject.FromObject(watchLog));
-
-            using (StreamWriter file = File.CreateText("watchlogs.json"))
-            using (JsonTextWriter writer = new JsonTextWriter(file))
-            {
-                JObject.FromObject(watchLog).WriteTo(writer);
-            }
-
+            LiteDBHelper.Insert(watchLog);
             //db.Add(videogameRatings);
         }
 
