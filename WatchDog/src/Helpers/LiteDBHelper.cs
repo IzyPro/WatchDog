@@ -21,7 +21,7 @@ namespace WatchDog.src.Helpers
             return _db.FindById(id);
         }
 
-        public static bool Insert(WatchLog log)
+        public static int Insert(WatchLog log)
         {
             return _db.Insert(log);
         }
