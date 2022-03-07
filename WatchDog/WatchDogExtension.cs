@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 
@@ -24,6 +25,14 @@ namespace WatchDog
 
         public static IApplicationBuilder UseWatchDogPage(this IApplicationBuilder app)
         {
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(WatchDogExtension.GetFolder(), @"src\WatchPage")),
+
+                RequestPath = new PathString("/statics")
+            });
+
             return app.UseRouter(router => {
                 router.MapGet("watchdog", async context =>
                 {
@@ -38,6 +47,11 @@ namespace WatchDog
         public static IFileInfo GetFile()
         {
             return Provider.GetFileInfo("src.WatchPage.index.html");
+        }
+
+        public static string GetFolder()
+        {
+            return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         }
     }
 }

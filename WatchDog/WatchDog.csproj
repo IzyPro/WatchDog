@@ -6,8 +6,329 @@
 
   <ItemGroup>
     <Folder Include="src\Interfaces\" />
+	  <Folder Include="src\WatchPage\" />
+    <None Remove="src\WatchPage\css\main.css" />
+    <None Remove="src\WatchPage\css\util.css" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\css\font-awesome.css" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\css\font-awesome.min.css" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.eot" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.svg" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.ttf" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.woff" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.woff2" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\fonts\FontAwesome.otf" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\animated.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\bordered-pulled.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\core.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\fixed-width.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\font-awesome.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\icons.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\larger.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\list.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\mixins.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\path.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\rotated-flipped.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\screen-reader.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\stacked.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\less\variables.less" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\font-awesome.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_animated.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_bordered-pulled.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_core.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_fixed-width.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_icons.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_larger.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_list.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_mixins.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_path.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_rotated-flipped.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_screen-reader.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_stacked.scss" />
+    <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\scss\_variables.scss" />
+    <None Remove="src\WatchPage\fonts\Lato\Lato-Black.ttf" />
+    <None Remove="src\WatchPage\fonts\Lato\Lato-BlackItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\Lato\Lato-Bold.ttf" />
+    <None Remove="src\WatchPage\fonts\Lato\Lato-BoldItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\Lato\Lato-Hairline.ttf" />
+    <None Remove="src\WatchPage\fonts\Lato\Lato-HairlineItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\Lato\Lato-Italic.ttf" />
+    <None Remove="src\WatchPage\fonts\Lato\Lato-Light.ttf" />
+    <None Remove="src\WatchPage\fonts\Lato\Lato-LightItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\Lato\Lato-Regular.ttf" />
+    <None Remove="src\WatchPage\fonts\Lato\OFL.txt" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-Black.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-BlackItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-Bold.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-BoldItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-ExtraBold.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-ExtraBoldItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-ExtraLight.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-ExtraLightItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-Italic.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-Light.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-LightItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-Medium.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-MediumItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-Regular.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-SemiBold.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-SemiBoldItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-Thin.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\Montserrat-ThinItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\montserrat\OFL.txt" />
+    <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-Bold.ttf" />
+    <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-BoldItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-ExtraBold.ttf" />
+    <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-ExtraBoldItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-Italic.ttf" />
+    <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-Light.ttf" />
+    <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-LightItalic.ttf" />
+    <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-Regular.otf" />
+    <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-Regular.ttf" />
+    <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-SemiBold.ttf" />
+    <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-SemiBoldItalic.ttf" />
 	<None Remove="src\WatchPage\index.html" />
+	<None Remove="src\WatchPage\js\main.js" />
+	<EmbeddedResource Include="src\WatchPage\css\main.css">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\css\util.css">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\css\font-awesome.css">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\css\font-awesome.min.css">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.eot">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.svg">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.woff">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.woff2">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\fonts\FontAwesome.otf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\animated.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\bordered-pulled.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\core.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\fixed-width.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\font-awesome.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\icons.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\larger.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\list.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\mixins.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\path.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\rotated-flipped.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\screen-reader.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\stacked.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\less\variables.less">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\font-awesome.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_animated.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_bordered-pulled.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_core.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_fixed-width.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_icons.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_larger.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_list.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_mixins.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_path.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_rotated-flipped.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_screen-reader.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_stacked.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\scss\_variables.scss">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\Lato\Lato-Black.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\Lato\Lato-BlackItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\Lato\Lato-Bold.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\Lato\Lato-BoldItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\Lato\Lato-Hairline.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\Lato\Lato-HairlineItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\Lato\Lato-Italic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\Lato\Lato-Light.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\Lato\Lato-LightItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\Lato\Lato-Regular.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\Lato\OFL.txt">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-Black.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-BlackItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-Bold.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-BoldItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-ExtraBold.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-ExtraBoldItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-ExtraLight.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-ExtraLightItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-Italic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-Light.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-LightItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-Medium.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-MediumItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-Regular.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-SemiBold.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-SemiBoldItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-Thin.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\Montserrat-ThinItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\montserrat\OFL.txt">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\OpenSans\OpenSans-Bold.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\OpenSans\OpenSans-BoldItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\OpenSans\OpenSans-ExtraBold.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\OpenSans\OpenSans-ExtraBoldItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\OpenSans\OpenSans-Italic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\OpenSans\OpenSans-Light.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\OpenSans\OpenSans-LightItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\OpenSans\OpenSans-Regular.otf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\OpenSans\OpenSans-Regular.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\OpenSans\OpenSans-SemiBold.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\fonts\OpenSans\OpenSans-SemiBoldItalic.ttf">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\index.html">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\js\main.js">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</EmbeddedResource>
   </ItemGroup>
@@ -18,8 +339,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="3.1.22" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.22" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="3.1.22" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.22" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
