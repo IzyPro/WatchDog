@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WatchDog.src.Helpers;
+using WatchDog.src.Hubs;
 using WatchDog.src.Models;
 
 namespace WatchDog.src
@@ -49,12 +50,15 @@ namespace WatchDog.src
                 ResponseBody = responseLog.ResponseBody,
                 TimeSpent = string.Format("{0:D1} hrs {1:D1} mins {2:D1} secs {3:D1} ms", timeSpent.Hours, timeSpent.Minutes, timeSpent.Seconds, timeSpent.Milliseconds),
                 RequestHeaders = requestLog.Headers,
-                ResponseHeaders = responseLog.Headers
+                ResponseHeaders = responseLog.Headers,
+                StartTime = requestLog.StartTime,
+                EndTime = responseLog.FinishTime
             };
 
             Console.WriteLine("IP IS: " + watchLog.IpAddress);
             LiteDBHelper.Insert(watchLog);
-            //db.Add(videogameRatings);
+            //var hub = new LoggerHub();
+            //hub.OnChange();
         }
 
         private async Task<RequestModel> LogRequest(HttpContext context)
