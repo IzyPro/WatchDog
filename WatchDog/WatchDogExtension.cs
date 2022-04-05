@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using WatchDog.src.Controllers;
 using WatchDog.src.Hubs;
 
 namespace WatchDog
@@ -22,6 +23,7 @@ namespace WatchDog
         public static IServiceCollection AddWatchDogServices(this IServiceCollection services)
         {
             services.AddSignalR();
+            services.AddMvcCore().AddApplicationPart(typeof(WatchDogExtension).Assembly);
             return services;
         }
         public static IApplicationBuilder UseWatchDog(this IApplicationBuilder builder)

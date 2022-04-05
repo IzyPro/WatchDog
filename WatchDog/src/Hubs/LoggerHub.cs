@@ -16,9 +16,14 @@ namespace WatchDog.src.Hubs
         public async Task GetAllLogs()
         {
             var logs = LiteDBHelper.GetAll();
-            if(logs != null)
+            if (logs != null)
                 logs.OrderBy(x => x.StartTime);
-            await Clients.All.SendAsync("GetWatchLogs", logs).ConfigureAwait(false);
+            await Clients.All.SendAsync("GetAllLogs", logs).ConfigureAwait(false);
+        }
+
+        public async Task Send(string message1, string Root)
+        {
+            await Clients.All.SendAsync("Send", message1);
         }
 
         public async void OnChange()
