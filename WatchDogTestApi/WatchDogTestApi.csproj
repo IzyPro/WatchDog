@@ -8,5 +8,9 @@
     <ProjectReference Include="..\WatchDog\WatchDog.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
 
 </Project>

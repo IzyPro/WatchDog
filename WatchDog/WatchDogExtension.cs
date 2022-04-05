@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using WatchDog.src.Controllers;
+using WatchDog.src.Hubs;
 
 namespace WatchDog
 {
@@ -17,7 +20,12 @@ namespace WatchDog
         "WatchDog"
         );
 
-
+        public static IServiceCollection AddWatchDogServices(this IServiceCollection services)
+        {
+            services.AddSignalR();
+            services.AddMvcCore().AddApplicationPart(typeof(WatchDogExtension).Assembly);
+            return services;
+        }
         public static IApplicationBuilder UseWatchDog(this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<src.WatchDog>();
@@ -37,6 +45,11 @@ namespace WatchDog
                 RequestPath = new PathString("/statics")
             });
 
+            app.UseSignalR(route =>
+            {
+                route.MapHub<LoggerHub>("/logger");
+            });
+
             return app.UseRouter(router => {
                 router.MapGet("watchdog", async context =>
                 {
@@ -51,6 +64,7 @@ namespace WatchDog
         public static IFileInfo GetFile()
         {
             return Provider.GetFileInfo("src.WatchPage.index.html");
+        
         }
 
         public static string GetFolder()

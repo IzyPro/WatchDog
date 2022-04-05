@@ -18,6 +18,8 @@ namespace WatchDog.src.Models
         public string Host { get; set; }
         public string IpAddress { get; set; }
         public string TimeSpent { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
     }
 }
         

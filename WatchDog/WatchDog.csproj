@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="src\Interfaces\" />
-	  <Folder Include="src\WatchPage\" />
     <None Remove="src\WatchPage\css\main.css" />
     <None Remove="src\WatchPage\css\util.css" />
     <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\css\font-awesome.css" />
@@ -88,6 +87,24 @@
     <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-SemiBoldItalic.ttf" />
 	<None Remove="src\WatchPage\index.html" />
 	<None Remove="src\WatchPage\js\main.js" />
+	<None Remove="src\WatchPage\omo.html" />
+	<None Remove="src\WatchPage\signalr\signalr.js" />
+	<None Remove="src\WatchPage\signalr\signalr.min.js" />
+	<None Remove="src\WatchPage\vendor\bootstrap\css\bootstrap.min.css" />
+	<None Remove="src\WatchPage\vendor\bootstrap\js\bootstrap.min.js" />
+	<None Remove="src\WatchPage\vendor\bootstrap\js\popper.js" />
+	<None Remove="src\WatchPage\vendor\bootstrap\js\popper.min.js" />
+	<None Remove="src\WatchPage\vendor\jquery\jquery-3.2.1.min.js" />
+	<EmbeddedResource Include="src\WatchPage\signalr\signalr.js">
+	  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\signalr\signalr.min.js">
+	  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\css\main.css">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</EmbeddedResource>
@@ -331,6 +348,21 @@
 	<EmbeddedResource Include="src\WatchPage\js\main.js">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\vendor\bootstrap\css\bootstrap.min.css">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\vendor\bootstrap\js\bootstrap.min.js">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\vendor\bootstrap\js\popper.js">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\vendor\bootstrap\js\popper.min.js">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\vendor\jquery\jquery-3.2.1.min.js">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
   </ItemGroup>
 
 
@@ -338,7 +370,10 @@
     <PackageReference Include="LiteDB" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="3.1.22" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.22" />
