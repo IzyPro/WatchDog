@@ -22,6 +22,10 @@ namespace WatchDog
         {
             return builder.UseMiddleware<src.WatchDog>();
         }
+        public static IApplicationBuilder UseWatchDogExceptionLogger(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<src.WatchDogExceptionLogger>();
+        }
 
         public static IApplicationBuilder UseWatchDogPage(this IApplicationBuilder app)
         {

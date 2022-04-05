@@ -40,6 +40,7 @@ namespace WatchDogTestApi
             app.UseHttpsRedirection();
 
             app.UseWatchDog();
+            app.UseWatchDogExceptionLogger();
             app.UseWatchDogPage();
 
             app.UseRouting();
