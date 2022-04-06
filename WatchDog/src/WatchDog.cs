@@ -31,7 +31,7 @@ namespace WatchDog.src
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (!context.Request.Path.ToString().Contains("watchdog") || !context.Request.Path.ToString().Contains("statics") || !context.Request.Path.ToString().Contains("favicon"))
+            if (!context.Request.Path.ToString().Contains("watchdog") && !context.Request.Path.ToString().Contains("statics") && !context.Request.Path.ToString().Contains("favicon") && !context.Request.Path.ToString().Contains("logger"))
             {
                 //Request handling comes here
                 var requestLog = await LogRequest(context);
