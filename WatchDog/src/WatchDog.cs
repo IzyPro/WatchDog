@@ -56,7 +56,7 @@ namespace WatchDog.src
             };
 
             Console.WriteLine("IP IS: " + watchLog.IpAddress);
-            LiteDBHelper.Insert(watchLog);
+            LiteDBHelper.InsertWatchLog(watchLog);
             //var hub = new LoggerHub();
             //hub.OnChange();
         }

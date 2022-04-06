@@ -85,7 +85,7 @@
     <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-Regular.ttf" />
     <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-SemiBold.ttf" />
     <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-SemiBoldItalic.ttf" />
-	<None Remove="src\WatchPage\index.html" />
+    <None Remove="src\WatchPage\index.html" />
 	<None Remove="src\WatchPage\js\main.js" />
 	<None Remove="src\WatchPage\omo.html" />
 	<None Remove="src\WatchPage\signalr\signalr.js" />
@@ -373,6 +373,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="3.1.22" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.22" />

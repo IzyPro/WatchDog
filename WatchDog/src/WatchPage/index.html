@@ -304,66 +304,80 @@
 	<script src="statics/vendor/bootstrap/js/bootstrap.min.js"></script>
 	<script src="statics/signalr/signalr.js"></script>
 
+
 	<script>
-        console.log("...START...");
+        $(document).ready(function () {
+			$.ajax({
+				type: "GET",
+                url: "/watchpage",
+                context: document.body,
+                success: function (data) {
+                    alert(data);
+                }
+            });
+        });
+	</script>
+
+	<!--<script>
+		console.log("...START...");
 		$.ajax({
 			type: "GET",
-            url: '/WebPage/GetAllLogs',
+			url: '/WebPage/GetAllLogs',
 			//data: { id: object_id },
 			success: function (response) {
 				console.log(response);
 			}
 		});
 
-        $.get('/WebPage/GetAllLogs', null, function (data) {
-            console.log(data);
-        });
-        console.log("...STOP...");
+		$.get('/WebPage/GetAllLogs', null, function (data) {
+			console.log(data);
+		});
+		console.log("...STOP...");
 
-        //Creates a connection to the server hub
-        var connection = new signalR.HubConnectionBuilder()
-            .withUrl("/LoggerHub")
-            .configureLogging(signalR.LogLevel.Information)
-            .withAutomaticReconnect()
+		//Creates a connection to the server hub
+		var connection = new signalR.HubConnectionBuilder()
+			.withUrl("/LoggerHub")
+			.configureLogging(signalR.LogLevel.Information)
+			.withAutomaticReconnect()
 			.build();
 
 
-        async function start() {
-            try {
-                await connection.start();
+		async function start() {
+			try {
+				await connection.start();
 				console.log("SignalR Connected.");
 
-    //            connection.stream("GetAllLogs")
-    //                .subscribe({
-    //                    next: (item) => {
-    //                        console.log(item);
-    //                    },
-    //                    complete: () => {
-    //                        console.log("End of Stream");
-    //                    },
+	//            connection.stream("GetAllLogs")
+	//                .subscribe({
+	//                    next: (item) => {
+	//                        console.log(item);
+	//                    },
+	//                    complete: () => {
+	//                        console.log("End of Stream");
+	//                    },
 				//		error: (err) => {
 				//			console.log(err);
-    //                    },
+	//                    },
 				//});
 
 				//connection.invoke('Send', "hey");
-                connection.on("getAllLogs", function (logs) {
+				connection.on("getAllLogs", function (logs) {
 					console.log(logs);
 					console.log("omo");
 				});
-            } catch (err) {
-                console.log(err);
-                setTimeout(start, 5000);
-            }
-        };
+			} catch (err) {
+				console.log(err);
+				setTimeout(start, 5000);
+			}
+		};
 
-        connection.onclose(async () => {
-            await start();
-        });
+		connection.onclose(async () => {
+			await start();
+		});
 
-        // Start the connection.
-        start();
-	</script>
+		// Start the connection.
+		start();
+	</script>-->
 	<!--===============================================================================================-->
 	<script src="statics/js/main.js"></script>
 

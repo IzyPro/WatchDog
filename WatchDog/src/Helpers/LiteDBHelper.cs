@@ -9,31 +9,58 @@ namespace WatchDog.src.Helpers
     public static class LiteDBHelper
     {
         public static LiteDatabase db = new LiteDatabase("watchlogs.db");
-        static ILiteCollection<WatchLog> _db = db.GetCollection<WatchLog>("Logs");
+        static ILiteCollection<WatchLog> _watchLogs = db.GetCollection<WatchLog>("WatchLogs");
+        static ILiteCollection<WatchExceptionLog> _watchExLogs = db.GetCollection<WatchExceptionLog>("WatchExceptionLogs");
 
-        public static IEnumerable<WatchLog> GetAll()
+        public static IEnumerable<WatchLog> GetAllWatchLogs()
         {
-            return _db.FindAll();
+            return _watchLogs.FindAll();
         }
 
-        public static WatchLog GetById(int id)
+        public static WatchLog GetWatchLogById(int id)
         {
-            return _db.FindById(id);
+            return _watchLogs.FindById(id);
         }
 
-        public static int Insert(WatchLog log)
+        public static int InsertWatchLog(WatchLog log)
         {
-            return _db.Insert(log);
+            return _watchLogs.Insert(log);
         }
 
-        public static bool Update(WatchLog log)
+        public static bool UpdateWatchLog(WatchLog log)
         {
-            return _db.Update(log);
+            return _watchLogs.Update(log);
         }
 
-        public static bool Delete(int id)
+        public static bool DeleteWatchLog(int id)
         {
-            return _db.Delete(id);
+            return _watchLogs.Delete(id);
+        }
+
+        //Watch Exception Operations
+        public static IEnumerable<WatchExceptionLog> GetAllWatchExceptionLogs()
+        {
+            return _watchExLogs.FindAll();
+        }
+
+        public static WatchExceptionLog GetWatchExceptionLogById(int id)
+        {
+            return _watchExLogs.FindById(id);
+        }
+
+        public static int InsertWatchExceptionLog(WatchExceptionLog log)
+        {
+            return _watchExLogs.Insert(log);
+        }
+
+        public static bool UpdateWatchExceptionLog(WatchExceptionLog log)
+        {
+            return _watchExLogs.Update(log);
+        }
+
+        public static bool DeleteWatchExceptionLog(int id)
+        {
+            return _watchExLogs.Delete(id);
         }
     }
 }
