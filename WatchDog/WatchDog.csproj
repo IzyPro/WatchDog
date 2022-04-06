@@ -85,7 +85,7 @@
     <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-Regular.ttf" />
     <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-SemiBold.ttf" />
     <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-SemiBoldItalic.ttf" />
-	<None Remove="src\WatchPage\index.html" />
+    <None Remove="src\WatchPage\index.html" />
 	<None Remove="src\WatchPage\js\main.js" />
 	<None Remove="src\WatchPage\omo.html" />
 	<None Remove="src\WatchPage\signalr\signalr.js" />

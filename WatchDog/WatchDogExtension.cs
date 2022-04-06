@@ -23,7 +23,10 @@ namespace WatchDog
         public static IServiceCollection AddWatchDogServices(this IServiceCollection services)
         {
             services.AddSignalR();
-            services.AddMvcCore().AddApplicationPart(typeof(WatchDogExtension).Assembly);
+            services.AddMvcCore(x =>
+            {
+                x.EnableEndpointRouting = false;
+            }).AddApplicationPart(typeof(WatchDogExtension).Assembly);
             return services;
         }
         public static IApplicationBuilder UseWatchDog(this IApplicationBuilder builder)
@@ -50,12 +53,23 @@ namespace WatchDog
                 route.MapHub<LoggerHub>("/logger");
             });
 
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "watchpage",
+                    template: "watchpage",
+                    defaults: new { controller = "WatchPage", action = "Index" });
+            });
+
             return app.UseRouter(router => {
+
                 router.MapGet("watchdog", async context =>
                 {
                     context.Response.ContentType = "text/html";
                     await context.Response.SendFileAsync(WatchDogExtension.GetFile());
+                    
                 });
+
             });
         }
 

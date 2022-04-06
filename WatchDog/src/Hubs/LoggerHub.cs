@@ -36,10 +36,5 @@ namespace WatchDog.src.Hubs
         //    //}
         //}
 
-        public async Task GetLogs()
-        {
-            var logs = LiteDBHelper.GetAll();
-            await Clients.All.SendAsync("getLogs", logs);
-        }
     }
 }

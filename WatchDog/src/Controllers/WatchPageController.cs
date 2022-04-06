@@ -8,17 +8,14 @@ using WatchDog.src.Models;
 
 namespace WatchDog.src.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
     public class WatchPageController : Controller
     {
-        [HttpGet]
-        public IEnumerable<WatchLog> GetAllLogs()
+        public JsonResult Index()
         {
-            var logs = LiteDBHelper.GetAll();
+            var logs = LiteDBHelper.GetAllWatchLogs();
             if (logs != null)
                 logs.OrderBy(x => x.StartTime);
-            return logs;
+            return Json(logs);
         }
     }
 }

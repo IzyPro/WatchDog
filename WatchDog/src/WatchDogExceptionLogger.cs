@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using WatchDog.src.Helpers;
+using WatchDog.src.Models;
 
 namespace WatchDog.src
 {
@@ -33,6 +35,15 @@ namespace WatchDog.src
         public async Task LogException(Exception ex)
         {
             Debug.WriteLine("The following exception is logged: " + ex.Message);
+            var watchExceptionLog = new WatchExceptionLog();
+            watchExceptionLog.EncounteredAt = DateTime.Now;
+            watchExceptionLog.Message = ex.Message;
+            watchExceptionLog.StackTrace = ex.StackTrace;
+            watchExceptionLog.Source = ex.Source;
+
+
+            //Insert
+            LiteDBHelper.InsertWatchExceptionLog(watchExceptionLog);
         }
     }
 }
