@@ -13,12 +13,12 @@ namespace WatchDog.src.Controllers
     public class WatchPageController : Controller
     {
         [HttpGet]
-        public IEnumerable<WatchLog> GetAllLogs()
+        public IActionResult GetAllLogs()
         {
             var logs = LiteDBHelper.GetAll();
             if (logs != null)
                 logs.OrderBy(x => x.StartTime);
-            return logs;
+            return Ok(logs);
         }
     }
 }

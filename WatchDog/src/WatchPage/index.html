@@ -330,8 +330,13 @@
 
         async function start() {
             try {
-                await connection.start();
-				console.log("SignalR Connected.");
+                this.connection.on("getAllLogs", (logs) => {
+                    console.log(logs);
+                    console.log("omo");
+                });
+                await connection.start().then(() => console.log('Connection started'))
+                    .catch(err => console.log('Error while starting connection: ' + err));
+                //console.log("SignalR Connected.");
 
     //            connection.stream("GetAllLogs")
     //                .subscribe({
@@ -347,10 +352,6 @@
 				//});
 
 				//connection.invoke('Send', "hey");
-                connection.on("getAllLogs", function (logs) {
-					console.log(logs);
-					console.log("omo");
-				});
             } catch (err) {
                 console.log(err);
                 setTimeout(start, 5000);
