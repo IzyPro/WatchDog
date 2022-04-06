@@ -31,32 +31,39 @@ namespace WatchDog.src
 
         public async Task InvokeAsync(HttpContext context)
         {
-            //Request handling comes here
-            var requestLog = await LogRequest(context);
-            var responseLog = await LogResponse(context);
-
-            var timeSpent = responseLog.FinishTime.Subtract(requestLog.StartTime);
-            //Build General WatchLog, Join from requestLog and responseLog
-
-            var watchLog = new WatchLog
+            if (!context.Request.Path.ToString().Contains("watchdog") || !context.Request.Path.ToString().Contains("statics") || !context.Request.Path.ToString().Contains("favicon"))
             {
-                IpAddress = context.Connection.RemoteIpAddress.ToString(),
-                ResponseStatus = responseLog.ResponseStatus,
-                QueryString = requestLog.QueryString,
-                Method = requestLog.Method,
-                Path = requestLog.Path,
-                Host = requestLog.Host,
-                RequestBody = requestLog.RequestBody,
-                ResponseBody = responseLog.ResponseBody,
-                TimeSpent = string.Format("{0:D1} hrs {1:D1} mins {2:D1} secs {3:D1} ms", timeSpent.Hours, timeSpent.Minutes, timeSpent.Seconds, timeSpent.Milliseconds),
-                RequestHeaders = requestLog.Headers,
-                ResponseHeaders = responseLog.Headers,
-                StartTime = requestLog.StartTime,
-                EndTime = responseLog.FinishTime
-            };
+                //Request handling comes here
+                var requestLog = await LogRequest(context);
+                var responseLog = await LogResponse(context);
 
-            Console.WriteLine("IP IS: " + watchLog.IpAddress);
-            LiteDBHelper.InsertWatchLog(watchLog);
+                var timeSpent = responseLog.FinishTime.Subtract(requestLog.StartTime);
+                //Build General WatchLog, Join from requestLog and responseLog
+
+                var watchLog = new WatchLog
+                {
+                    IpAddress = context.Connection.RemoteIpAddress.ToString(),
+                    ResponseStatus = responseLog.ResponseStatus,
+                    QueryString = requestLog.QueryString,
+                    Method = requestLog.Method,
+                    Path = requestLog.Path,
+                    Host = requestLog.Host,
+                    RequestBody = requestLog.RequestBody,
+                    ResponseBody = responseLog.ResponseBody,
+                    TimeSpent = string.Format("{0:D1} hrs {1:D1} mins {2:D1} secs {3:D1} ms", timeSpent.Hours, timeSpent.Minutes, timeSpent.Seconds, timeSpent.Milliseconds),
+                    RequestHeaders = requestLog.Headers,
+                    ResponseHeaders = responseLog.Headers,
+                    StartTime = requestLog.StartTime,
+                    EndTime = responseLog.FinishTime
+                };
+
+                Console.WriteLine("IP IS: " + watchLog.IpAddress);
+                LiteDBHelper.InsertWatchLog(watchLog);
+            }
+            else
+            {
+                await _next.Invoke(context);
+            }
             //var hub = new LoggerHub();
             //hub.OnChange();
         }
@@ -87,7 +94,7 @@ namespace WatchDog.src
 
                 context.Request.Body.Position = 0;
             }
-            
+
             _logger.LogInformation($"Http Request Information:{Environment.NewLine}" +
                                    $"Schema:{context.Request.Scheme} " +
                                    $"Host: {context.Request.Host} " +

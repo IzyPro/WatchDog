@@ -16,114 +16,51 @@
 	<!--===============================================================================================-->
 </head>
 <body>
-	<!--<div class="container table-responsive">
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col">#</th>
-					<th scope="col">Heading</th>
-					<th scope="col">Heading</th>
-					<th scope="col">Heading</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="accordion-toggle collapsed" id="accordion1" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
-					<td class="expand-button"></td>
-					<td>Cell</td>
-					<td>Cell</td>
-					<td>Cell</td>
-
-				</tr>
-				<tr class="hide-table-padding">
-					<td></td>
-					<td colspan="3">
-						<div id="collapseOne" class="collapse in p-3">
-							<div class="row">
-								<div class="col-2">label</div>
-								<div class="col-6">value 1</div>
-							</div>
-							<div class="row">
-								<div class="col-2">label</div>
-								<div class="col-6">value 2</div>
-							</div>
-							<div class="row">
-								<div class="col-2">label</div>
-								<div class="col-6">value 3</div>
-							</div>
-							<div class="row">
-								<div class="col-2">label</div>
-								<div class="col-6">value 4</div>
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr class="accordion-toggle collapsed" id="accordion2" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-					<td class="expand-button"></td>
-					<td>Cell</td>
-					<td>Cell</td>
-					<td>Cell</td>
-
-				</tr>
-				<tr class="hide-table-padding">
-					<td></td>
-					<td colspan="4">
-						<div id="collapseTwo" class="collapse in p-3">
-							<div class="row">
-								<div class="col-2">label</div>
-								<div class="col-6">value</div>
-							</div>
-							<div class="row">
-								<div class="col-2">label</div>
-								<div class="col-6">value</div>
-							</div>
-							<div class="row">
-								<div class="col-2">label</div>
-								<div class="col-6">value</div>
-							</div>
-							<div class="row">
-								<div class="col-2">label</div>
-								<div class="col-6">value</div>
-							</div>
-						</div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>-->
-
-	<div class="table-responsive">
-		<table class="table table-hover table-dark table-bordered">
-			<thead class="table-dark">
-				<tr>
-					<th scope="col">TYPE</th>
-					<th scope="col">PATH</th>
-					<th scope="col">STATUS</th>
-					<th scope="col">DURATION</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<th scope="row">1</th>
-					<td>Mark</td>
-					<td>Otto</td>
-					<td>@mdo</td>
-				</tr>
-				<tr>
-					<th scope="row">2</th>
-					<td>Jacob</td>
-					<td>Thornton</td>
-					<td>@fat</td>
-				</tr>
-				<tr>
-					<th scope="row">3</th>
-					<td>Larry the Bird</td>
-					<td>Thornton</td>
-					<td>@twitter</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-4">
+					<h2 class="heading-section">WatchDog</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="table-wrap">
+						<table class="table myaccordion table-hover" id="accordion">
+							<thead>
+								<tr>
+									<!--<th>#</th>-->
+									<th scope="col">TYPE</th>
+									<th scope="col">PATH</th>
+									<th scope="col">STATUS</th>
+									<th scope="col">DURATION</th>
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody id="tableBody">
+								
+								<!--<tr data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" class="collapsed">
+									<th scope="row">4</th>
+									<td>Laptop Technology AS2020</td>
+									<td>$200.00</td>
+									<td>2</td>
+									<td>$400.00</td>
+									<td>
+										<i class="fa" aria-hidden="false"></i>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="6" id="collapseFour" class="collapse acc" data-parent="#accordion">
+										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro iste, facere sunt sequi nostrum ipsa, amet doloremque magnam reiciendis tempore sapiente. Necessitatibus recusandae harum nam sit perferendis quia inventore natus.</p>
+									</td>
+								</tr>-->
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
 	<!--===============================================================================================-->
 	<script src="statics/vendor/jquery/jquery-3.2.1.min.js"></script>
@@ -140,6 +77,16 @@
 				context: document.body,
 				success: function (data) {
 					console.log(data);
+                    for (var i = 0; i < data.length; i++) {
+                        $('#tableBody').append("<tr data-toggle='collapse' data-target='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
+                            "<td>" + data[i].method + "</td><td>" + data[i].path + "</td><td>" + data[i].responseStatus + "</td><td>" + data[i].timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>" +
+                            "<tr><td id='collapse" + i + "' class='collapse acc' data-parent='#accordion'><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro iste, facere sunt sequi nostrum ipsa, amet doloremque magnam reiciendis tempore sapiente. Necessitatibus recusandae harum nam sit perferendis quia inventore natus.</p></td></tr>");
+
+                        //$('#tableBody').append("<tr data-toggle='collapse' data-target='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
+                        //    "<td>" + data[i].method + "</td><td>" + data[i].path + "</td><td>" + data[i].responseStatus + "</td><td>" + data[i].timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>" +
+                        //    "<tr id='collapse" + i + "' class='collapse acc' data-parent='#accordion'><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro iste, facere sunt sequi nostrum ipsa, amet doloremque magnam reiciendis tempore sapiente. Necessitatibus recusandae harum nam sit perferendis quia inventore natus.</p></tr>");
+
+                    }
 				}
 			});
 		});
