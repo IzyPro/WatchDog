@@ -9,7 +9,9 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using WatchDog.src.Controllers;
+using WatchDog.src.Helpers;
 using WatchDog.src.Hubs;
+using WatchDog.src.Interfaces;
 
 namespace WatchDog
 {
@@ -27,6 +29,7 @@ namespace WatchDog
             {
                 x.EnableEndpointRouting = false;
             }).AddApplicationPart(typeof(WatchDogExtension).Assembly);
+            services.AddTransient<IBroadcastHelper, BroadcastHelper>();
             return services;
         }
         public static IApplicationBuilder UseWatchDog(this IApplicationBuilder builder)

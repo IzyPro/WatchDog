@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IO;
 using Newtonsoft.Json;
@@ -12,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WatchDog.src.Helpers;
 using WatchDog.src.Hubs;
+using WatchDog.src.Interfaces;
 using WatchDog.src.Models;
 
 namespace WatchDog.src
@@ -21,17 +24,24 @@ namespace WatchDog.src
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
         private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
+        private readonly IBroadcastHelper _broadcastHelper;
 
-        public WatchDog(RequestDelegate next, ILoggerFactory loggerFactory)
+        public WatchDog(RequestDelegate next, ILoggerFactory loggerFactory, IHubContext<LoggerHub> hubContext, IBroadcastHelper broadcastHelper)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<WatchDog>();
             _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
+            _broadcastHelper = broadcastHelper;
+
+
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (!context.Request.Path.ToString().Contains("watchdog") && !context.Request.Path.ToString().Contains("statics") && !context.Request.Path.ToString().Contains("favicon") && !context.Request.Path.ToString().Contains("logger"))
+
+            var watchLog = new WatchLog();
+
+            if (!context.Request.Path.ToString().Contains("watchpage") && !context.Request.Path.ToString().Contains("watchdog") && !context.Request.Path.ToString().Contains("statics") && !context.Request.Path.ToString().Contains("favicon") && !context.Request.Path.ToString().Contains("logger"))
             {
                 //Request handling comes here
                 var requestLog = await LogRequest(context);
@@ -40,7 +50,7 @@ namespace WatchDog.src
                 var timeSpent = responseLog.FinishTime.Subtract(requestLog.StartTime);
                 //Build General WatchLog, Join from requestLog and responseLog
 
-                var watchLog = new WatchLog
+                watchLog = new WatchLog
                 {
                     IpAddress = context.Connection.RemoteIpAddress.ToString(),
                     ResponseStatus = responseLog.ResponseStatus,
@@ -59,13 +69,15 @@ namespace WatchDog.src
 
                 Console.WriteLine("IP IS: " + watchLog.IpAddress);
                 LiteDBHelper.InsertWatchLog(watchLog);
+                await _broadcastHelper.BroadcastLog(watchLog);
+
+
             }
             else
             {
                 await _next.Invoke(context);
             }
-            //var hub = new LoggerHub();
-            //hub.OnChange();
+            
         }
 
         private async Task<RequestModel> LogRequest(HttpContext context)
