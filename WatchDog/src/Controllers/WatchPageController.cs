@@ -14,7 +14,7 @@ namespace WatchDog.src.Controllers
         {
             var logs = LiteDBHelper.GetAllWatchLogs();
             if (logs != null)
-                logs.OrderBy(x => x.StartTime);
+                logs = logs.OrderByDescending(x => x.StartTime);
             return Json(logs);
         }
     }
