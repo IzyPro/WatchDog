@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="src\Interfaces\" />
     <None Remove="src\WatchPage\css\main.css" />
     <None Remove="src\WatchPage\css\util.css" />
     <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\css\font-awesome.css" />
