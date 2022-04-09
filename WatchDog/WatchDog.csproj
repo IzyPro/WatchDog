@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="src\WatchPage\css\bootstrap.min.css" />
+    <None Remove="src\WatchPage\css\bootstrap.min.css.map" />
     <None Remove="src\WatchPage\css\main.css" />
     <None Remove="src\WatchPage\css\util.css" />
     <None Remove="src\WatchPage\fonts\font-awesome-4.7.0\css\font-awesome.css" />
@@ -94,6 +96,12 @@
 	<None Remove="src\WatchPage\vendor\bootstrap\js\popper.js" />
 	<None Remove="src\WatchPage\vendor\bootstrap\js\popper.min.js" />
 	<None Remove="src\WatchPage\vendor\jquery\jquery-3.2.1.min.js" />
+	<EmbeddedResource Include="src\WatchPage\css\bootstrap.min.css">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\css\bootstrap.min.css.map">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\signalr\signalr.js">
 	  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 	  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -105,10 +113,10 @@
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\css\main.css">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\css\util.css">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\fonts\font-awesome-4.7.0\css\font-awesome.css">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -348,16 +356,16 @@
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\vendor\bootstrap\css\bootstrap.min.css">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\vendor\bootstrap\js\bootstrap.min.js">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\vendor\bootstrap\js\popper.js">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\vendor\bootstrap\js\popper.min.js">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\vendor\jquery\jquery-3.2.1.min.js">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -380,6 +388,49 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.22" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-grid.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-grid.css.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-grid.min.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-grid.min.css.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-reboot.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-reboot.css.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-reboot.min.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-reboot.min.css.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap.css.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap.min.css.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="src\WatchPage\vendor\bootstrap\js\bootstrap.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="src\WatchPage\vendor\bootstrap\js\tooltip.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

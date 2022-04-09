@@ -46,21 +46,21 @@ namespace WatchDog
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
-                    Path.Combine(WatchDogExtension.GetFolder(), @"src\WatchPage")),
+                    Path.Combine(WatchDogExtension.GetFolder(), @$"src{Path.DirectorySeparatorChar}WatchPage")),
 
-                RequestPath = new PathString("/statics")
+                RequestPath = new PathString("/WTCHDGstatics")
             });
 
             app.UseSignalR(route =>
             {
-                route.MapHub<LoggerHub>("/logger");
+                route.MapHub<LoggerHub>("/wtchdlogger");
             });
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "watchpage",
-                    template: "watchpage",
+                    name: "WTCHDwatchpage",
+                    template: "WTCHDwatchpage",
                     defaults: new { controller = "WatchPage", action = "Index" });
             });
 
