@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -12,6 +13,7 @@ using WatchDog.src.Controllers;
 using WatchDog.src.Helpers;
 using WatchDog.src.Hubs;
 using WatchDog.src.Interfaces;
+using WatchDog.src.Models;
 
 namespace WatchDog
 {
@@ -32,21 +34,16 @@ namespace WatchDog
             services.AddTransient<IBroadcastHelper, BroadcastHelper>();
             return services;
         }
-        public static IApplicationBuilder UseWatchDog(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseWatchDog(this IApplicationBuilder app, Action<WatchDogAuthModel> configureOptions)
         {
-            return builder.UseMiddleware<src.WatchDog>();
-        }
-        public static IApplicationBuilder UseWatchDogExceptionLogger(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<src.WatchDogExceptionLogger>();
-        }
+            var options = new WatchDogAuthModel();
+            configureOptions(options);
 
-        public static IApplicationBuilder UseWatchDogPage(this IApplicationBuilder app)
-        {
+
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
-                    Path.Combine(WatchDogExtension.GetFolder(), @$"src{Path.DirectorySeparatorChar}WatchPage")),
+                   Path.Combine(WatchDogExtension.GetFolder(), @$"src{Path.DirectorySeparatorChar}WatchPage")),
 
                 RequestPath = new PathString("/WTCHDGstatics")
             });
@@ -59,25 +56,41 @@ namespace WatchDog
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "WTCHDwatchpage",
-                    template: "WTCHDwatchpage",
-                    defaults: new { controller = "WatchPage", action = "Index" });
+                     name: "WTCHDwatchpage",
+                     template: "WTCHDwatchpage",
+                     defaults: new { controller = "WatchPage", action = "Index" });
+
+                routes.MapRoute(
+                     name: "WTCHDwatchpageauth",
+                     template: "WTCHDwatchpageauth",
+                     defaults: new { controller = "WatchPageAuth", action = "Index" });
+
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            return app.UseRouter(router => {
+
+            app.UseRouter(router => {
 
                 router.MapGet("watchdog", async context =>
                 {
                     context.Response.ContentType = "text/html";
                     await context.Response.SendFileAsync(WatchDogExtension.GetFile());
-                    
+
                 });
 
             });
+
+            return app.UseMiddleware<src.WatchDog>(options);
+        }
+        public static IApplicationBuilder UseWatchDogExceptionLogger(this IApplicationBuilder builder)
+        {
+           
+            return builder.UseMiddleware<src.WatchDogExceptionLogger>();
         }
 
         
-
         public static IFileInfo GetFile()
         {
             return Provider.GetFileInfo("src.WatchPage.index.html");

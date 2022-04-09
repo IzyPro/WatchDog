@@ -107,6 +107,26 @@
         </div>
     </div>
 
+    <div class="modal" id="myLoginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-5">
+                    <h3 class="lead fa-underline">WatchLog Login</h3>
+                    <div class="col-md-12 m">
+                        <label><b>Username</b></label>
+                        <input type="text" placeholder="Enter Username" name="uname" id="uname" required>
+                        <br/>
+                        <label><b>Password</b></label>
+                        <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+
+                        <button onclick="login()" type="submit">Login</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--===============================================================================================-->
     <script src="WTCHDGstatics/vendor/jquery/jquery-3.2.1.min.js"></script>
     <script src="WTCHDGstatics/vendor/bootstrap/js/popper.min.js"></script>
@@ -122,12 +142,14 @@
         var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
 
         connection.on("getLogs", function (data) {
-            const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                "<td>" + data.method + "</td><td>" + data.path + "</td><td>" + data.responseStatus + "</td><td>" + data.timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>");
-            tr.on('click', populateModal.bind(null, data));
-            $('#tableBody').prepend(tr);
-        });
+            if (sessionStorage.getItem("loggedIn") !== null && sessionStorage.getItem("loggedIn") === sessionStorage.getItem("newloggedIn")) {
+                const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                    "<td>" + data.method + "</td><td>" + data.path + "</td><td>" + data.responseStatus + "</td><td>" + data.timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>");
+                tr.on('click', populateModal.bind(null, data));
+                $('#tableBody').prepend(tr);
+            }
 
+        });
 
         connection
             .start()
@@ -142,12 +164,47 @@
                 context: document.body,
                 success: function (data) {
                     //console.log(data);
-                    for (var i = 0; i < data.length; i++) {
-                        const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                            "<td>" + data[i].method + "</td><td>" + data[i].path + "</td><td>" + data[i].responseStatus + "</td><td>" + data[i].timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>");
-                        tr.on('click', populateModal.bind(null, data[i]));
-                        $('#tableBody').append(tr);
+                    if (sessionStorage.getItem("loggedIn") === null) {
+                        window.alert("Not logged in")
+                        $('#myLoginModal').modal('show');
+        
+                    } else {
+                        if (sessionStorage.getItem("loggedIn") !== sessionStorage.getItem("newloggedIn")) {
+                            window.alert("Not logged in")
+                            $('#myLoginModal').modal('show');
+                        } else {
+                            for (var i = 0; i < data.length; i++) {
+                                const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
+                                    "<td>" + data[i].method + "</td><td>" + data[i].path + "</td><td>" + data[i].responseStatus + "</td><td>" + data[i].timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>");
+                                tr.on('click', populateModal.bind(null, data[i]));
+                                $('#tableBody').append(tr);
+                            }
+                        }
                     }
+
+                }
+            });
+        }
+
+        function login() {
+            $.ajax({
+                type: "POST",
+                url: "/WTCHDwatchpageauth",
+                data: {
+                    username: $("#uname").val(),
+                    password: $("#psw").val()
+                },
+                context: document.body,
+                success: function (data) {
+                    console.log("is auth" + data);
+                    if (data === true) {
+                        sessionStorage.setItem("newloggedIn", generateUUID())
+                        sessionStorage.setItem("loggedIn", sessionStorage.getItem("newloggedIn"))
+                    } else {
+                        sessionStorage.setItem("loggedIn", null)
+                    }
+                   
+                    window.location.reload()
                 }
             });
         }
@@ -176,6 +233,22 @@
                 var obj2 = JSON.parse(element2.innerText);
                 element2.innerHTML = JSON.stringify(obj, undefined, 2);
             }
+        }
+
+        function generateUUID() { // Public Domain/MIT
+            var d = new Date().getTime();//Timestamp
+            var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16;//random number between 0 and 16
+                if (d > 0) {//Use timestamp until depleted
+                    r = (d + r) % 16 | 0;
+                    d = Math.floor(d / 16);
+                } else {//Use microseconds since page-load if supported
+                    r = (d2 + r) % 16 | 0;
+                    d2 = Math.floor(d2 / 16);
+                }
+                return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
         }
     </script>
     <!--===============================================================================================-->

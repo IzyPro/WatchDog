@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,26 @@ namespace WatchDog.src.Controllers
     {
         public JsonResult Index()
         {
+
             var logs = LiteDBHelper.GetAllWatchLogs();
             if (logs != null)
                 logs = logs.OrderByDescending(x => x.StartTime);
             return Json(logs);
+        }
+
+
+        [HttpPost]
+        public JsonResult Auth(string username, string password)
+        {
+
+            if (username == "username" && password == "password")
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json(false);
+            }
         }
     }
 }

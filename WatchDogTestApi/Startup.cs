@@ -40,9 +40,11 @@ namespace WatchDogTestApi
 
             app.UseHttpsRedirection();
 
-            app.UseWatchDog();
+            app.UseWatchDog(opt => {
+                opt.WatchPageUsername = "Admin";
+                opt.WatchPagePassword = "Qwerty@123";
+            });
             app.UseWatchDogExceptionLogger();
-            app.UseWatchDogPage();
 
             app.UseRouting();
 
