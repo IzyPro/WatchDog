@@ -45,7 +45,6 @@ namespace WatchDogTestApi
                 opt.WatchPagePassword = "Qwerty@123";
             });
             app.UseWatchDogExceptionLogger();
-            app.UseWatchDogPage();
 
             app.UseRouting();
 
