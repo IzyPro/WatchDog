@@ -19,6 +19,12 @@
     <h2 class="ml-5 mt-5 lead">WatchDog</h2>
     <section class="ftco-section">
         <div class="container">
+            <div class="mb-5 row">
+                <input type="text" class="form-control col-md-3 m-1" id="SearchString" />
+                <button onclick="" class="btn-sm btn btn-dark m-1">Search</button>
+                <hr />
+                <a onclick="" class="m-1">Back to Full List</a>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="table">
@@ -38,6 +44,10 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <div class="">
+                <button class="text-left mr-5 btn-sm btn btn-dark float-left">Previous</button>
+                <button class="text-right ml-5 btn-sm btn btn-dark float-right">Next</button>
             </div>
         </div>
     </section>
@@ -111,15 +121,15 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body p-5">
-                    <h3 class="lead fa-underline">WatchLog Login</h3>
+                    <h3 class="lead fa-underline">WatchDog Login</h3>
                     <div class="col-md-12 m">
-                        <label><b>Username</b></label>
-                        <input type="text" placeholder="Enter Username" name="uname" id="uname" required>
+                        <!--<label><b>Username</b></label>-->
+                        <input class="form-control m-1" type="text" placeholder="Enter Username" name="uname" id="uname" required>
                         <br/>
-                        <label><b>Password</b></label>
-                        <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+                        <!--<label><b>Password</b></label>-->
+                        <input class="form-control m-1" type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
-                        <button onclick="login()" type="submit">Login</button>
+                        <button class="btn btn-sm btn-dark mt-5" style="width:100%" onclick="login()" type="submit">Login</button>
                     </div>
 
                 </div>
@@ -165,12 +175,12 @@
                 success: function (data) {
                     //console.log(data);
                     if (sessionStorage.getItem("loggedIn") === null) {
-                        window.alert("Not logged in")
+                        //window.alert("Not logged in")
                         $('#myLoginModal').modal('show');
         
                     } else {
                         if (sessionStorage.getItem("loggedIn") !== sessionStorage.getItem("newloggedIn")) {
-                            window.alert("Not logged in")
+                            //window.alert("Not logged in")
                             $('#myLoginModal').modal('show');
                         } else {
                             for (var i = 0; i < data.length; i++) {

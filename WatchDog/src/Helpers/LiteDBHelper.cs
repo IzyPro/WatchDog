@@ -37,6 +37,11 @@ namespace WatchDog.src.Helpers
             return _watchLogs.Delete(id);
         }
 
+        public static int ClearWatchLog()
+        {
+            return _watchLogs.DeleteAll();
+        }
+
         //Watch Exception Operations
         public static IEnumerable<WatchExceptionLog> GetAllWatchExceptionLogs()
         {
@@ -61,6 +66,10 @@ namespace WatchDog.src.Helpers
         public static bool DeleteWatchExceptionLog(int id)
         {
             return _watchExLogs.Delete(id);
+        }
+        public static int ClearWatchExceptionLog()
+        {
+            return _watchExLogs.DeleteAll();
         }
     }
 }
