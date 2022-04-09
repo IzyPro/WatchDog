@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -12,6 +13,7 @@ using WatchDog.src.Controllers;
 using WatchDog.src.Helpers;
 using WatchDog.src.Hubs;
 using WatchDog.src.Interfaces;
+using WatchDog.src.Models;
 
 namespace WatchDog
 {
@@ -32,12 +34,16 @@ namespace WatchDog
             services.AddTransient<IBroadcastHelper, BroadcastHelper>();
             return services;
         }
-        public static IApplicationBuilder UseWatchDog(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseWatchDog(this IApplicationBuilder builder, Action<WatchDogAuthModel> configureOptions)
         {
-            return builder.UseMiddleware<src.WatchDog>();
+            var options = new WatchDogAuthModel();
+            configureOptions(options);
+
+            return builder.UseMiddleware<src.WatchDog>(options);
         }
         public static IApplicationBuilder UseWatchDogExceptionLogger(this IApplicationBuilder builder)
         {
+           
             return builder.UseMiddleware<src.WatchDogExceptionLogger>();
         }
 
@@ -59,10 +65,21 @@ namespace WatchDog
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "WTCHDwatchpage",
-                    template: "WTCHDwatchpage",
-                    defaults: new { controller = "WatchPage", action = "Index" });
+                     name: "WTCHDwatchpage",
+                     template: "WTCHDwatchpage",
+                     defaults: new { controller = "WatchPage", action = "Index" });
+
+                routes.MapRoute(
+                     name: "WTCHDwatchpageauth",
+                     template: "WTCHDwatchpageauth",
+                     defaults: new { controller = "WatchPageAuth", action = "Index" });
+
+                routes.MapRoute(
+                    name: "default", 
+                    template: "{controller=Home}/{action=Index}/{id?}"); 
             });
+
+          
 
             return app.UseRouter(router => {
 

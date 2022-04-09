@@ -25,15 +25,18 @@ namespace WatchDog.src
         private readonly ILogger _logger;
         private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
         private readonly IBroadcastHelper _broadcastHelper;
+        private readonly WatchDogAuthModel _options;
 
-        public WatchDog(RequestDelegate next, ILoggerFactory loggerFactory, IHubContext<LoggerHub> hubContext, IBroadcastHelper broadcastHelper)
+        public WatchDog(RequestDelegate next, ILoggerFactory loggerFactory, WatchDogAuthModel options, IBroadcastHelper broadcastHelper)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<WatchDog>();
+            _options = options;
             _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
             _broadcastHelper = broadcastHelper;
 
-
+            WatchDogAuthConfigModel.UserName = _options.WatchPageUsername;
+            WatchDogAuthConfigModel.Password = _options.WatchPagePassword;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -41,7 +44,7 @@ namespace WatchDog.src
 
             var watchLog = new WatchLog();
 
-            if (!context.Request.Path.ToString().Contains("WTCHDwatchpage") && !context.Request.Path.ToString().Contains("watchdog") && !context.Request.Path.ToString().Contains("WTCHDGstatics") && !context.Request.Path.ToString().Contains("favicon") && !context.Request.Path.ToString().Contains("wtchdlogger"))
+            if (!context.Request.Path.ToString().Contains("WTCHDwatchpage") && !context.Request.Path.ToString().Contains("WTCHDwatchpageauth") && !context.Request.Path.ToString().Contains("watchdog") && !context.Request.Path.ToString().Contains("WTCHDGstatics") && !context.Request.Path.ToString().Contains("favicon") && !context.Request.Path.ToString().Contains("wtchdlogger"))
             {
                 //Request handling comes here
                 var requestLog = await LogRequest(context);
