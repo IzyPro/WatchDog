@@ -1,114 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>WATCHDOG</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--===============================================================================================-->
-	<!--<link rel="icon" type="image/png" href="statics/images/icons/favicon.ico" />-->
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="statics/vendor/bootstrap/css/bootstrap.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="statics/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="statics/css/util.css">
-	<link rel="stylesheet" type="text/css" href="statics/css/main.css">
-	<!--===============================================================================================-->
+    <title>WATCHDOG</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <!--<link rel="icon" type="image/png" href="WTCHDGstatics/images/icons/favicon.ico" />-->
+    <!--===============================================================================================-->
+    <!--<link rel="stylesheet" type="text/css" href="WTCHDGstatics/vendor/bootstrap/css/bootstrap.min.css">-->
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="WTCHDGstatics/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="WTCHDGstatics/css/util.css">
+    <link rel="stylesheet" type="text/css" href="WTCHDGstatics/css/main.css">
+    <!--===============================================================================================-->
 </head>
 <body>
-	<section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-6 text-center mb-4">
-					<h2 class="heading-section">WatchDog</h2>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="table-wrap">
-						<table class="table myaccordion table-hover" id="accordion">
-							<thead>
-								<tr>
-									<th scope="col">TYPE</th>
-									<th scope="col">PATH</th>
-									<th scope="col">STATUS</th>
-									<th scope="col">DURATION</th>
+    <h2 class="ml-5 mt-5 lead">WatchDog</h2>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table">
+                        <table class="table table-hover table-responsive-lg table-lg">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Method</th>
+                                    <th scope="col">Path</th>
+                                    <th scope="col">Status Code</th>
+                                    <th scope="col">Time Spent</th>
 
-									<th>&nbsp;</th>
-								</tr>
-							</thead>
-							<tbody id="tableBody">
-								
-								<!--<tr data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" class="collapsed">
-									<th scope="row">4</th>
-									<td>Laptop Technology AS2020</td>
-									<td>$200.00</td>
-									<td>2</td>
-									<td>$400.00</td>
-									<td>
-										<i class="fa" aria-hidden="false"></i>
-									</td>
-								</tr>
-								<tr>
-									<td colspan="6" id="collapseFour" class="collapse acc" data-parent="#accordion">
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro iste, facere sunt sequi nostrum ipsa, amet doloremque magnam reiciendis tempore sapiente. Necessitatibus recusandae harum nam sit perferendis quia inventore natus.</p>
-									</td>
-								</tr>-->
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+                                    <!--<th>&nbsp;</th>-->
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-	<!--===============================================================================================-->
-	<script src="statics/vendor/jquery/jquery-3.2.1.min.js"></script>
-	<script src="statics/vendor/bootstrap/js/popper.min.js"></script>
-	<script src="statics/vendor/bootstrap/js/bootstrap.min.js"></script>
-	<script src="statics/signalr/signalr.js"></script>
+    <!-- Modal -->
+    <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-5">
+                    <h3 class="lead fa-underline">WatchLog</h3>
+                    <div class="row">
+                        <div class="col-md-12 m">
+                            <p><b>Host: </b> <span id="host"></span></p>
+                            <p style="word-wrap: break-word;"><b>Path: </b> <span id="path"></span></p>
+                            <p style="word-wrap: break-word;"><b>Query: </b> <span id="query"></span></p>
+                            <p><b>Method: </b> <span id="method"></span></p>
+                            <p><b>IP Address: </b> <span id="ip"></span></p>
+                            <p><b>Status Code: </b> <span id="statusCode"></span></p>
+                            <p style="word-wrap: break-word;"><b>Time Spent: </b> <span id="time"></span></p>
+                        </div>
+                        <div class="col-md-12 purplebg m mt-3">
+
+                            <div>
+
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active">
+                                        <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Request</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Response</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Headers</a>
+                                    </li>
+                                    <!--<li role="presentation">
+                                        <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a>
+                                    </li>-->
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content mt-3">
+                                    <div role="tabpanel" class="tab-pane active" id="home">
+                                        <p class="lead">Request Body: </p>
+                                        <pre id="reqBody" style="word-wrap: break-word;"></pre>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="profile">
+                                        <p class="lead">Response Body: </p>
+                                        <pre id="resBody" style="word-wrap: break-word;"></pre>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="messages">
+                                        <p class="lead">Request Header: </p>
+                                        <pre id="reqHd" style="word-wrap: break-word;"></pre>
+                                        <p class="lead">Response Header: </p>
+                                        <pre id="resHd" style="word-wrap: break-word;"></pre>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="settings">Settings</div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--===============================================================================================-->
+    <script src="WTCHDGstatics/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="WTCHDGstatics/vendor/bootstrap/js/popper.min.js"></script>
+    <script src="WTCHDGstatics/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="WTCHDGstatics/signalr/signalr.js"></script>
+    <link rel="stylesheet" type="text/css" href="WTCHDGstatics/css/bootstrap.min.css">
 
 
-	<script>
 
-		var connection = new signalR.HubConnectionBuilder().withUrl("/logger").build();
 
-		connection.on("getLogs", function (data) {
-			$('#tableBody').prepend("<tr data-toggle='collapse' data-target='#collapse' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                "<td>" + data.method + "</td><td>" + data.path + "</td><td>" + data.responseStatus + "</td><td>" + data.timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>" +
-                "<tr><td id='collapse' class='collapse acc' data-parent='#accordion'><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro iste, facere sunt sequi nostrum ipsa, amet doloremque magnam reiciendis tempore sapiente. Necessitatibus recusandae harum nam sit perferendis quia inventore natus.</p></td></tr>");
+    <script>
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
+
+        connection.on("getLogs", function (data) {
+            const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                "<td>" + data.method + "</td><td>" + data.path + "</td><td>" + data.responseStatus + "</td><td>" + data.timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>");
+            tr.on('click', populateModal.bind(null, data));
+            $('#tableBody').prepend(tr);
         });
 
 
-		connection
-			.start()
-			.then(function () {
-				getLogs()
-			}).catch(err => console.log('Error while starting connection: ' + err));
+        connection
+            .start()
+            .then(function () {
+                getLogs()
+            }).catch(err => console.log('Error while starting connection: ' + err));
 
-		function getLogs() {
+        function getLogs() {
             $.ajax({
                 type: "GET",
-                url: "/watchpage",
+                url: "/WTCHDwatchpage",
                 context: document.body,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     for (var i = 0; i < data.length; i++) {
-                        $('#tableBody').append("<tr data-toggle='collapse' data-target='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                            "<td>" + data[i].method + "</td><td>" + data[i].path + "</td><td>" + data[i].responseStatus + "</td><td>" + data[i].timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>" +
-                            "<tr><td id='collapse" + i + "' class='collapse acc' data-parent='#accordion'><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro iste, facere sunt sequi nostrum ipsa, amet doloremque magnam reiciendis tempore sapiente. Necessitatibus recusandae harum nam sit perferendis quia inventore natus.</p></td></tr>");
-
-                        //$('#tableBody').append("<tr data-toggle='collapse' data-target='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                        //    "<td>" + data[i].method + "</td><td>" + data[i].path + "</td><td>" + data[i].responseStatus + "</td><td>" + data[i].timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>" +
-                        //    "<tr id='collapse" + i + "' class='collapse acc' data-parent='#accordion'><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro iste, facere sunt sequi nostrum ipsa, amet doloremque magnam reiciendis tempore sapiente. Necessitatibus recusandae harum nam sit perferendis quia inventore natus.</p></tr>");
-
+                        const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
+                            "<td>" + data[i].method + "</td><td>" + data[i].path + "</td><td>" + data[i].responseStatus + "</td><td>" + data[i].timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>");
+                        tr.on('click', populateModal.bind(null, data[i]));
+                        $('#tableBody').append(tr);
                     }
                 }
             });
         }
-	</script>
-	<!--===============================================================================================-->
-	<script src="statics/js/main.js"></script>
+
+        function populateModal(data) {
+            $('#host').text(data.host);
+            $('#path').text(data.path);
+            $('#query').text(data.queryString);
+            $('#method').text(data.method);
+            $('#ip').text(data.ipAddress);
+            $('#statusCode').text(data.responseStatus);
+            $('#time').text(data.timeSpent);
+            $('#reqHd').text(data.requestHeaders);
+            $('#resHd').text(data.responseHeaders);
+            $('#reqBody').text(data.requestBody);
+
+            $('#resBody').text(data.responseBody);
+
+            if (data.responseBody != null) {
+                var element = document.getElementById("resBody");
+                var obj = JSON.parse(element.innerText);
+                element.innerHTML = JSON.stringify(obj, undefined, 2);
+            }
+            if (data.requestBody != null) {
+                var element2 = document.getElementById("reqBody");
+                var obj2 = JSON.parse(element2.innerText);
+                element2.innerHTML = JSON.stringify(obj, undefined, 2);
+            }
+        }
+    </script>
+    <!--===============================================================================================-->
+    <script src="WTCHDGstatics/js/main.js"></script>
 
 </body>
 </html>
