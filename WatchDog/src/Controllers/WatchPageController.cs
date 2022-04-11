@@ -11,13 +11,27 @@ namespace WatchDog.src.Controllers
 {
     public class WatchPageController : Controller
     {
-        public JsonResult Index()
+        int PAGE_SIZE = 50;
+        public JsonResult Index(string searchString = "", int pageNumber = 1)
         {
-
+            searchString = searchString.ToLower();
             var logs = LiteDBHelper.GetAllWatchLogs();
             if (logs != null)
-                logs = logs.OrderByDescending(x => x.StartTime);
-            return Json(logs);
+            {
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    logs = logs.Where(l => l.Path.ToLower().Contains(searchString) || l.Method.ToLower().Contains(searchString) || l.QueryString.ToLower().Contains(searchString) || l.ResponseStatus.ToString().Contains(searchString)).OrderByDescending(l => l.StartTime);
+                    return Json(PaginatedList<WatchLog>.CreateAsync(logs, pageNumber, PAGE_SIZE));
+                }
+            }
+            logs = logs.OrderByDescending(x => x.StartTime);
+            return Json(PaginatedList<WatchLog>.CreateAsync(logs, pageNumber, PAGE_SIZE));
+        }
+
+        public JsonResult ClearLogs()
+        {
+            var cleared = LiteDBHelper.ClearWatchLog();
+            return Json(cleared > 0);
         }
 
 
