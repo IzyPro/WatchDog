@@ -56,14 +56,9 @@ namespace WatchDog
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                     name: "WTCHDwatchpage",
-                     template: "WTCHDwatchpage",
-                     defaults: new { controller = "WatchPage", action = "Index" });
-
-                routes.MapRoute(
-                     name: "WTCHDwatchpageauth",
-                     template: "WTCHDwatchpageauth",
-                     defaults: new { controller = "WatchPageAuth", action = "Index" });
+                    name: "WTCHDwatchpage",
+                    template: "WTCHDwatchpage/{action}",
+                    defaults: new { controller = "WatchPage", action = "Index" });
 
                 routes.MapRoute(
                     name: "default",

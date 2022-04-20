@@ -39,7 +39,7 @@ namespace WatchDog.src.Controllers
         public JsonResult Auth(string username, string password)
         {
 
-            if (username == "username" && password == "password")
+            if (username.ToLower() == WatchDogAuthConfigModel.UserName.ToLower() && password == WatchDogAuthConfigModel.Password)
             {
                 return Json(true);
             }
