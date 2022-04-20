@@ -96,6 +96,7 @@
 	<None Remove="src\WatchPage\vendor\bootstrap\js\popper.js" />
 	<None Remove="src\WatchPage\vendor\bootstrap\js\popper.min.js" />
 	<None Remove="src\WatchPage\vendor\jquery\jquery-3.2.1.min.js" />
+	<None Remove="src\WatchPage\vendor\moment.min.js" />
 	<EmbeddedResource Include="src\WatchPage\css\bootstrap.min.css">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
@@ -369,6 +370,9 @@
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\vendor\jquery\jquery-3.2.1.min.js">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\vendor\moment.min.js">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
   </ItemGroup>
 
