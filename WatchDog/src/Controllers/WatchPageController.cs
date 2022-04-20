@@ -11,21 +11,23 @@ namespace WatchDog.src.Controllers
 {
     public class WatchPageController : Controller
     {
-        int PAGE_SIZE = 50;
+        int PAGE_SIZE = 10;
         public JsonResult Index(string searchString = "", int pageNumber = 1)
         {
-            searchString = searchString.ToLower();
             var logs = LiteDBHelper.GetAllWatchLogs();
             if (logs != null)
             {
                 if (!string.IsNullOrEmpty(searchString))
                 {
-                    logs = logs.Where(l => l.Path.ToLower().Contains(searchString) || l.Method.ToLower().Contains(searchString) || l.QueryString.ToLower().Contains(searchString) || l.ResponseStatus.ToString().Contains(searchString)).OrderByDescending(l => l.StartTime);
-                    return Json(PaginatedList<WatchLog>.CreateAsync(logs, pageNumber, PAGE_SIZE));
+                    searchString = searchString.ToLower();
+                    // todo: Search Query Strings
+                    // String.IsNullOrEmpty(l.QueryString) ? false : l.QueryString.ToLower().Contains(searchString) doesn't work for some reason
+                    logs = logs.Where(l => l.Path.ToLower().Contains(searchString) || l.Method.ToLower().Contains(searchString) || l.ResponseStatus.ToString().Contains(searchString));
                 }
             }
             logs = logs.OrderByDescending(x => x.StartTime);
-            return Json(PaginatedList<WatchLog>.CreateAsync(logs, pageNumber, PAGE_SIZE));
+            var result = PaginatedList<WatchLog>.CreateAsync(logs, pageNumber, PAGE_SIZE);
+            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result });
         }
 
         public JsonResult ClearLogs()

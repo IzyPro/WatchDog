@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>WATCHDOG</title>
+    <title>WatchDog</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
@@ -20,10 +20,10 @@
     <section class="ftco-section">
         <div class="container">
             <div class="mb-5 row">
-                <input type="text" class="form-control col-md-3 m-1" id="SearchString" />
-                <button onclick="" class="btn-sm btn btn-dark m-1">Search</button>
+                <input type="text" name="search" class="form-control col-md-3 m-1" id="searchString" />
+                <button onclick="search()" class="btn-sm btn btn-dark m-1">Search</button>
                 <hr />
-                <a onclick="" class="m-1">Back to Full List</a>
+                <a href="" onclick="backToList()" class="m-1">Back to Full List</a>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -35,6 +35,7 @@
                                     <th scope="col">Path</th>
                                     <th scope="col">Status Code</th>
                                     <th scope="col">Time Spent</th>
+                                    <th scope="col">Happened At</th>
 
                                     <!--<th>&nbsp;</th>-->
                                 </tr>
@@ -45,9 +46,10 @@
                     </div>
                 </div>
             </div>
+            <p class="lead text-center text-muted" id="pageMap"></p>
             <div class="">
-                <button class="text-left mr-5 btn-sm btn btn-dark float-left">Previous</button>
-                <button class="text-right ml-5 btn-sm btn btn-dark float-right">Next</button>
+                <button id="prev" class="text-left mr-5 btn-sm btn btn-dark float-left" onclick="prevPage()">Previous</button>
+                <button id="next" class="text-right ml-5 btn-sm btn btn-dark float-right" onclick="nextPage()">Next</button>
             </div>
         </div>
     </section>
@@ -67,6 +69,7 @@
                             <p><b>IP Address: </b> <span id="ip"></span></p>
                             <p><b>Status Code: </b> <span id="statusCode"></span></p>
                             <p style="word-wrap: break-word;"><b>Time Spent: </b> <span id="time"></span></p>
+                            <p style="word-wrap: break-word;"><b>Happened At: </b> <span id="startTime"></span></p>
                         </div>
                         <div class="col-md-12 purplebg m mt-3">
 
@@ -123,10 +126,8 @@
                 <div class="modal-body p-5">
                     <h3 class="lead fa-underline">WatchDog Login</h3>
                     <div class="col-md-12 m">
-                        <!--<label><b>Username</b></label>-->
                         <input class="form-control m-1" type="text" placeholder="Enter Username" name="uname" id="uname" required>
-                        <br/>
-                        <!--<label><b>Password</b></label>-->
+                        <br />
                         <input class="form-control m-1" type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
                         <button class="btn btn-sm btn-dark mt-5" style="width:100%" onclick="login()" type="submit">Login</button>
@@ -142,19 +143,20 @@
     <script src="WTCHDGstatics/vendor/bootstrap/js/popper.min.js"></script>
     <script src="WTCHDGstatics/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="WTCHDGstatics/signalr/signalr.js"></script>
+    <script src="WTCHDGstatics/vendor/moment.min.js"></script>
     <link rel="stylesheet" type="text/css" href="WTCHDGstatics/css/bootstrap.min.css">
 
 
 
 
     <script>
-
+        var pageIndex = 1;
         var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
 
         connection.on("getLogs", function (data) {
             if (sessionStorage.getItem("loggedIn") !== null && sessionStorage.getItem("loggedIn") === sessionStorage.getItem("newloggedIn")) {
                 const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                    "<td>" + data.method + "</td><td>" + data.path + "</td><td>" + data.responseStatus + "</td><td>" + data.timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>");
+                    "<td>" + data.method + "</td><td>" + data.path + "</td><td>" + data.responseStatus + "</td><td>" + data.timeSpent + "</td><td>" + moment(data.startTime).format('LLL') + "</td></tr>");
                 tr.on('click', populateModal.bind(null, data));
                 $('#tableBody').prepend(tr);
             }
@@ -167,26 +169,42 @@
                 getLogs()
             }).catch(err => console.log('Error while starting connection: ' + err));
 
-        function getLogs() {
+        function getLogs(searchString = "") {
             $.ajax({
                 type: "GET",
-                url: "/WTCHDwatchpage",
+                url: "/WTCHDwatchpage?pageNumber=" + pageIndex + "&searchString=" + searchString,
                 context: document.body,
                 success: function (data) {
+                    $('#pageMap').text("Page " + data.pageIndex + " of " + data.totalPages);
                     //console.log(data);
+                    if (data.hasNext === false) {
+                        $('#next').hide();
+                    }
+                    else {
+                        $('#next').show();
+
+                    }
+
+                    if (data.hasPrevious === false) {
+                        $('#prev').hide();
+                    }
+                    else {
+                        $('#prev').show();
+                    }
+
                     if (sessionStorage.getItem("loggedIn") === null) {
                         //window.alert("Not logged in")
                         $('#myLoginModal').modal('show');
-        
+
                     } else {
                         if (sessionStorage.getItem("loggedIn") !== sessionStorage.getItem("newloggedIn")) {
                             //window.alert("Not logged in")
                             $('#myLoginModal').modal('show');
                         } else {
-                            for (var i = 0; i < data.length; i++) {
+                            for (var i = 0; i < data.logs.length; i++) {
                                 const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                                    "<td>" + data[i].method + "</td><td>" + data[i].path + "</td><td>" + data[i].responseStatus + "</td><td>" + data[i].timeSpent + "</td><td><i class='fa' aria-hidden='false'></i></td></tr>");
-                                tr.on('click', populateModal.bind(null, data[i]));
+                                    "<td>" + data.logs[i].method + "</td><td>" + data.logs[i].path + "</td><td>" + data.logs[i].responseStatus + "</td><td>" + data.logs[i].timeSpent + "</td><td>" + moment(data.logs[i].startTime).format('LLL') + "</td></tr>");
+                                tr.on('click', populateModal.bind(null, data.logs[i]));
                                 $('#tableBody').append(tr);
                             }
                         }
@@ -194,6 +212,32 @@
 
                 }
             });
+        }
+
+        function search() {
+            pageIndex = 1;
+            $('#tableBody').empty();
+            var ss = $('#searchString').val();
+            getLogs(ss);
+        }
+
+        function nextPage() {
+            ++pageIndex;
+            $('#tableBody').empty();
+            getLogs();
+        }
+
+        function prevPage() {
+            if (pageIndex > 1)
+                --pageIndex;
+            $('#tableBody').empty();
+            getLogs();
+        }
+
+        function backToList() {
+            pageIndex = 1;
+            $('#tableBody').empty();
+            getLogs();
         }
 
         function login() {
@@ -206,14 +250,14 @@
                 },
                 context: document.body,
                 success: function (data) {
-                    console.log("is auth" + data);
+                    //console.log("is auth" + data);
                     if (data === true) {
                         sessionStorage.setItem("newloggedIn", generateUUID())
                         sessionStorage.setItem("loggedIn", sessionStorage.getItem("newloggedIn"))
                     } else {
                         sessionStorage.setItem("loggedIn", null)
                     }
-                   
+
                     window.location.reload()
                 }
             });
@@ -227,6 +271,8 @@
             $('#ip').text(data.ipAddress);
             $('#statusCode').text(data.responseStatus);
             $('#time').text(data.timeSpent);
+            $('#startTime').text(moment(data.startTime).format('LLL'));
+
             $('#reqHd').text(data.requestHeaders);
             $('#resHd').text(data.responseHeaders);
             $('#reqBody').text(data.requestBody);
