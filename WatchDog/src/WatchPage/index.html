@@ -20,10 +20,18 @@
     <section class="ftco-section">
         <div class="container">
             <div class="mb-5 row">
-                <input type="text" name="search" class="form-control col-md-3 m-1" id="searchString" />
-                <button onclick="search()" class="btn-sm btn btn-dark m-1">Search</button>
+                <div class="col-md-8">
+                    <button onclick="clearLogs()" class="btn-sm btn btn-dark m-1">Clear Logs</button>
+                    <hr/>
+                    <div>
+                        <input type="text" name="search" class="form-control col-md-3 m-1" id="searchString" />
+                        <button onclick="search()" class="btn-sm btn btn-dark m-1">Search</button>
+                    </div>
+
+                </div>
                 <hr />
                 <a href="" onclick="backToList()" class="m-1">Back to Full List</a>
+
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -126,9 +134,12 @@
                 <div class="modal-body p-5">
                     <h3 class="lead fa-underline">WatchDog Login</h3>
                     <div class="col-md-12 m">
-                        <input class="form-control m-1" type="text" placeholder="Enter Username" name="uname" id="uname" required>
-                        <br />
-                        <input class="form-control m-1" type="password" placeholder="Enter Password" name="psw" id="psw" required>
+                        <form id="myLoginForm">
+                            <input class="form-control m-1" type="text" placeholder="Enter Username" name="uname" id="uname" required>
+                            <br />
+                            <input class="form-control m-1" type="password" placeholder="Enter Password" name="psw" id="psw" required>
+                           
+                        </form>
 
                         <button class="btn btn-sm btn-dark mt-5" style="width:100%" onclick="login()" type="submit">Login</button>
                     </div>
@@ -175,7 +186,8 @@
                 url: "/WTCHDwatchpage?pageNumber=" + pageIndex + "&searchString=" + searchString,
                 context: document.body,
                 success: function (data) {
-                    $('#pageMap').text("Page " + data.pageIndex + " of " + data.totalPages);
+                    var totalPages = data.totalPages === 0 ? 1 : data.totalPages
+                    $('#pageMap').text("Page " + data.pageIndex + " of " + totalPages);
                     //console.log(data);
                     if (data.hasNext === false) {
                         $('#next').hide();
@@ -214,6 +226,17 @@
             });
         }
 
+
+        function clearLogs() {
+            $.ajax({
+                type: "POST",
+                url: "/WTCHDwatchpage/ClearLogs",
+                success: function (data) {
+                    window.location.reload()
+                }
+            });
+        }
+
         function search() {
             pageIndex = 1;
             $('#tableBody').empty();
@@ -241,26 +264,31 @@
         }
 
         function login() {
-            $.ajax({
-                type: "POST",
-                url: "/WTCHDwatchpage/Auth",
-                data: {
-                    username: $("#uname").val(),
-                    password: $("#psw").val()
-                },
-                context: document.body,
-                success: function (data) {
-                    //console.log("is auth" + data);
-                    if (data === true) {
-                        sessionStorage.setItem("newloggedIn", generateUUID())
-                        sessionStorage.setItem("loggedIn", sessionStorage.getItem("newloggedIn"))
-                    } else {
-                        sessionStorage.setItem("loggedIn", null)
-                    }
+            var form = document.querySelector('form')
+            form.reportValidity()
+            if (form.checkValidity()) {
+                $.ajax({
+                    type: "POST",
+                    url: "/WTCHDwatchpage/Auth",
+                    data: {
+                        username: $("#uname").val(),
+                        password: $("#psw").val()
+                    },
+                    context: document.body,
+                    success: function (data) {
+                        //console.log("is auth" + data);
+                        if (data === true) {
+                            sessionStorage.setItem("newloggedIn", generateUUID())
+                            sessionStorage.setItem("loggedIn", sessionStorage.getItem("newloggedIn"))
+                        } else {
+                            sessionStorage.setItem("loggedIn", null)
+                        }
 
-                    window.location.reload()
-                }
-            });
+                        window.location.reload()
+                    }
+                });
+            }
+            
         }
 
         function populateModal(data) {
