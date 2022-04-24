@@ -12,7 +12,7 @@ namespace WatchDog.src.Controllers
     public class WatchPageController : Controller
     {
         int PAGE_SIZE = 10;
-        public JsonResult Index(string searchString = "", int pageNumber = 1)
+        public JsonResult Index(string searchString = "", string verbString = "", string statusCode = "", int pageNumber = 1)
         {
             var logs = LiteDBHelper.GetAllWatchLogs();
             if (logs != null)
@@ -23,6 +23,16 @@ namespace WatchDog.src.Controllers
                     // todo: Search Query Strings
                     // String.IsNullOrEmpty(l.QueryString) ? false : l.QueryString.ToLower().Contains(searchString) doesn't work for some reason
                     logs = logs.Where(l => l.Path.ToLower().Contains(searchString) || l.Method.ToLower().Contains(searchString) || l.ResponseStatus.ToString().Contains(searchString));
+                }
+
+                if (!string.IsNullOrEmpty(verbString))
+                {
+                    logs = logs.Where(l => l.Method.ToLower() == verbString.ToLower());
+                }
+
+                if (!string.IsNullOrEmpty(statusCode))
+                {
+                    logs = logs.Where(l => l.ResponseStatus.ToString() == statusCode);
                 }
             }
             logs = logs.OrderByDescending(x => x.StartTime);

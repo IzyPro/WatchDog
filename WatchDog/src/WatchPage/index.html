@@ -19,17 +19,41 @@
     <h2 class="ml-5 mt-5 lead">WatchDog</h2>
     <section class="ftco-section">
         <div class="container">
+            
             <div class="mb-5 row">
                 <div class="col-md-8">
                     <button onclick="clearLogs()" class="btn-sm btn btn-dark m-1">Clear Logs</button>
                     <hr/>
-                    <div>
-                        <input type="text" name="search" class="form-control col-md-3 m-1" id="searchString" />
-                        <button onclick="search()" class="btn-sm btn btn-dark m-1">Search</button>
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input type="text" name="search" class="form-control col-md-5 m-1" id="searchString" />
+                            <button onclick="search()" class="btn-sm btn btn-dark m-1">Search</button>
+                        </div>
+                        <hr/>
+                        <div class="col-lg-10">
+                            <select id="myVerbDropDown" class="form-control col-md-5 m-1" aria-label="Default select HTTP Verb">
+                                <option selected>Select HTTP Verb</option>
+                                <option value="POST">POST</option>
+                                <option value="GET">GET</option>
+                                <option value="PUT">PUT</option>
+                                <option value="PATCH">PATCH</option>
+                                <option value="DELETE">DELETE</option>
+                            </select>
+                            <select id="myStatusCodeDropDown" class="form-control col-md-5 m-1" aria-label="Default select HTTP Verb">
+                                <option selected>Select HTTP Status Code</option>
+                                <option value="200">200</option>
+                                <option value="301">301</option>
+                                <option value="302">302</option>
+                                <option value="404">404</option>
+                                <option value="410">410</option>
+                                <option value="500">500</option>
+                                <option value="503">503</option>
+                            </select>
+                        </div>
                     </div>
 
                 </div>
-                <hr />
+                <hr/>
                 <a href="" onclick="backToList()" class="m-1">Back to Full List</a>
 
             </div>
@@ -180,15 +204,32 @@
                 getLogs()
             }).catch(err => console.log('Error while starting connection: ' + err));
 
-        function getLogs(searchString = "") {
+        $("#myVerbDropDown").change(function (event) {
+            if ($("#myVerbDropDown")[0].selectedIndex === 0) {
+                getLogs()
+            } else {
+                filterVerb($(this).val());
+            }
+
+        });
+
+        $("#myStatusCodeDropDown").change(function (event) {
+            if ($("#myStatusCodeDropDown")[0].selectedIndex === 0) {
+                getLogs()
+            } else {
+                filterStatusCode($(this).val());
+            }
+            
+        });
+
+        function getLogs(searchString = "", verb = "", statusCode = "") {
             $.ajax({
                 type: "GET",
-                url: "/WTCHDwatchpage?pageNumber=" + pageIndex + "&searchString=" + searchString,
+                url: "/WTCHDwatchpage?pageNumber=" + pageIndex + "&searchString=" + searchString + "&verbString=" + verb + "&statusCode=" + statusCode,
                 context: document.body,
                 success: function (data) {
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
                     $('#pageMap').text("Page " + data.pageIndex + " of " + totalPages);
-                    //console.log(data);
                     if (data.hasNext === false) {
                         $('#next').hide();
                     }
@@ -205,12 +246,10 @@
                     }
 
                     if (sessionStorage.getItem("loggedIn") === null) {
-                        //window.alert("Not logged in")
                         $('#myLoginModal').modal('show');
 
                     } else {
                         if (sessionStorage.getItem("loggedIn") !== sessionStorage.getItem("newloggedIn")) {
-                            //window.alert("Not logged in")
                             $('#myLoginModal').modal('show');
                         } else {
                             for (var i = 0; i < data.logs.length; i++) {
@@ -242,6 +281,18 @@
             $('#tableBody').empty();
             var ss = $('#searchString').val();
             getLogs(ss);
+        }
+
+        function filterVerb(verbString) {
+            pageIndex = 1;
+            $('#tableBody').empty();
+            getLogs("", verbString, "");
+        }
+
+        function filterStatusCode(statusCodeString) {
+            pageIndex = 1;
+            $('#tableBody').empty();
+            getLogs("", "", statusCodeString);
         }
 
         function nextPage() {
@@ -276,7 +327,6 @@
                     },
                     context: document.body,
                     success: function (data) {
-                        //console.log("is auth" + data);
                         if (data === true) {
                             sessionStorage.setItem("newloggedIn", generateUUID())
                             sessionStorage.setItem("loggedIn", sessionStorage.getItem("newloggedIn"))
