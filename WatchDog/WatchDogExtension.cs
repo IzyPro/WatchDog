@@ -39,11 +39,11 @@ namespace WatchDog
             var options = new WatchDogAuthModel();
             configureOptions(options);
 
-
+            app.UseMiddleware<src.WatchDog>(options); 
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
-                   Path.Combine(WatchDogExtension.GetFolder(), @$"src{Path.DirectorySeparatorChar}WatchPage")),
+                  Path.Combine(WatchDogExtension.GetFolder(), @$"src{Path.DirectorySeparatorChar}WatchPage")),
 
                 RequestPath = new PathString("/WTCHDGstatics")
             });
@@ -66,7 +66,7 @@ namespace WatchDog
             });
 
 
-            app.UseRouter(router => {
+            return app.UseRouter(router => {
 
                 router.MapGet("watchdog", async context =>
                 {
@@ -77,8 +77,8 @@ namespace WatchDog
 
             });
 
-            return app.UseMiddleware<src.WatchDog>(options);
         }
+
         public static IApplicationBuilder UseWatchDogExceptionLogger(this IApplicationBuilder builder)
         {
            

@@ -27,7 +27,7 @@ namespace WatchDog.src
         private readonly IBroadcastHelper _broadcastHelper;
         private readonly WatchDogAuthModel _options;
 
-        public WatchDog(RequestDelegate next, ILoggerFactory loggerFactory, WatchDogAuthModel options, IBroadcastHelper broadcastHelper)
+        public WatchDog(WatchDogAuthModel options, RequestDelegate next, ILoggerFactory loggerFactory, IBroadcastHelper broadcastHelper)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<WatchDog>();
