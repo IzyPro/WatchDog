@@ -87,20 +87,18 @@
     <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-SemiBold.ttf" />
     <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-SemiBoldItalic.ttf" />
     <None Remove="src\WatchPage\index.html" />
+    <None Remove="src\WatchPage\js\bootstrap.min.js" />
 	<None Remove="src\WatchPage\js\main.js" />
 	<None Remove="src\WatchPage\omo.html" />
 	<None Remove="src\WatchPage\signalr\signalr.js" />
 	<None Remove="src\WatchPage\signalr\signalr.min.js" />
-	<None Remove="src\WatchPage\vendor\bootstrap\css\bootstrap.min.css" />
-	<None Remove="src\WatchPage\vendor\bootstrap\js\bootstrap.min.js" />
-	<None Remove="src\WatchPage\vendor\bootstrap\js\popper.js" />
-	<None Remove="src\WatchPage\vendor\bootstrap\js\popper.min.js" />
-	<None Remove="src\WatchPage\vendor\jquery\jquery-3.2.1.min.js" />
-	<None Remove="src\WatchPage\vendor\moment.min.js" />
 	<EmbeddedResource Include="src\WatchPage\css\bootstrap.min.css">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\css\bootstrap.min.css.map">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\js\bootstrap.min.js">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\signalr\signalr.js">
@@ -353,25 +351,16 @@
 	<EmbeddedResource Include="src\WatchPage\index.html">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\js\main.js">
+	<Resource Include="src\WatchPage\js\main.js">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Resource>
+	<EmbeddedResource Include="src\WatchPage\js\popper.min.js">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\js\jquery-3.2.1.min.js">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\vendor\bootstrap\css\bootstrap.min.css">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\vendor\bootstrap\js\bootstrap.min.js">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\vendor\bootstrap\js\popper.js">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\vendor\bootstrap\js\popper.min.js">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\vendor\jquery\jquery-3.2.1.min.js">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\vendor\moment.min.js">
+	<EmbeddedResource Include="src\WatchPage\js\moment.min.js">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
   </ItemGroup>
@@ -392,49 +381,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.22" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-grid.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-grid.css.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-grid.min.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-grid.min.css.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-reboot.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-reboot.css.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-reboot.min.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap-reboot.min.css.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap.css.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="src\WatchPage\vendor\bootstrap\css\bootstrap.min.css.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="src\WatchPage\vendor\bootstrap\js\bootstrap.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="src\WatchPage\vendor\bootstrap\js\tooltip.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

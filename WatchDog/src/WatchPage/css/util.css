@@ -4,7 +4,7 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
-:root {
+/*:root {
     --blue: #007bff;
     --indigo: #6610f2;
     --purple: #6f42c1;
@@ -2757,7 +2757,7 @@ textarea.form-control {
 }
 
 .btn:hover {
-    color: #212529;
+    color: #fff;
     text-decoration: none;
 }
 
@@ -11352,6 +11352,7 @@ a.text-dark:hover, a.text-dark:focus {
 
     body {
         min-width: 992px !important;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .container {
@@ -11566,4 +11567,85 @@ h1, h2, h3, h4, h5,
         [data-toggle="collapse"].collapsed:hover {
             background: #ececec !important;
             border-bottom: 2px solid #ececec;
-        }
+        }*/
+
+
+
+
+
+
+
+body {
+    color: #000;
+    overflow-x: hidden;
+    height: 100%;
+    background-color: #D1C4E9;
+    background-repeat: no-repeat
+}
+
+.container {
+    margin: 200px auto
+}
+
+fieldset {
+    display: none
+}
+
+    fieldset.show {
+        display: block
+    }
+
+select:focus,
+input:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 1px solid #2196F3 !important;
+    outline-width: 0 !important;
+    font-weight: 400
+}
+
+button:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    outline-width: 0
+}
+
+.tabs {
+    margin: 2px 5px 0px 5px;
+    padding-bottom: 10px;
+    cursor: pointer
+}
+
+    .tabs:hover,
+    .tabs.active {
+        border-bottom: 1px solid #2196F3
+    }
+
+a:hover {
+    text-decoration: none;
+    color: #1565C0
+}
+
+.box {
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 10px
+}
+
+.modal-backdrop {
+    background-color: #64B5F6
+}
+
+.line {
+    background-color: #CFD8DC;
+    height: 1px;
+    width: 100%
+}
+
+@media screen and (max-width: 768px) {
+    .tabs h6 {
+        font-size: 12px
+    }
+}
