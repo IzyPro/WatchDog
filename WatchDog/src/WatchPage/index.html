@@ -4,72 +4,148 @@
     <title>WatchDog</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--===============================================================================================-->
-    <!--<link rel="icon" type="image/png" href="WTCHDGstatics/images/icons/favicon.ico" />-->
-    <!--===============================================================================================-->
-    <!--<link rel="stylesheet" type="text/css" href="WTCHDGstatics/vendor/bootstrap/css/bootstrap.min.css">-->
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="WTCHDGstatics/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="WTCHDGstatics/css/util.css">
-    <link rel="stylesheet" type="text/css" href="WTCHDGstatics/css/main.css">
-    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="WTCHDGstatics/images/icons/favicon.ico" />
+
+    <script src="WTCHDGstatics/js/jquery-3.2.1.min.js"></script>
+    <script src="WTCHDGstatics/js/popper.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="WTCHDGstatics/css/bootstrap.min.css" />
+    <script src="WTCHDGstatics/js/bootstrap.min.js"></script>
+    <script src="WTCHDGstatics/signalr/signalr.js"></script>
+    <script src="WTCHDGstatics/js/moment.min.js"></script>
+
+    <style>
+        body {
+            color: #000;
+            overflow-x: hidden;
+            height: 100%;
+            background-color: #EBEFFB;
+            background-repeat: no-repeat;
+            font-family: 'Avenir Next LT Pro', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+        }
+
+        fieldset {
+            display: none
+        }
+
+            fieldset.show {
+                display: block
+            }
+
+        select:focus,
+        input:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border: 1px solid #2196F3 !important;
+            outline-width: 0 !important;
+            font-weight: 400
+        }
+
+        button:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            outline-width: 0
+        }
+
+        .tabs {
+            margin: 2px 5px 0px 5px;
+            padding-bottom: 10px;
+            cursor: pointer
+        }
+
+            .tabs:hover,
+            .tabs.active {
+                border-bottom: 1px solid #2196F3
+            }
+
+        a:hover {
+            text-decoration: none;
+            color: #1565C0
+        }
+
+        .box {
+            margin-bottom: 10px;
+            border-radius: 5px;
+            padding: 10px
+        }
+
+        .modal-backdrop {
+            background-color: #000000
+        }
+
+        .line {
+            background-color: #CFD8DC;
+            height: 1px;
+            width: 100%
+        }
+
+        @media screen and (max-width: 768px) {
+            .tabs h6 {
+                font-size: 12px
+            }
+        }
+
+        .dot {
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    </style>
+
+
 </head>
 <body>
-    <h2 class="ml-5 mt-5 lead">WatchDog</h2>
     <section class="ftco-section">
         <div class="container">
-            
+            <div class="mb-3 mb-3 text-left">
+                <h2 class="lead mt-5">WatchDog</h2>
+            </div>
+            <button data-toggle="modal" data-target="#clearLogsModal" class="btn-sm btn btn-dark m-1 float-right">Clear Logs</button>
+            <button onclick="logOut()" class="btn-sm btn btn-dark m-1 float-right">Log out</button>
             <div class="mb-5 row">
-                <div class="col-md-8">
-                    <button onclick="clearLogs()" class="btn-sm btn btn-dark m-1">Clear Logs</button>
-                    <hr/>
-                    <div class="row">
-                        <div class="col-lg-10">
-                            <input type="text" name="search" class="form-control col-md-5 m-1" id="searchString" />
-                            <button onclick="search()" class="btn-sm btn btn-dark m-1">Search</button>
-                        </div>
-                        <hr/>
-                        <div class="col-lg-10">
-                            <select id="myVerbDropDown" class="form-control col-md-5 m-1" aria-label="Default select HTTP Verb">
-                                <option selected>Select HTTP Verb</option>
-                                <option value="POST">POST</option>
-                                <option value="GET">GET</option>
-                                <option value="PUT">PUT</option>
-                                <option value="PATCH">PATCH</option>
-                                <option value="DELETE">DELETE</option>
-                            </select>
-                            <select id="myStatusCodeDropDown" class="form-control col-md-5 m-1" aria-label="Default select HTTP Verb">
-                                <option selected>Select HTTP Status Code</option>
-                                <option value="200">200</option>
-                                <option value="301">301</option>
-                                <option value="302">302</option>
-                                <option value="404">404</option>
-                                <option value="410">410</option>
-                                <option value="500">500</option>
-                                <option value="503">503</option>
-                            </select>
-                        </div>
-                    </div>
+                <select id="myVerbDropDown" class="form-control col-md-1 m-1" aria-label="Default select HTTP Verb">
+                    <option selected>ALL</option>
+                    <option value="POST">POST</option>
+                    <option value="GET">GET</option>
+                    <option value="PUT">PUT</option>
+                    <option value="PATCH">PATCH</option>
+                    <option value="DELETE">DELETE</option>
+                </select>
+                <select id="myStatusCodeDropDown" class="form-control col-md-1 m-1" aria-label="Default select HTTP Verb">
+                    <option selected>ALL</option>
+                    <option value="200">200</option>
+                    <option value="301">301</option>
+                    <option value="302">302</option>
+                    <option value="404">404</option>
+                    <option value="410">410</option>
+                    <option value="500">500</option>
+                    <option value="503">503</option>
+                </select>
+                <input type="text" name="search" class="form-control col-md-2 m-1" id="searchString" />
+                <button onclick="search()" class="btn-sm btn btn-dark m-1">Search</button>
+                <a href="" onclick="backToList()" class="m-1 mx-auto text-right col-md-6">Back to Full List</a>
+                <hr />
 
-                </div>
-                <hr/>
-                <a href="" onclick="backToList()" class="m-1">Back to Full List</a>
-
+            </div>
+            <div class="my-auto">
+                <b>Realtime Connection: <span id="dot" class="dot" style="background-color: dodgerblue"></span></b>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="table">
-                        <table class="table table-hover table-responsive-lg table-lg">
-                            <thead>
+                        <table class="table table-hover table-responsive-lg table-lg shadow p-3 mb-5 bg-light rounded">
+                            <thead class="thead-light">
                                 <tr>
                                     <th scope="col">Method</th>
                                     <th scope="col">Path</th>
                                     <th scope="col">Status Code</th>
                                     <th scope="col">Time Spent</th>
-                                    <th scope="col">Happened At</th>
-
-                                    <!--<th>&nbsp;</th>-->
+                                    <th scope="col">Time Stamp</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody">
@@ -79,18 +155,16 @@
                 </div>
             </div>
             <p class="lead text-center text-muted" id="pageMap"></p>
-            <div class="">
+            <div class="mb-5">
                 <button id="prev" class="text-left mr-5 btn-sm btn btn-dark float-left" onclick="prevPage()">Previous</button>
                 <button id="next" class="text-right ml-5 btn-sm btn btn-dark float-right" onclick="nextPage()">Next</button>
             </div>
         </div>
     </section>
-
-    <!-- Modal -->
     <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-body p-5">
+                <div class="modal-body p-5 shadow-lg">
                     <h3 class="lead fa-underline">WatchLog</h3>
                     <div class="row">
                         <div class="col-md-12 m">
@@ -101,49 +175,46 @@
                             <p><b>IP Address: </b> <span id="ip"></span></p>
                             <p><b>Status Code: </b> <span id="statusCode"></span></p>
                             <p style="word-wrap: break-word;"><b>Time Spent: </b> <span id="time"></span></p>
-                            <p style="word-wrap: break-word;"><b>Happened At: </b> <span id="startTime"></span></p>
+                            <p style="word-wrap: break-word;"><b>Time Stamp: </b> <span id="startTime"></span></p>
                         </div>
                         <div class="col-md-12 purplebg m mt-3">
 
-                            <div>
 
-                                <!-- Nav tabs -->
-                                <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" class="active">
-                                        <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Request</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Response</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Headers</a>
-                                    </li>
-                                    <!--<li role="presentation">
-                                        <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a>
-                                    </li>-->
-                                </ul>
-
-                                <!-- Tab panes -->
-                                <div class="tab-content mt-3">
-                                    <div role="tabpanel" class="tab-pane active" id="home">
-                                        <p class="lead">Request Body: </p>
-                                        <pre id="reqBody" style="word-wrap: break-word;"></pre>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="profile">
-                                        <p class="lead">Response Body: </p>
-                                        <pre id="resBody" style="word-wrap: break-word;"></pre>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="messages">
-                                        <p class="lead">Request Header: </p>
-                                        <pre id="reqHd" style="word-wrap: break-word;"></pre>
-                                        <p class="lead">Response Header: </p>
-                                        <pre id="resHd" style="word-wrap: break-word;"></pre>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="settings">Settings</div>
+                            <div class="row d-flex justify-content-between mx-1 mx-sm-3 mb-0 pb-0 border-0">
+                                <div class="tabs active" id="tab01">
+                                    <h6 class="font-weight-bold">Request</h6>
                                 </div>
-
+                                <div class="tabs" id="tab02">
+                                    <h6 class="text-muted">Response</h6>
+                                </div>
+                                <div class="tabs" id="tab03">
+                                    <h6 class="text-muted">Headers</h6>
+                                </div>
                             </div>
+                            <div class="line mb-3"></div>
 
+                            <div class="modal-body p-0">
+                                <fieldset id="tab011" class="show">
+                                    <div class="">
+                                        <p class="lead">Request Body: </p>
+                                        <pre id="reqBody" class="bg-light p-2" style="word-wrap: break-word;"></pre>
+                                    </div>
+                                </fieldset>
+                                <fieldset class="" id="tab021">
+                                    <div class="">
+                                        <p class="lead">Response Body: </p>
+                                        <pre id="resBody" class="bg-light p-2" style="word-wrap: break-word;"></pre>
+                                    </div>
+                                </fieldset>
+                                <fieldset id="tab031">
+                                    <div class="">
+                                        <p class="lead">Request Header: </p>
+                                        <pre id="reqHd" class="bg-light p-2" style="word-wrap: break-word;"></pre>
+                                        <p class="lead mt-3">Response Header: </p>
+                                        <pre id="resHd" class="bg-light p-2" style="word-wrap: break-word;"></pre>
+                                    </div>
+                                </fieldset>
+                            </div>
                         </div>
                     </div>
 
@@ -162,7 +233,7 @@
                             <input class="form-control m-1" type="text" placeholder="Enter Username" name="uname" id="uname" required>
                             <br />
                             <input class="form-control m-1" type="password" placeholder="Enter Password" name="psw" id="psw" required>
-                           
+
                         </form>
 
                         <button class="btn btn-sm btn-dark mt-5" style="width:100%" onclick="login()" type="submit">Login</button>
@@ -173,25 +244,63 @@
         </div>
     </div>
 
-    <!--===============================================================================================-->
-    <script src="WTCHDGstatics/vendor/jquery/jquery-3.2.1.min.js"></script>
-    <script src="WTCHDGstatics/vendor/bootstrap/js/popper.min.js"></script>
-    <script src="WTCHDGstatics/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="WTCHDGstatics/signalr/signalr.js"></script>
-    <script src="WTCHDGstatics/vendor/moment.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="WTCHDGstatics/css/bootstrap.min.css">
+    <div class="modal" id="clearLogsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-5 text-center">
+                    <h3 class="lead fa-underline mb-3">Are you sure you want to clear all logs?</h3>
+                    <div class="mx-auto text-center">
+                        <a href="" data-dismiss="modal" class="mr-5">No</a>
+                        <a href="" onclick="clearLogs()" class="ml-5">Yes</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
 
-    <script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".tabs").click(function () {
+                $(".tabs").removeClass("active");
+                $(".tabs h6").removeClass("font-weight-bold");
+                $(".tabs h6").addClass("text-muted");
+                $(this).children("h6").removeClass("text-muted");
+                $(this).children("h6").addClass("font-weight-bold");
+                $(this).addClass("active");
+                current_fs = $(".active");
+                next_fs = $(this).attr('id');
+                next_fs = "#" + next_fs + "1";
+                $("fieldset").removeClass("show");
+                $(next_fs).addClass("show");
+                current_fs.animate({}, {
+                    step: function () {
+                        current_fs.css({
+                            'display': 'none',
+                            'position': 'relative'
+                        });
+                        next_fs.css({
+                            'display': 'block'
+                        });
+                    }
+                });
+            });
+        });
+
         var pageIndex = 1;
         var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
 
         connection.on("getLogs", function (data) {
             if (sessionStorage.getItem("loggedIn") !== null && sessionStorage.getItem("loggedIn") === sessionStorage.getItem("newloggedIn")) {
+                const firstDigitStr = String(data.responseStatus)[0];
+                var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
                 const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                    "<td>" + data.method + "</td><td>" + data.path + "</td><td>" + data.responseStatus + "</td><td>" + data.timeSpent + "</td><td>" + moment(data.startTime).format('LLL') + "</td></tr>");
+                    "<td><b>" + data.method + "</b></td><td>" + data.path + "</td><td><b class='" + statusColor + "'> " + data.responseStatus + "</b></td><td>" + data.timeSpent + "</td><td>" + moment(data.startTime).format('LLL') + "</td></tr>");
                 tr.on('click', populateModal.bind(null, data));
                 $('#tableBody').prepend(tr);
             }
@@ -201,10 +310,15 @@
         connection
             .start()
             .then(function () {
-                getLogs()
-            }).catch(err => console.log('Error while starting connection: ' + err));
+                getLogs();
+                document.getElementById("dot").style.backgroundColor = "green";
+            }).catch(err => {
+                getLogs();
+                document.getElementById("dot").style.backgroundColor = "red";
+            });
 
         $("#myVerbDropDown").change(function (event) {
+            $('#tableBody').empty();
             if ($("#myVerbDropDown")[0].selectedIndex === 0) {
                 getLogs()
             } else {
@@ -214,12 +328,13 @@
         });
 
         $("#myStatusCodeDropDown").change(function (event) {
+            $('#tableBody').empty();
             if ($("#myStatusCodeDropDown")[0].selectedIndex === 0) {
                 getLogs()
             } else {
                 filterStatusCode($(this).val());
             }
-            
+
         });
 
         function getLogs(searchString = "", verb = "", statusCode = "") {
@@ -253,8 +368,10 @@
                             $('#myLoginModal').modal('show');
                         } else {
                             for (var i = 0; i < data.logs.length; i++) {
+                                const firstDigitStr = String(data.logs[i].responseStatus)[0];
+                                var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
                                 const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                                    "<td>" + data.logs[i].method + "</td><td>" + data.logs[i].path + "</td><td>" + data.logs[i].responseStatus + "</td><td>" + data.logs[i].timeSpent + "</td><td>" + moment(data.logs[i].startTime).format('LLL') + "</td></tr>");
+                                    "<td><b>" + data.logs[i].method + "</b></td><td>" + data.logs[i].path + "</td><td><b class='" + statusColor + "'> " + data.logs[i].responseStatus + "</b ></td ><td>" + data.logs[i].timeSpent + "</td><td>" + moment(data.logs[i].startTime).format('LLL') + "</td></tr > ");
                                 tr.on('click', populateModal.bind(null, data.logs[i]));
                                 $('#tableBody').append(tr);
                             }
@@ -280,19 +397,19 @@
             pageIndex = 1;
             $('#tableBody').empty();
             var ss = $('#searchString').val();
-            getLogs(ss);
+            getLogs(ss, $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val());
         }
 
         function filterVerb(verbString) {
             pageIndex = 1;
             $('#tableBody').empty();
-            getLogs("", verbString, "");
+            getLogs($('#searchString').val(), verbString, $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val());
         }
 
         function filterStatusCode(statusCodeString) {
             pageIndex = 1;
             $('#tableBody').empty();
-            getLogs("", "", statusCodeString);
+            getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), statusCodeString);
         }
 
         function nextPage() {
@@ -314,6 +431,10 @@
             getLogs();
         }
 
+        function logOut() {
+            sessionStorage.clear();
+            window.location.reload();
+        }
         function login() {
             var form = document.querySelector('form')
             form.reportValidity()
@@ -338,7 +459,7 @@
                     }
                 });
             }
-            
+
         }
 
         function populateModal(data) {
@@ -385,7 +506,6 @@
             });
         }
     </script>
-    <!--===============================================================================================-->
     <script src="WTCHDGstatics/js/main.js"></script>
 
 </body>
