@@ -39,12 +39,11 @@ namespace WatchDog.src.Services
                     return;
                 }
 
-                await DoWorkAsync();
 
                 isProcessing = false;
 
                 TimeSpan minute;
-                var schedule = WatchDogConfigModel.ClearTimeSchedule;
+                var schedule = AutoClearModel.ClearTimeSchedule;
 
                 switch (schedule)
                 {
@@ -58,12 +57,13 @@ namespace WatchDog.src.Services
                         minute = TimeSpan.FromDays(30);
                         break;
                     default:
-                        minute = TimeSpan.FromDays(1);
+                        minute = TimeSpan.FromDays(7);
                         break;
 
                 }
 
                 await Task.Delay(minute);
+                await DoWorkAsync();
 
             }
         }
