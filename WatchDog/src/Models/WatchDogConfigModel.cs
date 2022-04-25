@@ -10,6 +10,6 @@ namespace WatchDog.src.Models
         public static string UserName { get; set; }
         public static string Password { get; set; }
         public static bool IsAutoClear { get; set; }
-        public static WatchDogAutoClearScheduleEnum ClearTimeSchedule { get; set; }
+        public static WatchDogAutoClearScheduleEnum ClearTimeSchedule { get; set; } = WatchDogAutoClearScheduleEnum.Daily;
     }
 }
