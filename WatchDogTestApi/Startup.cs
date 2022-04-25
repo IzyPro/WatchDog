@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WatchDog;
+using WatchDog.src.Enums;
 
 namespace WatchDogTestApi
 {
@@ -43,6 +44,8 @@ namespace WatchDogTestApi
             app.UseWatchDog(opt => {
                 opt.WatchPageUsername = "Admin";
                 opt.WatchPagePassword = "Qwerty@123";
+                opt.WatchDogAutoClearLogs = true;
+                opt.WatchDogAutoClearLogsScheduler = WatchDogAutoClearScheduleEnum.Weekly;
             });
             app.UseWatchDogExceptionLogger();
 
