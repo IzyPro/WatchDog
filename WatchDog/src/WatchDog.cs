@@ -25,9 +25,9 @@ namespace WatchDog.src
         private readonly ILogger _logger;
         private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
         private readonly IBroadcastHelper _broadcastHelper;
-        private readonly WatchDogAuthModel _options;
+        private readonly WatchDogOptionsModel _options;
 
-        public WatchDog(WatchDogAuthModel options, RequestDelegate next, ILoggerFactory loggerFactory, IBroadcastHelper broadcastHelper)
+        public WatchDog(WatchDogOptionsModel options, RequestDelegate next, ILoggerFactory loggerFactory, IBroadcastHelper broadcastHelper)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<WatchDog>();
@@ -35,8 +35,11 @@ namespace WatchDog.src
             _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
             _broadcastHelper = broadcastHelper;
 
-            WatchDogAuthConfigModel.UserName = _options.WatchPageUsername;
-            WatchDogAuthConfigModel.Password = _options.WatchPagePassword;
+            WatchDogConfigModel.UserName = _options.WatchPageUsername;
+            WatchDogConfigModel.Password = _options.WatchPagePassword;
+            WatchDogConfigModel.IsAutoClear = (bool)_options.WatchDogAutoClearLogs;
+            WatchDogConfigModel.ClearTimeSchedule = _options.WatchDogAutoClearLogsScheduler;
+
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -143,7 +146,7 @@ namespace WatchDog.src
                                                $"Response Body: {responseBody}");
                         var responseBodyDto = new ResponseModel
                         {
-                            ResponseBody = responseBody,
+                            ResponseBody = responseBody?.Length > 300 ? responseBody.Truncate(300) : responseBody,
                             ResponseStatus = context.Response.StatusCode,
                             FinishTime = DateTime.Now,
                             Headers = context.Response.StatusCode != 200 || context.Response.StatusCode != 201 ? "" : context.Response.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b),

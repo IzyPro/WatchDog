@@ -1,31 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WatchDog.src.Helpers;
+using WatchDog.src.Interfaces;
 using WatchDog.src.Models;
 
 namespace WatchDog.src.Services
 {
-    public interface ILoggerService
+    public class LoggerService : ILoggerService
     {
-        void AddToLogs(WatchLog log);
-
-        List<WatchLog> GetAllLogs();
-    }
-    public class LoggerService
-    {
-        public void AddToLogs(WatchLog log)
+        public void ClearWatchLogs()
         {
-            LoggerStore.Logs.Add(log);
+            if (WatchDogConfigModel.IsAutoClear)
+            {
+                LiteDBHelper.ClearWatchLog();
+            }
+            
         }
-
-        public List<WatchLog> GetAllLogs()
-        {
-            return LoggerStore.Logs;
-        }
-    }
-
-    public class LoggerStore
-    {
-        public static List<WatchLog> Logs = new List<WatchLog>();
     }
 }

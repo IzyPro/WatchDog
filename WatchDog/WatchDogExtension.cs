@@ -14,6 +14,7 @@ using WatchDog.src.Helpers;
 using WatchDog.src.Hubs;
 using WatchDog.src.Interfaces;
 using WatchDog.src.Models;
+using WatchDog.src.Services;
 
 namespace WatchDog
 {
@@ -32,14 +33,18 @@ namespace WatchDog
                 x.EnableEndpointRouting = false;
             }).AddApplicationPart(typeof(WatchDogExtension).Assembly);
             services.AddTransient<IBroadcastHelper, BroadcastHelper>();
+            services.AddTransient<ILoggerService, LoggerService>();
+            services.AddHostedService<AutoLogClearerBackgroundService>();
             return services;
         }
-        public static IApplicationBuilder UseWatchDog(this IApplicationBuilder app, Action<WatchDogAuthModel> configureOptions)
+        public static IApplicationBuilder UseWatchDog(this IApplicationBuilder app, Action<WatchDogOptionsModel> configureOptions)
         {
-            var options = new WatchDogAuthModel();
+            var options = new WatchDogOptionsModel();
             configureOptions(options);
 
-            app.UseMiddleware<src.WatchDog>(options); 
+            app.UseMiddleware<src.WatchDog>(options);
+
+
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
@@ -65,6 +70,7 @@ namespace WatchDog
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            app.Build();
 
             return app.UseRouter(router => {
 
