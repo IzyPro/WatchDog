@@ -11,7 +11,7 @@ namespace WatchDog.src.Services
     {
         public void ClearWatchLogs()
         {
-            if (WatchDogConfigModel.IsAutoClear)
+            if (AutoClearModel.IsAutoClear)
             {
                 LiteDBHelper.ClearWatchLog();
             }

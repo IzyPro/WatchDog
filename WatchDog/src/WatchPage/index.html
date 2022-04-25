@@ -320,7 +320,7 @@
         $("#myVerbDropDown").change(function (event) {
             $('#tableBody').empty();
             if ($("#myVerbDropDown")[0].selectedIndex === 0) {
-                getLogs()
+                getLogs($('#searchString').val(), "", $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val())
             } else {
                 filterVerb($(this).val());
             }
@@ -330,7 +330,7 @@
         $("#myStatusCodeDropDown").change(function (event) {
             $('#tableBody').empty();
             if ($("#myStatusCodeDropDown")[0].selectedIndex === 0) {
-                getLogs()
+                getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), "")
             } else {
                 filterStatusCode($(this).val());
             }
@@ -415,14 +415,14 @@
         function nextPage() {
             ++pageIndex;
             $('#tableBody').empty();
-            getLogs();
+            getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val());
         }
 
         function prevPage() {
             if (pageIndex > 1)
                 --pageIndex;
             $('#tableBody').empty();
-            getLogs();
+            getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val());
         }
 
         function backToList() {

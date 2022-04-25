@@ -28,7 +28,12 @@ namespace WatchDogTestApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddWatchDogServices();
+            //services.AddWatchDogServices();
+            services.AddWatchDogServices(opt =>
+            {
+                opt.IsAutoClear = true;
+                opt.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Monthly;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,8 +49,6 @@ namespace WatchDogTestApi
             app.UseWatchDog(opt => {
                 opt.WatchPageUsername = "Admin";
                 opt.WatchPagePassword = "Qwerty@123";
-                opt.WatchDogAutoClearLogs = true;
-                opt.WatchDogAutoClearLogsScheduler = WatchDogAutoClearScheduleEnum.Weekly;
             });
             app.UseWatchDogExceptionLogger();
 

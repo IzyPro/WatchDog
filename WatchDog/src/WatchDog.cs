@@ -37,9 +37,6 @@ namespace WatchDog.src
 
             WatchDogConfigModel.UserName = _options.WatchPageUsername;
             WatchDogConfigModel.Password = _options.WatchPagePassword;
-            WatchDogConfigModel.IsAutoClear = (bool)_options.WatchDogAutoClearLogs;
-            WatchDogConfigModel.ClearTimeSchedule = _options.WatchDogAutoClearLogsScheduler;
-
         }
 
         public async Task InvokeAsync(HttpContext context)

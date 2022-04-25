@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using WatchDog.src.Controllers;
 using WatchDog.src.Helpers;
@@ -25,8 +26,14 @@ namespace WatchDog
         "WatchDog"
         );
 
-        public static IServiceCollection AddWatchDogServices(this IServiceCollection services)
+        public static IServiceCollection AddWatchDogServices(this IServiceCollection services, [Optional] Action<AutoClearLogsModel> configureOptions)
         {
+            var options = new AutoClearLogsModel();
+            if (configureOptions != null)
+                configureOptions(options);
+            AutoClearModel.IsAutoClear = options.IsAutoClear;
+            AutoClearModel.ClearTimeSchedule = options.ClearTimeSchedule;
+
             services.AddSignalR();
             services.AddMvcCore(x =>
             {
@@ -34,7 +41,8 @@ namespace WatchDog
             }).AddApplicationPart(typeof(WatchDogExtension).Assembly);
             services.AddTransient<IBroadcastHelper, BroadcastHelper>();
             services.AddTransient<ILoggerService, LoggerService>();
-            services.AddHostedService<AutoLogClearerBackgroundService>();
+            if (AutoClearModel.IsAutoClear)
+                services.AddHostedService<AutoLogClearerBackgroundService>();
             return services;
         }
         public static IApplicationBuilder UseWatchDog(this IApplicationBuilder app, Action<WatchDogOptionsModel> configureOptions)
@@ -72,7 +80,8 @@ namespace WatchDog
 
             app.Build();
 
-            return app.UseRouter(router => {
+            return app.UseRouter(router =>
+            {
 
                 router.MapGet("watchdog", async context =>
                 {
@@ -87,15 +96,15 @@ namespace WatchDog
 
         public static IApplicationBuilder UseWatchDogExceptionLogger(this IApplicationBuilder builder)
         {
-           
+
             return builder.UseMiddleware<src.WatchDogExceptionLogger>();
         }
 
-        
+
         public static IFileInfo GetFile()
         {
             return Provider.GetFileInfo("src.WatchPage.index.html");
-        
+
         }
 
         public static string GetFolder()

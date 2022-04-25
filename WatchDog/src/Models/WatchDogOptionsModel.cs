@@ -9,7 +9,5 @@ namespace WatchDog.src.Models
     {
         public string WatchPageUsername { get; set; }
         public string WatchPagePassword { get; set; }
-        public bool? WatchDogAutoClearLogs { get; set; }
-        public WatchDogAutoClearScheduleEnum WatchDogAutoClearLogsScheduler { get; set; } = WatchDogAutoClearScheduleEnum.Daily;
     }
 }
