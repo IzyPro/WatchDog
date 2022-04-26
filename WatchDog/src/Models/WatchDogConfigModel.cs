@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WatchDog.src.Enums;
+﻿using WatchDog.src.Enums;
 
 namespace WatchDog.src.Models
 {
@@ -9,6 +6,7 @@ namespace WatchDog.src.Models
     {
         public static string UserName { get; set; }
         public static string Password { get; set; }
+        public static string[] Blacklist { get; set; }
     }
 
     public class AutoClearLogsModel

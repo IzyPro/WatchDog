@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using WatchDog.src.Controllers;
 using WatchDog.src.Helpers;
 using WatchDog.src.Hubs;
 using WatchDog.src.Interfaces;
@@ -49,6 +45,8 @@ namespace WatchDog
         {
             var options = new WatchDogOptionsModel();
             configureOptions(options);
+            if (string.IsNullOrEmpty(options.WatchPageUsername) || string.IsNullOrEmpty(options.WatchPagePassword))
+                throw new ArgumentException("Parameters Username and password are required");
 
             app.UseMiddleware<src.WatchDog>(options);
 
