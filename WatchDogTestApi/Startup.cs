@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WatchDog;
+using WatchDog.src.Enums;
 
 namespace WatchDogTestApi
 {
@@ -24,7 +25,7 @@ namespace WatchDogTestApi
             services.AddWatchDogServices(opt =>
             {
                 opt.IsAutoClear = true;
-                opt.ClearTimeSchedule = WatchDog.src.Enums.WatchDogAutoClearScheduleEnum.Monthly;
+                opt.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Monthly;
             });
         }
 

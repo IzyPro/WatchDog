@@ -46,7 +46,7 @@ namespace WatchDog
             var options = new WatchDogOptionsModel();
             configureOptions(options);
             if (string.IsNullOrEmpty(options.WatchPageUsername) || string.IsNullOrEmpty(options.WatchPagePassword))
-                throw new ArgumentException("Parameters Username and password are required");
+                throw new ArgumentException("Parameters Username and password are required on .UseWatchLog()");
 
             app.UseMiddleware<src.WatchDog>(options);
 

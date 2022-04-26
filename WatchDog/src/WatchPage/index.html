@@ -350,7 +350,6 @@
                 url: "/WTCHDwatchpage?pageNumber=" + pageIndex + "&searchString=" + searchString + "&verbString=" + verb + "&statusCode=" + statusCode,
                 context: document.body,
                 success: function (data) {
-                    console.log(data);
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
                     $('#pageMap').text("Page " + data.pageIndex + " of " + totalPages);
                     if (data.hasNext === false) {
