@@ -22,5 +22,10 @@ namespace WatchDog.src.Helpers
         {
             await _hubContext.Clients.All.SendAsync("getLogs", log);
         }
+
+        public async Task BroadcastExLog(WatchExceptionLog log)
+        {
+            await _hubContext.Clients.All.SendAsync("getExLogs", log);
+        }
     }
 }

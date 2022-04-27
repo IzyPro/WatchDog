@@ -29,7 +29,7 @@ namespace WatchDogTestApi.Controllers
             var rng = new Random();
             try
             {
-                throw new Exception("ID DOES NOT EXIST");
+               
             }
             catch (Exception ex)
             {
