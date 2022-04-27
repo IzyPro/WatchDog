@@ -292,24 +292,9 @@
                             <p style="word-wrap"><b>Message: </b> <span id="exMessage"></span></p>
                             <p style="word-wrap"><b>TypeOf: </b> <span id="exTypeOf"></span></p>
                         </div>
-                        <div class="col-md-12 purplebg m mt-3">
-
-
-                            <div class="row d-flex justify-content-between mx-1 mx-sm-3 mb-0 pb-0 border-0">
-                                <div class="tabs active" id="tab01">
-                                    <h6 class="font-weight-bold">Stack Trace</h6>
-                                </div>
-                            </div>
-                            <div class="line mb-3"></div>
-
-                            <div class="modal-body p-0">
-                                <fieldset class="" id="tab01">
-                                    <div class="">
-                                        <p class="lead">Stack Trace: </p>
-                                        <pre id="exStackTrace" class="bg-light p-2"></pre>
-                                    </div>
-                                </fieldset>
-                            </div>
+                        <div class="">
+                            <p class="lead"><b>Stack Trace:</b> </p>
+                            <pre style="word-wrap" id="exStackTrace" class="bg-light p-2"></pre>
                         </div>
                     </div>
 
@@ -392,23 +377,24 @@
         var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
 
         connection.on("getLogs", function (data) {
+            console.log("Log receid realtime")
             if (sessionStorage.getItem("loggedIn") !== null && sessionStorage.getItem("loggedIn") === sessionStorage.getItem("newloggedIn")) {
-                const firstDigitStr = String(data.responseStatus)[0];
-                var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
-                const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                    "<td><b>" + data.method + "</b></td><td>" + data.path + "</td><td><b class='" + statusColor + "'> " + data.responseStatus + "</b></td><td>" + data.timeSpent + "</td><td>" + moment(data.startTime).format('LLL') + "</td></tr>");
-                tr.on('click', populateModal.bind(null, data));
-                $('#tableBody').prepend(tr);
-            }
-
-        });
-
-        connection.on("getExLogs", function (data) {
-            if (sessionStorage.getItem("loggedIn") !== null && sessionStorage.getItem("loggedIn") === sessionStorage.getItem("newloggedIn")) {
-                const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                    "<td><b>" + data.logs[i].source + "</b></td><td>" + data.logs[i].message + "</td><td>" + data.logs[i].typeof + "</td><td>" + data.logs[i].encounteredAt + "</td></tr > ");
-                tr.on('click', populateExceptionModal.bind(null, data));
-                $('#tableBodyEx').append(tr);
+                if (data.type === "rqLog") {
+                    const firstDigitStr = String(data.log.responseStatus)[0];
+                    var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
+                    const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                        "<td><b>" + data.log.method + "</b></td><td>" + data.log.path + "</td><td><b class='" + statusColor + "'> " + data.log.responseStatus + "</b></td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.startTime).format('LLL') + "</td></tr>");
+                    tr.on('click', populateModal.bind(null, data.log));
+                    $('#tableBody').prepend(tr);
+                } else {
+                    console.log("Ex Log realtime")
+                    console.log(data.log)
+                    const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                        "<td><b>" + data.log.source + "</b></td><td>" + data.log.message + "</td><td>" + data.logs.typeof + "</td><td>" + data.logs.encounteredAt + "</td></tr > ");
+                    tr.on('click', populateExceptionModal.bind(null, data.log));
+                    $('#tableBodyEx').append(tr);
+                }
+                
             }
 
         });
@@ -416,9 +402,9 @@
         connection
             .start()
             .then(function () {
+                document.getElementById("dot").style.backgroundColor = "green";
                 getLogs();
                 getExceptionLogs();
-                document.getElementById("dot").style.backgroundColor = "green";
             }).catch(err => {
                 getLogs();
                 getExceptionLogs();
@@ -495,7 +481,6 @@
                 url: "/WTCHDwatchpage/Exceptions?pageNumber" + pageIndex + "&searchString=" + searchString,
                 context: document.body,
                 success: function (data) {
-                    console.log(data);
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
                     $('#exPageMap').text("Page " + data.pageIndex + " of " + totalPages);
                     if (data.hasNext === false) {
@@ -662,7 +647,6 @@
         function populateExceptionModal(data) {
             $('#exMessage').text(data.message);
             $('#exTypeOf').text(data.typeOf);
-
             $('#exStackTrace').text(data.stackTrace);
         }
 

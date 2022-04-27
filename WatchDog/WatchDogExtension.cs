@@ -41,6 +41,13 @@ namespace WatchDog
                 services.AddHostedService<AutoLogClearerBackgroundService>();
             return services;
         }
+
+        public static IApplicationBuilder UseWatchDogExceptionLogger(this IApplicationBuilder builder)
+        {
+
+            return builder.UseMiddleware<src.WatchDogExceptionLogger>();
+        }
+
         public static IApplicationBuilder UseWatchDog(this IApplicationBuilder app, Action<WatchDogOptionsModel> configureOptions)
         {
             var options = new WatchDogOptionsModel();
@@ -90,12 +97,6 @@ namespace WatchDog
 
             });
 
-        }
-
-        public static IApplicationBuilder UseWatchDogExceptionLogger(this IApplicationBuilder builder)
-        {
-
-            return builder.UseMiddleware<src.WatchDogExceptionLogger>();
         }
 
 
