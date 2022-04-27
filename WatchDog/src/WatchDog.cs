@@ -37,7 +37,7 @@ namespace WatchDog.src
 
             WatchDogConfigModel.UserName = _options.WatchPageUsername;
             WatchDogConfigModel.Password = _options.WatchPagePassword;
-            WatchDogConfigModel.Blacklist = String.IsNullOrEmpty(_options.Blacklist) ? new string[] {} : _options.Blacklist.Replace(" ", string.Empty).Split(',');
+            WatchDogConfigModel.Blacklist = String.IsNullOrEmpty(_options.Blacklist) ? new string[] { } : _options.Blacklist.Replace(" ", string.Empty).Split(',');
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -80,7 +80,7 @@ namespace WatchDog.src
             {
                 await _next.Invoke(context);
             }
-            
+
         }
 
         private async Task<RequestModel> LogRequest(HttpContext context)
@@ -100,12 +100,14 @@ namespace WatchDog.src
                 Headers = context.Request.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b),
             };
 
-            if (context.Request.Method == "POST")
+
+            //if (context.Request.Method == "POST") 
+            if (context.Request.ContentLength > 1)
             {
                 context.Request.EnableBuffering();
                 await using var requestStream = _recyclableMemoryStreamManager.GetStream();
                 await context.Request.Body.CopyToAsync(requestStream);
-                requestBody = ReadStreamInChunks(requestStream);
+                requestBodyDto.RequestBody = ReadStreamInChunks(requestStream);
 
                 context.Request.Body.Position = 0;
             }

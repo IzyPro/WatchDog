@@ -203,12 +203,14 @@
                             <div class="modal-body p-0">
                                 <fieldset id="tab011" class="show">
                                     <div class="">
+                                        <a href="#" id="reqBodyCopy" onclick="copyToClipboard(event, 'reqBody', 'reqBodyCopy')" style="display:none" class="float-right">Copy</a>
                                         <p class="lead">Request Body: </p>
                                         <pre id="reqBody" class="bg-light p-2"></pre>
                                     </div>
                                 </fieldset>
                                 <fieldset class="" id="tab021">
                                     <div class="">
+                                        <a href="#" id="resBodyCopy" onclick="copyToClipboard(event, 'resBody', 'resBodyCopy')" style="display:none" class="float-right">Copy</a>
                                         <p class="lead">Response Body: </p>
                                         <pre id="resBody" class="bg-light p-2"></pre>
                                     </div>
@@ -484,16 +486,22 @@
             $('#reqBody').text(data.requestBody);
 
             $('#resBody').text(data.responseBody);
-
-            if (data.responseBody != null) {
+            console.log(data.requestBody);
+            if (data.responseBody != null && data.responseBody !== "") {
+                document.getElementById("resBodyCopy").style.display = "block";
                 var element = document.getElementById("resBody");
                 var obj = JSON.parse(element.innerText);
                 element.innerHTML = JSON.stringify(obj, undefined, 2);
+            } else {
+                document.getElementById("resBodyCopy").style.display = "none";
             }
-            if (data.requestBody != null) {
+            if (data.requestBody != null && data.requestBody !== "") {
+                document.getElementById("reqBodyCopy").style.display = "block";
                 var element2 = document.getElementById("reqBody");
                 var obj2 = JSON.parse(element2.innerText);
                 element2.innerHTML = JSON.stringify(obj, undefined, 2);
+            } else {
+                document.getElementById("reqBodyCopy").style.display = "none";
             }
         }
 
@@ -511,6 +519,25 @@
                 }
                 return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
             });
+        }
+
+        function sleep(time) {
+            return new Promise((resolve) => setTimeout(resolve, time));
+        }
+
+        function copyToClipboard(e, id, tag) {
+            var copyText = document.getElementById(id).innerHTML;
+            console.log(copyText);
+            navigator.clipboard.writeText(copyText);
+
+            /* Alert the copied text */
+            document.getElementById(tag).innerHTML = "Copied!";
+
+            sleep(1500).then(() => {
+                document.getElementById(tag).innerHTML = "Copy";
+            });
+            e = e || window.event;
+            e.preventDefault();
         }
     </script>
     <script src="WTCHDGstatics/js/main.js"></script>
