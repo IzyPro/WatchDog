@@ -112,59 +112,109 @@
             <div class="mb-3 mb-3 text-left">
                 <h2 class="lead mt-5">WatchDog</h2>
             </div>
-            <button data-toggle="modal" data-target="#clearLogsModal" class="btn-sm btn btn-dark m-1 float-right">Clear Logs</button>
-            <button onclick="logOut()" class="btn-sm btn btn-dark m-1 float-right">Log out</button>
-            <div class="mb-5 row">
-                <select id="myVerbDropDown" class="form-control col-md-1 m-1" aria-label="Default select HTTP Verb">
-                    <option selected>ALL</option>
-                    <option value="POST">POST</option>
-                    <option value="GET">GET</option>
-                    <option value="PUT">PUT</option>
-                    <option value="PATCH">PATCH</option>
-                    <option value="DELETE">DELETE</option>
-                </select>
-                <select id="myStatusCodeDropDown" class="form-control col-md-1 m-1" aria-label="Default select HTTP Verb">
-                    <option selected>ALL</option>
-                    <option value="200">200</option>
-                    <option value="301">301</option>
-                    <option value="302">302</option>
-                    <option value="404">404</option>
-                    <option value="410">410</option>
-                    <option value="500">500</option>
-                    <option value="503">503</option>
-                </select>
-                <input type="text" name="search" class="form-control col-md-2 m-1" id="searchString" />
-                <button onclick="search()" class="btn-sm btn btn-dark m-1">Search</button>
-                <a href="" onclick="backToList()" class="m-1 mx-auto text-right col-md-6">Back to Full List</a>
-                <hr />
+            <div class="text-right">
+                <button data-toggle="modal" data-target="#clearLogsModal" class="btn-sm btn btn-dark m-1 float-right">Clear Logs</button>
+                <button onclick="logOut()" class="btn-sm btn btn-dark m-1 float-right">Log out</button>
+            </div>
 
-            </div>
-            <div class="my-auto mb-5">
-                <b>Realtime Connection: <span id="dot" class="dot" style="background-color: dodgerblue"></span></b>
-            </div>
-            <div class="mt-3 row">
-                <div class="col-md-12">
-                    <div class="table">
-                        <table class="table table-hover table-responsive-lg table-lg shadow p-3 mb-5 bg-light rounded">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Method</th>
-                                    <th scope="col">Path</th>
-                                    <th scope="col">Status Code</th>
-                                    <th scope="col">Time Spent</th>
-                                    <th scope="col">Time Stamp</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody">
-                            </tbody>
-                        </table>
+
+            <ul class="nav nav-tabs mb-3">
+                <li class="active"><a data-toggle="tab" href="#requestTab">Request Logs</a></li>
+
+                <li><a data-toggle="tab" href="#exceptionTab">Exception Logs</a></li>
+            </ul>
+
+
+            <div class="tab-content">
+                <div id="requestTab" class="tab-pane fade in active show">
+                    <div class="mb-5 row">
+                        <select id="myVerbDropDown" class="form-control col-md-1 m-1" aria-label="Default select HTTP Verb">
+                            <option selected>ALL</option>
+                            <option value="POST">POST</option>
+                            <option value="GET">GET</option>
+                            <option value="PUT">PUT</option>
+                            <option value="PATCH">PATCH</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+                        <select id="myStatusCodeDropDown" class="form-control col-md-1 m-1" aria-label="Default select HTTP Verb">
+                            <option selected>ALL</option>
+                            <option value="200">200</option>
+                            <option value="301">301</option>
+                            <option value="302">302</option>
+                            <option value="404">404</option>
+                            <option value="410">410</option>
+                            <option value="500">500</option>
+                            <option value="503">503</option>
+                        </select>
+                        <input type="text" name="search" class="form-control col-md-2 m-1" id="searchString" />
+                        <button onclick="search()" class="btn-sm btn btn-dark m-1">Search</button>
+                        <a href="" onclick="backToList()" class="m-1 mx-auto text-right col-md-6">Back to Full List</a>
+                        <hr />
+
+                    </div>
+                    <div class="my-auto mb-5">
+                        <b>Realtime Connection: <span id="dot" class="dot" style="background-color: dodgerblue"></span></b>
+                    </div>
+                    <div class="mt-3 row">
+                        <div class="col-md-12">
+                            <div class="table">
+                                <table class="table table-hover table-responsive-lg table-lg shadow p-3 mb-5 bg-light rounded">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Method</th>
+                                            <th scope="col">Path</th>
+                                            <th scope="col">Status Code</th>
+                                            <th scope="col">Time Spent</th>
+                                            <th scope="col">Time Stamp</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="lead text-center text-muted" id="pageMap"></p>
+                    <div class="mb-5">
+                        <button id="prev" class="text-left mr-5 btn-sm btn btn-dark float-left" onclick="prevPage()">Previous</button>
+                        <button id="next" class="text-right ml-5 btn-sm btn btn-dark float-right" onclick="nextPage()">Next</button>
                     </div>
                 </div>
-            </div>
-            <p class="lead text-center text-muted" id="pageMap"></p>
-            <div class="mb-5">
-                <button id="prev" class="text-left mr-5 btn-sm btn btn-dark float-left" onclick="prevPage()">Previous</button>
-                <button id="next" class="text-right ml-5 btn-sm btn btn-dark float-right" onclick="nextPage()">Next</button>
+                <div id="exceptionTab" class="tab-pane fade">
+                    <div class="mb-5 row">
+                        <input type="text" name="search" class="form-control col-md-2 m-1" id="exSearchString" />
+                        <button onclick="exSearch()" class="btn-sm btn btn-dark m-1">Search</button>
+                        <a href="" onclick="backToList()" class="m-1 mx-auto text-right col-md-6">Back to Full List</a>
+                        <hr />
+
+                    </div>
+                    <div class="my-auto mb-5">
+                        <b>Realtime Connection: <span id="dot" class="dot" style="background-color: dodgerblue"></span></b>
+                    </div>
+                    <div class="mt-3 row">
+                        <div class="col-md-12">
+                            <div class="table">
+                                <table class="table table-hover table-responsive-lg table-lg shadow p-3 mb-5 bg-light rounded">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Source</th>
+                                            <th scope="col">Message</th>
+                                            <th scope="col">TypeOf</th>
+                                            <th scope="col">Encountered At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBodyEx">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="lead text-center text-muted" id="exPageMap"></p>
+                    <div class="mb-5">
+                        <button id="exPrev" class="text-left mr-5 btn-sm btn btn-dark float-left" onclick="prevPage()">Previous</button>
+                        <button id="exNext" class="text-right ml-5 btn-sm btn btn-dark float-right" onclick="nextPage()">Next</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -224,6 +274,27 @@
                                     </div>
                                 </fieldset>
                             </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="myExceptionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-5 shadow-lg">
+                    <h3 class="lead fa-underline">WatchLog Exceptions</h3>
+                    <div class="row">
+                        <div class="col-md-12 m">
+                            <p style="word-wrap"><b>Message: </b> <span id="exMessage"></span></p>
+                            <p style="word-wrap"><b>TypeOf: </b> <span id="exTypeOf"></span></p>
+                        </div>
+                        <div class="">
+                            <p class="lead"><b>Stack Trace:</b> </p>
+                            <pre style="word-wrap" id="exStackTrace" class="bg-light p-2"></pre>
                         </div>
                     </div>
 
@@ -302,16 +373,28 @@
         });
 
         var pageIndex = 1;
+        var exPageIndex = 1;
         var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
 
         connection.on("getLogs", function (data) {
+            console.log("Log receid realtime")
             if (sessionStorage.getItem("loggedIn") !== null && sessionStorage.getItem("loggedIn") === sessionStorage.getItem("newloggedIn")) {
-                const firstDigitStr = String(data.responseStatus)[0];
-                var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
-                const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                    "<td><b>" + data.method + "</b></td><td>" + data.path + "</td><td><b class='" + statusColor + "'> " + data.responseStatus + "</b></td><td>" + data.timeSpent + "</td><td>" + moment(data.startTime).format('LLL') + "</td></tr>");
-                tr.on('click', populateModal.bind(null, data));
-                $('#tableBody').prepend(tr);
+                if (data.type === "rqLog") {
+                    const firstDigitStr = String(data.log.responseStatus)[0];
+                    var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
+                    const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                        "<td><b>" + data.log.method + "</b></td><td>" + data.log.path + "</td><td><b class='" + statusColor + "'> " + data.log.responseStatus + "</b></td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.startTime).format('LLL') + "</td></tr>");
+                    tr.on('click', populateModal.bind(null, data.log));
+                    $('#tableBody').prepend(tr);
+                } else {
+                    console.log("Ex Log realtime")
+                    console.log(data.log)
+                    const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                        "<td><b>" + data.log.source + "</b></td><td>" + data.log.message + "</td><td>" + data.logs.typeof + "</td><td>" + data.logs.encounteredAt + "</td></tr > ");
+                    tr.on('click', populateExceptionModal.bind(null, data.log));
+                    $('#tableBodyEx').append(tr);
+                }
+                
             }
 
         });
@@ -319,10 +402,12 @@
         connection
             .start()
             .then(function () {
-                getLogs();
                 document.getElementById("dot").style.backgroundColor = "green";
+                getLogs();
+                getExceptionLogs();
             }).catch(err => {
                 getLogs();
+                getExceptionLogs();
                 document.getElementById("dot").style.backgroundColor = "red";
             });
 
@@ -390,6 +475,38 @@
                 }
             });
         }
+        function getExceptionLogs(searchString = "") {
+            $.ajax({
+                type: "GET",
+                url: "/WTCHDwatchpage/Exceptions?pageNumber" + pageIndex + "&searchString=" + searchString,
+                context: document.body,
+                success: function (data) {
+                    var totalPages = data.totalPages === 0 ? 1 : data.totalPages
+                    $('#exPageMap').text("Page " + data.pageIndex + " of " + totalPages);
+                    if (data.hasNext === false) {
+                        $('#exNext').hide();
+                    }
+                    else {
+                        $('#exNext').show();
+
+                    }
+
+                    if (data.hasPrevious === false) {
+                        $('#exPrev').hide();
+                    }
+                    else {
+                        $('#exPrev').show();
+                    }
+
+                    for (var i = 0; i < data.logs.length; i++) {
+                        const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
+                            "<td><b>" + data.logs[i].source + "</b></td><td>" + data.logs[i].message + "</td><td>" + data.logs[i].typeof + "</td><td>" + data.logs[i].encounteredAt + "</td></tr > ");
+                        tr.on('click', populateExceptionModal.bind(null, data.logs[i]));
+                        $('#tableBodyEx').append(tr);
+                    }
+                }
+            });
+        }
 
 
         function clearLogs() {
@@ -407,6 +524,13 @@
             $('#tableBody').empty();
             var ss = $('#searchString').val();
             getLogs(ss, $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val());
+        }
+
+        function exSearch() {
+            exPageIndex = 1;
+            $('#tableBodyEx').empty();
+            var ss = $('#exSearchString').val();
+            getExceptionLogs(ss);
         }
 
         function filterVerb(verbString) {
@@ -434,10 +558,25 @@
             getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val());
         }
 
+        function exNextPage() {
+            ++exPageIndex;
+            $('#tableBodyEx').empty();
+            getExceptionLogs($('#searchString').val());
+        }
+
+        function exPrevPage() {
+            if (exPageIndex > 1)
+                --exPageIndex;
+            $('#tableBodyEx').empty();
+            getExceptionLogs($('#searchString').val());
+        }
+
         function backToList() {
             pageIndex = 1;
             $('#tableBody').empty();
+            $('#tableBodyEx').empty();
             getLogs();
+            getExceptionLogs();
         }
 
         function logOut() {
@@ -503,6 +642,12 @@
             } else {
                 document.getElementById("reqBodyCopy").style.display = "none";
             }
+        }
+
+        function populateExceptionModal(data) {
+            $('#exMessage').text(data.message);
+            $('#exTypeOf').text(data.typeOf);
+            $('#exStackTrace').text(data.stackTrace);
         }
 
         function generateUUID() { // Public Domain/MIT

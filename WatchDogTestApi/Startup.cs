@@ -39,12 +39,13 @@ namespace WatchDogTestApi
 
             app.UseHttpsRedirection();
 
+            app.UseWatchDogExceptionLogger();
             app.UseWatchDog(opt => {
                 opt.WatchPagePassword = "Qwerty@123";
                 opt.WatchPageUsername = "Admin";
                 opt.Blacklist = "ogedengbe, marerin, otp/2";
             });
-            app.UseWatchDogExceptionLogger();
+
 
             app.UseRouting();
 

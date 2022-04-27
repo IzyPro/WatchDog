@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using WatchDog.src.Helpers;
+using WatchDog.src.Interfaces;
 using WatchDog.src.Models;
 
 namespace WatchDog.src
@@ -14,10 +15,12 @@ namespace WatchDog.src
     {
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
-        public WatchDogExceptionLogger(RequestDelegate next, ILoggerFactory loggerFactory)
+        private readonly IBroadcastHelper _broadcastHelper;
+        public WatchDogExceptionLogger(RequestDelegate next, ILoggerFactory loggerFactory, IBroadcastHelper broadcastHelper)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<WatchDogExceptionLogger>();
+            _broadcastHelper = broadcastHelper;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -40,10 +43,11 @@ namespace WatchDog.src
             watchExceptionLog.Message = ex.Message;
             watchExceptionLog.StackTrace = ex.StackTrace;
             watchExceptionLog.Source = ex.Source;
-
+            watchExceptionLog.TypeOf = ex.GetType().ToString();
 
             //Insert
             LiteDBHelper.InsertWatchExceptionLog(watchExceptionLog);
+            await _broadcastHelper.BroadcastExLog(watchExceptionLog);
         }
     }
 }

@@ -39,9 +39,6 @@ namespace WatchDog.src.Services
                     return;
                 }
 
-
-                isProcessing = false;
-
                 TimeSpan minute;
                 var schedule = AutoClearModel.ClearTimeSchedule;
 
@@ -75,6 +72,7 @@ namespace WatchDog.src.Services
                     await Task.Delay(TimeSpan.FromMilliseconds(remaining));
                 }
                 await DoWorkAsync();
+                isProcessing = false;
             }
         }
 
