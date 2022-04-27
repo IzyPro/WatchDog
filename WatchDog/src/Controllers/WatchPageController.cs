@@ -40,6 +40,22 @@ namespace WatchDog.src.Controllers
             return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result });
         }
 
+        public JsonResult Exceptions(string searchString = "", int pageNumber = 1)
+        {
+            var logs = LiteDBHelper.GetAllWatchExceptionLogs();
+            if (logs != null)
+            {
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    searchString = searchString.ToLower();
+                    logs = logs.Where(l => l.Message.ToLower().Contains(searchString) || l.StackTrace.ToLower().Contains(searchString) || l.Source.ToString().Contains(searchString));
+                }
+            }
+            logs = logs.OrderByDescending(x => x.EncounteredAt);
+            var result = PaginatedList<WatchExceptionLog>.CreateAsync(logs, pageNumber, PAGE_SIZE);
+            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result });
+        }
+
         public JsonResult ClearLogs()
         {
             var cleared = LiteDBHelper.ClearWatchLog();

@@ -9,5 +9,6 @@ namespace WatchDog.src.Interfaces
     public interface IBroadcastHelper
     {
         Task BroadcastLog(WatchLog log);
+        Task BroadcastExLog(WatchExceptionLog log);
     }
 }

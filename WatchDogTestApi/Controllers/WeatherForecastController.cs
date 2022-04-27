@@ -27,14 +27,7 @@ namespace WatchDogTestApi.Controllers
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
-            try
-            {
-                throw new Exception("ID DOES NOT EXIST");
-            }
-            catch (Exception ex)
-            {
-
-            }
+            throw new Exception("An error occured");
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
