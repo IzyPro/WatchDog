@@ -8,6 +8,7 @@ namespace WatchDog.src.Enums
     {
         Daily = 1,
         Weekly,
-        Monthly
+        Monthly,
+        Quarterly,
     }
 }

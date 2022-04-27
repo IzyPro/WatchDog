@@ -56,15 +56,25 @@ namespace WatchDog.src.Services
                     case WatchDogAutoClearScheduleEnum.Monthly:
                         minute = TimeSpan.FromDays(30);
                         break;
+                    case WatchDogAutoClearScheduleEnum.Quarterly:
+                        minute = TimeSpan.FromDays(90);
+                        break;
                     default:
                         minute = TimeSpan.FromDays(7);
                         break;
 
                 }
-
-                await Task.Delay(minute);
+                var start = DateTime.UtcNow;
+                while (true)
+                {
+                    var remaining = (minute - (DateTime.UtcNow - start)).TotalMilliseconds;
+                    if (remaining <= 0)
+                        break;
+                    if (remaining > Int16.MaxValue)
+                        remaining = Int16.MaxValue;
+                    await Task.Delay(TimeSpan.FromMilliseconds(remaining));
+                }
                 await DoWorkAsync();
-
             }
         }
 

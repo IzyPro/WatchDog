@@ -1,15 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WatchDog;
 using WatchDog.src.Enums;
 
@@ -47,8 +40,9 @@ namespace WatchDogTestApi
             app.UseHttpsRedirection();
 
             app.UseWatchDog(opt => {
-                opt.WatchPageUsername = "Admin";
                 opt.WatchPagePassword = "Qwerty@123";
+                opt.WatchPageUsername = "Admin";
+                opt.Blacklist = "ogedengbe, marerin, otp/2";
             });
             app.UseWatchDogExceptionLogger();
 

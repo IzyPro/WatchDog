@@ -37,14 +37,14 @@ namespace WatchDog.src
 
             WatchDogConfigModel.UserName = _options.WatchPageUsername;
             WatchDogConfigModel.Password = _options.WatchPagePassword;
+            WatchDogConfigModel.Blacklist = String.IsNullOrEmpty(_options.Blacklist) ? new string[] {} : _options.Blacklist.Replace(" ", string.Empty).Split(',');
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-
             var watchLog = new WatchLog();
 
-            if (!context.Request.Path.ToString().Contains("WTCHDwatchpage") && !context.Request.Path.ToString().Contains("watchdog") && !context.Request.Path.ToString().Contains("WTCHDGstatics") && !context.Request.Path.ToString().Contains("favicon") && !context.Request.Path.ToString().Contains("wtchdlogger"))
+            if (!context.Request.Path.ToString().Contains("WTCHDwatchpage") && !context.Request.Path.ToString().Contains("watchdog") && !context.Request.Path.ToString().Contains("WTCHDGstatics") && !context.Request.Path.ToString().Contains("favicon") && !context.Request.Path.ToString().Contains("wtchdlogger") && !WatchDogConfigModel.Blacklist.Contains(context.Request.Path.ToString().Remove(0, 1), StringComparer.OrdinalIgnoreCase))
             {
                 //Request handling comes here
                 var requestLog = await LogRequest(context);
@@ -143,7 +143,8 @@ namespace WatchDog.src
                                                $"Response Body: {responseBody}");
                         var responseBodyDto = new ResponseModel
                         {
-                            ResponseBody = responseBody?.Length > 300 ? responseBody.Truncate(300) : responseBody,
+                            //ResponseBody = responseBody?.Length > 300 ? responseBody.Truncate(300) : responseBody,
+                            ResponseBody = responseBody,
                             ResponseStatus = context.Response.StatusCode,
                             FinishTime = DateTime.Now,
                             Headers = context.Response.StatusCode != 200 || context.Response.StatusCode != 201 ? "" : context.Response.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b),
