@@ -80,18 +80,16 @@ namespace WatchDog.src
             {
                 await _next.Invoke(context);
             }
-            
         }
 
         private async Task<RequestModel> LogRequest(HttpContext context)
         {
             var startTime = DateTime.Now;
             List<string> requestHeaders = new List<string>();
-            var requestBody = string.Empty;
 
             var requestBodyDto = new RequestModel()
             {
-                RequestBody = requestBody,
+                RequestBody = string.Empty,
                 Host = context.Request.Host.ToString(),
                 Path = context.Request.Path.ToString(),
                 Method = context.Request.Method.ToString(),
@@ -100,12 +98,13 @@ namespace WatchDog.src
                 Headers = context.Request.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b),
             };
 
-            if (context.Request.Method == "POST")
+
+            if (context.Request.ContentLength > 1)
             {
                 context.Request.EnableBuffering();
                 await using var requestStream = _recyclableMemoryStreamManager.GetStream();
                 await context.Request.Body.CopyToAsync(requestStream);
-                requestBody = ReadStreamInChunks(requestStream);
+                requestBodyDto.RequestBody = ReadStreamInChunks(requestStream);
 
                 context.Request.Body.Position = 0;
             }
@@ -116,7 +115,7 @@ namespace WatchDog.src
                                    $"Method: {context.Request.Method}" +
                                    $"Path: {context.Request.Path} " +
                                    $"QueryString: {context.Request.QueryString} " +
-                                   $"Request Body: {requestBody}");
+                                   $"Request Body: {requestBodyDto.RequestBody}");
 
             return requestBodyDto;
         }

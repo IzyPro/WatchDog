@@ -43,5 +43,10 @@ namespace WatchDogTestApi.Controllers
             })
             .ToArray();
         }
+        //[HttpGet]
+        //public string Get([FromBody]WeatherForecast weatherForecast)
+        //{
+        //    return "Abobi, carry umbrella o " + weatherForecast.Summary.ToString();
+        //}
     }
 }
