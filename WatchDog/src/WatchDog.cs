@@ -37,7 +37,7 @@ namespace WatchDog.src
 
             WatchDogConfigModel.UserName = _options.WatchPageUsername;
             WatchDogConfigModel.Password = _options.WatchPagePassword;
-            WatchDogConfigModel.Blacklist = String.IsNullOrEmpty(_options.Blacklist) ? new string[] { } : _options.Blacklist.Replace(" ", string.Empty).Split(',');
+            WatchDogConfigModel.Blacklist = String.IsNullOrEmpty(_options.Blacklist) ? new string[] {} : _options.Blacklist.Replace(" ", string.Empty).Split(',');
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -80,18 +80,16 @@ namespace WatchDog.src
             {
                 await _next.Invoke(context);
             }
-
         }
 
         private async Task<RequestModel> LogRequest(HttpContext context)
         {
             var startTime = DateTime.Now;
             List<string> requestHeaders = new List<string>();
-            var requestBody = string.Empty;
 
             var requestBodyDto = new RequestModel()
             {
-                RequestBody = requestBody,
+                RequestBody = string.Empty,
                 Host = context.Request.Host.ToString(),
                 Path = context.Request.Path.ToString(),
                 Method = context.Request.Method.ToString(),
@@ -101,7 +99,6 @@ namespace WatchDog.src
             };
 
 
-            //if (context.Request.Method == "POST") 
             if (context.Request.ContentLength > 1)
             {
                 context.Request.EnableBuffering();
@@ -118,7 +115,7 @@ namespace WatchDog.src
                                    $"Method: {context.Request.Method}" +
                                    $"Path: {context.Request.Path} " +
                                    $"QueryString: {context.Request.QueryString} " +
-                                   $"Request Body: {requestBody}");
+                                   $"Request Body: {requestBodyDto.RequestBody}");
 
             return requestBodyDto;
         }
