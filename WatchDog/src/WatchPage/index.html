@@ -4,7 +4,7 @@
     <title>WatchDog</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="WTCHDGstatics/images/icons/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="WTCHDGstatics/images/icons/favicon.ico" />
 
     <script src="WTCHDGstatics/js/jquery-3.2.1.min.js"></script>
     <script src="WTCHDGstatics/js/popper.min.js"></script>
@@ -109,8 +109,10 @@
 <body>
     <section class="ftco-section">
         <div class="container">
-            <div class="mb-3 mb-3 text-left">
-                <h2 class="lead mt-5">WatchDog</h2>
+            <div class="row mb-3 mb-3 mt-5 text-left">
+                <img src="WTCHDGstatics/images/watchdogLogo.png" alt="Watchdog Logo" style="height:35px;" />
+                <!--<img src="WTCHDGstatics/images/watchdog.png" alt="Watchdog Logo" style="width:35px;height:35px;" />
+                <h1 class="lead mt-2 ml-3"><b>WatchDog</b></h1>-->
             </div>
             <button data-toggle="modal" data-target="#clearLogsModal" class="btn-sm btn btn-dark m-1 float-right">Clear Logs</button>
             <button onclick="logOut()" class="btn-sm btn btn-dark m-1 float-right">Log out</button>
@@ -172,6 +174,9 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body p-5 shadow-lg">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     <h3 class="lead fa-underline">WatchLog</h3>
                     <div class="row">
                         <div class="col-md-12 m">
@@ -490,16 +495,20 @@
             if (data.responseBody != null && data.responseBody !== "") {
                 document.getElementById("resBodyCopy").style.display = "block";
                 var element = document.getElementById("resBody");
-                var obj = JSON.parse(element.innerText);
-                element.innerHTML = JSON.stringify(obj, undefined, 2);
+                if (data.responseBody.includes("{")) {
+                    var obj = JSON.parse(element.innerText);
+                    element.innerHTML = JSON.stringify(obj, undefined, 2);
+                }
             } else {
                 document.getElementById("resBodyCopy").style.display = "none";
             }
             if (data.requestBody != null && data.requestBody !== "") {
                 document.getElementById("reqBodyCopy").style.display = "block";
                 var element2 = document.getElementById("reqBody");
-                var obj2 = JSON.parse(element2.innerText);
-                element2.innerHTML = JSON.stringify(obj, undefined, 2);
+                if (data.requestBody.includes("{")) {
+                    var obj2 = JSON.parse(element2.innerText);
+                    element2.innerHTML = JSON.stringify(obj2, undefined, 2);
+                }
             } else {
                 document.getElementById("reqBodyCopy").style.display = "none";
             }
@@ -540,7 +549,6 @@
             e.preventDefault();
         }
     </script>
-    <script src="WTCHDGstatics/js/main.js"></script>
 
 </body>
 </html>
