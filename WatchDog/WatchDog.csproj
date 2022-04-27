@@ -86,6 +86,9 @@
     <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-Regular.ttf" />
     <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-SemiBold.ttf" />
     <None Remove="src\WatchPage\fonts\OpenSans\OpenSans-SemiBoldItalic.ttf" />
+    <None Remove="src\WatchPage\images\icons\favicon.ico" />
+    <None Remove="src\WatchPage\images\watchdog.png" />
+    <None Remove="src\WatchPage\images\watchdogLogo.png" />
     <None Remove="src\WatchPage\index.html" />
     <None Remove="src\WatchPage\js\bootstrap.min.js" />
 	<None Remove="src\WatchPage\js\main.js" />
@@ -96,6 +99,15 @@
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\css\bootstrap.min.css.map">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\images\icons\favicon.ico">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\images\watchdog.png">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</EmbeddedResource>
+	<EmbeddedResource Include="src\WatchPage\images\watchdogLogo.png">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
 	<EmbeddedResource Include="src\WatchPage\js\bootstrap.min.js">
