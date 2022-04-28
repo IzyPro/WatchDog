@@ -54,10 +54,11 @@ services.AddWatchDogServices(opt =>
    opt.IsAutoClear = true;
    opt.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Monthly;
 });
+```
 
 ### Add WatchDog middleware in the HTTP request pipeline in `Startup.cs` under `Configure()`
 
->**NOTE**</br>
+>**NOTE**
 >Add Authentication option like below: `Important`
 
 
@@ -82,7 +83,7 @@ app.UseWatchDog(opt =>
 
 #### Add WatchDog Exception Logger `Optional`
 
->**NOTE**</br>
+>**NOTE**
 >Add Exception Logger before the main WatchDog Middleware
 
 ```c#
