@@ -646,26 +646,7 @@
 
             $('#resBody').text(data.responseBody);
 
-            if (data.responseBody != null && data.responseBody !== "") {
-                document.getElementById("resBodyCopy").style.display = "block";
-                var element = document.getElementById("resBody");
-                if (data.responseBody.includes("{")) {
-                    var obj = JSON.parse(element.innerText);
-                    element.innerHTML = JSON.stringify(obj, undefined, 2);
-                }
-            } else {
-                document.getElementById("resBodyCopy").style.display = "none";
-            }
-            if (data.requestBody != null && data.requestBody !== "") {
-                document.getElementById("reqBodyCopy").style.display = "block";
-                var element2 = document.getElementById("reqBody");
-                if (data.requestBody.includes("{")) {
-                    var obj2 = JSON.parse(element2.innerText);
-                    element2.innerHTML = JSON.stringify(obj2, undefined, 2);
-                }
-            } else {
-                document.getElementById("reqBodyCopy").style.display = "none";
-            }
+          
         }
 
         function populateExceptionModal(data) {
