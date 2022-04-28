@@ -2,10 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.IO;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WatchDog.src.Helpers;
 using WatchDog.src.Interfaces;
@@ -35,7 +32,7 @@ namespace WatchDog.src
             }
             catch (Exception ex)
             {
-                var requestLog = await LogRequest(context);
+                var requestLog = WatchDog.RequestLog;
                 await LogException(ex, requestLog);
                 throw;
             }
@@ -51,39 +48,12 @@ namespace WatchDog.src
             watchExceptionLog.TypeOf = ex.GetType().ToString();
             watchExceptionLog.Path = requestModel.Path;
             watchExceptionLog.Method = requestModel.Method;
+            watchExceptionLog.QueryString = requestModel.QueryString;
             watchExceptionLog.RequestBody = requestModel.RequestBody;
 
             //Insert
             LiteDBHelper.InsertWatchExceptionLog(watchExceptionLog);
             await _broadcastHelper.BroadcastExLog(watchExceptionLog);
-        }
-
-
-        private async Task<RequestModel> LogRequest(HttpContext context)
-        {
-            var startTime = DateTime.Now;
-            List<string> requestHeaders = new List<string>();
-
-            var requestBodyDto = new RequestModel()
-            {
-                RequestBody = string.Empty,
-                Host = context.Request.Host.ToString(),
-                Path = context.Request.Path.ToString(),
-                Method = context.Request.Method.ToString()
-            };
-
-
-            if (context.Request.ContentLength > 1)
-            {
-                context.Request.EnableBuffering();
-                await using var requestStream = _recyclableMemoryStreamManager.GetStream();
-                await context.Request.Body.CopyToAsync(requestStream);
-                requestBodyDto.RequestBody = GeneralHelper.ReadStreamInChunks(requestStream);
-
-                context.Request.Body.Position = 0;
-            }
-
-            return requestBodyDto;
         }
     }
 }

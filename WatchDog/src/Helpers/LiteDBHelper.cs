@@ -1,7 +1,5 @@
 ﻿using LiteDB;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using WatchDog.src.Models;
 
 namespace WatchDog.src.Helpers

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WatchDog.src.Helpers;
+﻿using WatchDog.src.Helpers;
 using WatchDog.src.Interfaces;
 using WatchDog.src.Models;
 
@@ -14,6 +11,7 @@ namespace WatchDog.src.Services
             if (AutoClearModel.IsAutoClear)
             {
                 LiteDBHelper.ClearWatchLog();
+                LiteDBHelper.ClearWatchExceptionLog();
             }
             
         }

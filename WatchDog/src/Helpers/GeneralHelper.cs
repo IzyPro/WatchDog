@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
 namespace WatchDog.src.Helpers
 {
     public static class GeneralHelper
     {
-        public static string? Truncate(this string? value, int maxLength, string truncationSuffix = "…}")
-        {
-            return value?.Length > maxLength
-                ? value.Substring(0, maxLength) + truncationSuffix
-                : value;
-        }
-
         public static string ReadStreamInChunks(Stream stream)
         {
             const int readChunkBufferLength = 4096;
