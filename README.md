@@ -3,8 +3,18 @@
 
 ## Introduction
 
-WatchDog is a HTTP (Request & Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view http requests made to their and also exception caught during runtime in their web applications.
+WatchDog is a Realtime HTTP (Request & Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view http requests made to their web application and also exception caught during runtime in their web applications in Realtime.
 It leverages on LiteDb a Serverless MongoDB-like database with no configuration.
+
+## General Features
+
+- RealTime HTTP Request and Response Logger
+- RealTime Exception Logger
+- User Friendly Logger Views
+- Search Option for HTTP and Exception Logs
+- Filtering Option for HTTP Logs using HTTP Methods and StatusCode
+- Logger View Authentication
+- Auto Clear Logs Option
  
 ## Installation
 
