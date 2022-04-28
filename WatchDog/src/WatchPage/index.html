@@ -308,11 +308,16 @@
                         <p style="word-wrap"><b>Message: </b> <span id="exMessage"></span></p>
                         <p style="word-wrap"><b>TypeOf: </b> <span id="exTypeOf"></span></p>
                         <p style="word-wrap"><b>Source: </b> <span id="exSource"></span></p>
+                        <p style="word-wrap"><b>Path: </b> <span id="exPath"></span></p>
+                        <p style="word-wrap"><b>Method: </b> <span id="exMethod"></span></p>
                         <p style="word-wrap"><b>Encountered At: </b> <span id="exTime"></span></p>
                     </div>
                     <div class="">
                         <p class="lead"><b>Stack Trace:</b> </p>
                         <pre id="exStackTrace" class="bg-light p-2"></pre>
+
+                        <p class="lead"><b>Request Body:</b> </p>
+                        <pre id="exReqBody" class="bg-light p-2"></pre>
                     </div>
 
                 </div>
@@ -394,7 +399,6 @@
         var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
 
         connection.on("getLogs", function (data) {
-            console.log("Log receid realtime")
             if (sessionStorage.getItem("loggedIn") !== null && sessionStorage.getItem("loggedIn") === sessionStorage.getItem("newloggedIn")) {
                 if (data.type === "rqLog") {
                     const firstDigitStr = String(data.log.responseStatus)[0];
@@ -404,8 +408,6 @@
                     tr.on('click', populateModal.bind(null, data.log));
                     $('#tableBody').prepend(tr);
                 } else {
-                    console.log("Ex Log realtime");
-                    console.log(data.log);
                     const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
                         "<td><b>" + data.log.source + "</b></td><td>" + data.log.message + "</td><td>" + data.log.typeOf + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
                     tr.on('click', populateExceptionModal.bind(null, data.log));
@@ -644,26 +646,7 @@
 
             $('#resBody').text(data.responseBody);
 
-            if (data.responseBody != null && data.responseBody !== "") {
-                document.getElementById("resBodyCopy").style.display = "block";
-                var element = document.getElementById("resBody");
-                if (data.responseBody.includes("{")) {
-                    var obj = JSON.parse(element.innerText);
-                    element.innerHTML = JSON.stringify(obj, undefined, 2);
-                }
-            } else {
-                document.getElementById("resBodyCopy").style.display = "none";
-            }
-            if (data.requestBody != null && data.requestBody !== "") {
-                document.getElementById("reqBodyCopy").style.display = "block";
-                var element2 = document.getElementById("reqBody");
-                if (data.requestBody.includes("{")) {
-                    var obj2 = JSON.parse(element2.innerText);
-                    element2.innerHTML = JSON.stringify(obj2, undefined, 2);
-                }
-            } else {
-                document.getElementById("reqBodyCopy").style.display = "none";
-            }
+          
         }
 
         function populateExceptionModal(data) {
@@ -672,6 +655,30 @@
             $('#exSource').text(data.source);
             $('#exTime').text(moment(data.encounteredAt).format('LLL'));
             $('#exStackTrace').text(data.stackTrace);
+            $('#exReqBody').text(data.requestBody);
+            $('#exPath').text(data.path);
+            $('#exMethod').text(data.method);
+
+            if (data.stackTrace != null && data.requestBody !== "") {
+                document.getElementById("exStackTraceCopy").style.display = "block";
+                var element = document.getElementById("exStackTrace");
+                if (data.responseBody.includes("{")) {
+                    var obj = JSON.parse(element.innerText);
+                    element.innerHTML = JSON.stringify(obj, undefined, 2);
+                }
+            } else {
+                document.getElementById("exReqBodyCopy").style.display = "none";
+            }
+            if (data.requestBody != null && data.requestBody !== "") {
+                document.getElementById("exReqBodyCopy").style.display = "block";
+                var element2 = document.getElementById("exReqBody");
+                if (data.requestBody.includes("{")) {
+                    var obj2 = JSON.parse(element2.innerText);
+                    element2.innerHTML = JSON.stringify(obj2, undefined, 2);
+                }
+            } else {
+                document.getElementById("exReqBodyCopy").style.display = "none";
+            }
         }
 
         function generateUUID() { // Public Domain/MIT
