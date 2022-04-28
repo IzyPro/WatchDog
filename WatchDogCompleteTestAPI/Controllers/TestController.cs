@@ -34,9 +34,9 @@ namespace WatchDogCompleteTestAPI.Controllers
         [HttpPatch("testPatch")]
         public JsonResult TestPatch([Required] int id, string name)
         {
+            throw new AccessViolationException("That one there was a violation, personally i wouldn't have it");
             var product = new Product { Id = id, Name = name, Description = $"This is the response from testPatch", IsOnSale = false };
             return Json(new { Code = "00", Message = $"Product {id} patched successfully with name change {name}", product});
-            throw new AccessViolationException("That one there was a violation, personally i wouldn't have it");
         }
 
         [HttpDelete("testDelete")]
