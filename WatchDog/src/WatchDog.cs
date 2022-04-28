@@ -1,19 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WatchDog.src.Helpers;
-using WatchDog.src.Hubs;
 using WatchDog.src.Interfaces;
 using WatchDog.src.Models;
 
@@ -21,16 +13,15 @@ namespace WatchDog.src
 {
     public class WatchDog
     {
+        public static RequestModel RequestLog;
         private readonly RequestDelegate _next;
-        private readonly ILogger _logger;
         private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
         private readonly IBroadcastHelper _broadcastHelper;
         private readonly WatchDogOptionsModel _options;
 
-        public WatchDog(WatchDogOptionsModel options, RequestDelegate next, ILoggerFactory loggerFactory, IBroadcastHelper broadcastHelper)
+        public WatchDog(WatchDogOptionsModel options, RequestDelegate next, IBroadcastHelper broadcastHelper)
         {
             _next = next;
-            _logger = loggerFactory.CreateLogger<WatchDog>();
             _options = options;
             _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
             _broadcastHelper = broadcastHelper;
@@ -70,11 +61,8 @@ namespace WatchDog.src
                     EndTime = responseLog.FinishTime
                 };
 
-                Console.WriteLine("IP IS: " + watchLog.IpAddress);
                 LiteDBHelper.InsertWatchLog(watchLog);
                 await _broadcastHelper.BroadcastLog(watchLog);
-
-
             }
             else
             {
@@ -105,18 +93,9 @@ namespace WatchDog.src
                 await using var requestStream = _recyclableMemoryStreamManager.GetStream();
                 await context.Request.Body.CopyToAsync(requestStream);
                 requestBodyDto.RequestBody = GeneralHelper.ReadStreamInChunks(requestStream);
-
                 context.Request.Body.Position = 0;
             }
-
-            _logger.LogInformation($"Http Request Information:{Environment.NewLine}" +
-                                   $"Schema:{context.Request.Scheme} " +
-                                   $"Host: {context.Request.Host} " +
-                                   $"Method: {context.Request.Method}" +
-                                   $"Path: {context.Request.Path} " +
-                                   $"QueryString: {context.Request.QueryString} " +
-                                   $"Request Body: {requestBodyDto.RequestBody}");
-
+            RequestLog = requestBodyDto;
             return requestBodyDto;
         }
 
@@ -134,15 +113,8 @@ namespace WatchDog.src
                         context.Response.Body.Seek(0, SeekOrigin.Begin);
                         responseBody = await new StreamReader(context.Response.Body).ReadToEndAsync();
                         context.Response.Body.Seek(0, SeekOrigin.Begin);
-                        _logger.LogInformation($"Http Response Information:{Environment.NewLine}" +
-                                               $"Schema:{context.Request.Scheme} " +
-                                               $"Host: {context.Request.Host} " +
-                                               $"Path: {context.Request.Path} " +
-                                               $"QueryString: {context.Request.QueryString} " +
-                                               $"Response Body: {responseBody}");
                         var responseBodyDto = new ResponseModel
                         {
-                            //ResponseBody = responseBody?.Length > 300 ? responseBody.Truncate(300) : responseBody,
                             ResponseBody = responseBody,
                             ResponseStatus = context.Response.StatusCode,
                             FinishTime = DateTime.Now,

@@ -22,6 +22,9 @@
             background-repeat: no-repeat;
             font-family: 'Avenir Next LT Pro', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+            body[data-theme="dark"] {
+                --logo: url(WTCHDGstatics/images/watchdogLogo.png) no-repeat;
+            }
 
         .container {
         }
@@ -102,6 +105,10 @@
             max-height: 200px;
             overflow: auto
         }
+
+        .logo{
+            height:35px;
+        }
     </style>
 
 
@@ -110,30 +117,24 @@
     <section class="ftco-section pb-5">
         <div class="container">
             <div class="row d-flex float-right nav nav-tabs mx-1 mx-sm-3 mb-0 pb-0 border-0">
-                <a data-toggle="tab" href="#requestTab" style="color:black; text-decoration:none">
+                <a data-toggle="tab" onclick="makeActive('reqLog', 'excptLog')" href="#requestTab" style="color:black; text-decoration:none; text-underline-offset: 5px">
                     <div class="active">
-                        <h6 class="font-weight-bold">Request Logs</h6>
+                        <h6 id="reqLog" class="font-weight-bold">Request Logs</h6>
                     </div>
                 </a>
-                <a data-toggle="tab" class="ml-3" href="#exceptionTab" style="color:black; text-decoration:none">
+                <a data-toggle="tab" onclick="makeActive('excptLog', 'reqLog')" class="ml-3" href="#exceptionTab" style="color: black; text-decoration: none; text-underline-offset: 5px">
                     <div class="">
-                        <h6 class="font-weight-bold">Exception Logs</h6>
+                        <h6 id="excptLog" class="font-weight-bold">Exception Logs</h6>
                     </div>
                 </a>
             </div>
             <div class="row mb-3 mb-3 mt-5 text-left">
-                <img src="WTCHDGstatics/images/watchdogLogo.png" alt="Watchdog Logo" style="height:35px;" />
+                <img src="WTCHDGstatics/images/watchdogLogo.png" class="logo" alt="Watchdog Logo" />
             </div>
             <div class="text-right">
                 <button data-toggle="modal" data-target="#clearLogsModal" class="btn-sm btn btn-dark m-1 float-right">Clear Logs</button>
                 <button onclick="logOut()" class="btn-sm btn btn-dark m-1 float-right">Log out</button>
             </div>
-
-            <!--<ul class="nav nav-tabs mb-3">
-        <li class="active"><a data-toggle="tab" href="#requestTab">Request Logs</a></li>
-
-        <li><a data-toggle="tab" href="#exceptionTab">Exception Logs</a></li>
-    </ul>-->
 
 
             <div class="tab-content">
@@ -150,16 +151,21 @@
                         <select id="myStatusCodeDropDown" class="form-control col-md-1 m-1" aria-label="Default select HTTP Verb">
                             <option selected>ALL</option>
                             <option value="200">200</option>
+                            <option value="201">201</option>
                             <option value="301">301</option>
                             <option value="302">302</option>
+                            <option value="400">400</option>
+                            <option value="401">401</option>
                             <option value="404">404</option>
+                            <option value="405">405</option>
+                            <option value="407">407</option>
                             <option value="410">410</option>
                             <option value="500">500</option>
                             <option value="503">503</option>
                         </select>
                         <input type="text" name="search" class="form-control col-md-2 m-1" id="searchString" />
                         <button onclick="search()" class="btn-sm btn btn-dark m-1">Search</button>
-                        <a href="" onclick="backToList()" class="m-1 mx-auto text-right col-md-6">Back to Full List</a>
+                        <a href="#" onclick="backToList(event)" class="m-1 mx-auto text-right col-md-6">Back to Full List</a>
                         <hr />
 
                     </div>
@@ -195,7 +201,7 @@
                     <div class="mb-5 row">
                         <input type="text" name="search" class="form-control col-md-2 m-1" id="exSearchString" />
                         <button onclick="exSearch()" class="btn-sm btn btn-dark m-1">Search</button>
-                        <a href="" onclick="backToList()" class="m-1 mx-auto text-right col-md-6">Back to Full List</a>
+                        <a href="#" onclick="backToList(event)" class="m-1 mx-auto text-right col-md-8">Back to Full List</a>
                         <hr />
 
                     </div>
@@ -308,14 +314,17 @@
                         <p style="word-wrap"><b>Message: </b> <span id="exMessage"></span></p>
                         <p style="word-wrap"><b>TypeOf: </b> <span id="exTypeOf"></span></p>
                         <p style="word-wrap"><b>Source: </b> <span id="exSource"></span></p>
-                        <p style="word-wrap"><b>Path: </b> <span id="exPath"></span></p>
                         <p style="word-wrap"><b>Method: </b> <span id="exMethod"></span></p>
+                        <p style="word-wrap"><b>Path: </b> <span id="exPath"></span></p>
+                        <p style="word-wrap"><b>Query: </b> <span id="exQuery"></span></p>
                         <p style="word-wrap"><b>Encountered At: </b> <span id="exTime"></span></p>
                     </div>
                     <div class="">
+                        <a href="#" id="exStackTraceCopy" onclick="copyToClipboard(event, 'exStackTrace', 'exStackTraceCopy')" style="display:none" class="float-right">Copy</a>
                         <p class="lead"><b>Stack Trace:</b> </p>
                         <pre id="exStackTrace" class="bg-light p-2"></pre>
 
+                        <a href="#" id="exReqBodyCopy" onclick="copyToClipboard(event, 'exReqBody', 'exReqBodyCopy')" style="display:none" class="float-right">Copy</a>
                         <p class="lead"><b>Request Body:</b> </p>
                         <pre id="exReqBody" class="bg-light p-2"></pre>
                     </div>
@@ -329,16 +338,15 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body p-5">
-                    <h3 class="lead fa-underline">WatchDog Login</h3>
-                    <div class="col-md-12 m">
+                    <h3 class="lead fa-underline mb-3">WatchDog Login</h3>
+                    <div class="">
                         <form id="myLoginForm">
-                            <input class="form-control m-1" type="text" placeholder="Enter Username" name="uname" id="uname" required>
-                            <br />
+                            <input class="form-control m-1 mb-3" type="text" placeholder="Enter Username" name="uname" id="uname" required>
                             <input class="form-control m-1" type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
                         </form>
 
-                        <button class="btn btn-sm btn-dark mt-5" style="width:100%" onclick="login()" type="submit">Login</button>
+                        <button class="btn btn-sm btn-dark m-1 mt-3" style="width:100%" onclick="login()" type="submit">Login</button>
                     </div>
 
                 </div>
@@ -352,8 +360,8 @@
                 <div class="modal-body p-5 text-center">
                     <h3 class="lead fa-underline mb-3">Are you sure you want to clear all logs?</h3>
                     <div class="mx-auto text-center">
-                        <a href="" data-dismiss="modal" class="mr-5">No</a>
                         <a href="" onclick="clearLogs()" class="ml-5">Yes</a>
+                        <a href="" data-dismiss="modal" class="mr-5">No</a>
                     </div>
 
                 </div>
@@ -396,6 +404,7 @@
 
         var pageIndex = 1;
         var exPageIndex = 1;
+        document.getElementById('reqLog').style.textDecoration = "underline";
         var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
 
         connection.on("getLogs", function (data) {
@@ -411,7 +420,6 @@
                     const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
                         "<td><b>" + data.log.source + "</b></td><td>" + data.log.message + "</td><td>" + data.log.typeOf + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
                     tr.on('click', populateExceptionModal.bind(null, data.log));
-                    console.log(tr);
                     $('#tableBodyEx').prepend(tr);
                 }
 
@@ -591,18 +599,27 @@
             getExceptionLogs($('#searchString').val());
         }
 
-        function backToList() {
+        function backToList(e) {
             pageIndex = 1;
             $('#tableBody').empty();
             $('#tableBodyEx').empty();
             getLogs();
             getExceptionLogs();
+
+            $('#searchString').val("");
+            $('#exSearchString').val("");
+            $('#myVerbDropDown').val("ALL");
+            $('#myStatusCodeDropDown').val("ALL");
+
+            e = e || window.event;
+            e.preventDefault();
         }
 
         function logOut() {
             sessionStorage.clear();
             window.location.reload();
         }
+
         function login() {
             var form = document.querySelector('form')
             form.reportValidity()
@@ -646,7 +663,27 @@
 
             $('#resBody').text(data.responseBody);
 
-          
+
+            if (data.responseBody != null && data.responseBody !== "") {
+                document.getElementById("resBodyCopy").style.display = "block";
+                var element = document.getElementById("resBody");
+                if (data.responseBody.includes("{")) {
+                    var obj = JSON.parse(element.innerText);
+                    element.innerHTML = JSON.stringify(obj, undefined, 2);
+                }
+            } else {
+                document.getElementById("resBodyCopy").style.display = "none";
+            }
+            if (data.requestBody != null && data.requestBody !== "") {
+                document.getElementById("reqBodyCopy").style.display = "block";
+                var element2 = document.getElementById("reqBody");
+                if (data.requestBody.includes("{")) {
+                    var obj2 = JSON.parse(element2.innerText);
+                    element2.innerHTML = JSON.stringify(obj2, undefined, 2);
+                }
+            } else {
+                document.getElementById("reqBodyCopy").style.display = "none";
+            }
         }
 
         function populateExceptionModal(data) {
@@ -658,11 +695,12 @@
             $('#exReqBody').text(data.requestBody);
             $('#exPath').text(data.path);
             $('#exMethod').text(data.method);
+            $('#exQuery').text(data.queryString);
 
-            if (data.stackTrace != null && data.requestBody !== "") {
+            if (data.stackTrace != null && data.stackTrace !== "") {
                 document.getElementById("exStackTraceCopy").style.display = "block";
                 var element = document.getElementById("exStackTrace");
-                if (data.responseBody.includes("{")) {
+                if (data.stackTrace.includes("{")) {
                     var obj = JSON.parse(element.innerText);
                     element.innerHTML = JSON.stringify(obj, undefined, 2);
                 }
@@ -703,7 +741,6 @@
 
         function copyToClipboard(e, id, tag) {
             var copyText = document.getElementById(id).innerHTML;
-            console.log(copyText);
             navigator.clipboard.writeText(copyText);
 
             /* Alert the copied text */
@@ -714,6 +751,11 @@
             });
             e = e || window.event;
             e.preventDefault();
+        }
+
+        function makeActive(id, removeId) {
+            document.getElementById(id).style.textDecoration = "underline";
+            document.getElementById(removeId).style.textDecoration = "none";
         }
     </script>
 
