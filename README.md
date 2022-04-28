@@ -19,6 +19,8 @@ Install via Package Manager
 Install-Package WatchDog --version 1.0.0
 ```
 
+
+
 ## Usage
 To enable WatchDog to listen for requests, use the WatchDog middleware provided by WatchDog.
 
@@ -28,11 +30,15 @@ Add WatchDog Namespace in `Startup.cs`
 using WatchDog;
 ```
 
+
+
 ### Register WatchDog service in `Startup.cs` under `ConfigureService()`
 
 ```c#
 services.AddWatchDogServices();
 ```
+
+
 
 ### Setup AutoClear Logs `Optional`
 
@@ -43,7 +49,9 @@ services.AddWatchDogServices(opt =>
 });
 ```
 
->**NOTE**</br>
+
+
+>**NOTE**
 >When `IsAutoClear = true`
 >Default Schedule Time is set to Weekly,  override the settings like below:
 
@@ -56,7 +64,10 @@ services.AddWatchDogServices(opt =>
 });
 ```
 
+
+
 ### Add WatchDog middleware in the HTTP request pipeline in `Startup.cs` under `Configure()`
+
 
 >**NOTE**
 >Add Authentication option like below: `Important`
@@ -70,6 +81,7 @@ app.UseWatchDog(opt =>
  });
 ```
 
+
 #### Add list of routes you want to ignore by the logger, like below: `Optional`
 
 ```c#
@@ -81,10 +93,12 @@ app.UseWatchDog(opt =>
  });
 ```
 
+
 #### Add WatchDog Exception Logger `Optional`
 
 >**NOTE**
 >Add Exception Logger before the main WatchDog Middleware
+
 
 ```c#
 app.UseWatchDogExceptionLogger();
