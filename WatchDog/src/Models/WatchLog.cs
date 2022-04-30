@@ -20,4 +20,3 @@ namespace WatchDog.src.Models
         public DateTime EndTime { get; set; }
     }
 }
-        

@@ -66,9 +66,11 @@ namespace WatchDog
                 RequestPath = new PathString("/WTCHDGstatics")
             });
 
-            app.UseSignalR(route =>
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
             {
-                route.MapHub<LoggerHub>("/wtchdlogger");
+                endpoints.MapHub<LoggerHub>("/wtchdlogger");
             });
 
             app.UseMvc(routes =>
@@ -82,6 +84,7 @@ namespace WatchDog
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
 
             app.Build();
 
