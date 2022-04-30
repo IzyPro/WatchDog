@@ -2,9 +2,9 @@
 
 namespace WatchDog.src.Hubs
 {
-    public  class LoggerHub : Hub
+    public class LoggerHub : Hub
     {
-      
+
 
     }
 }
