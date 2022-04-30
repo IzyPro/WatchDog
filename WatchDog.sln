@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchDog", "WatchDog\WatchD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchDogCompleteTestAPI", "WatchDogCompleteTestAPI\WatchDogCompleteTestAPI.csproj", "{3167933D-09D0-47D1-BB82-9DE4E7D5B636}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatchDogCompleteApiNet6", "WatchDogCompleteApiNet6\WatchDogCompleteApiNet6.csproj", "{B0EA2031-4C36-442F-BC82-618AB0A5DA16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchDogCompleteApiNet6", "WatchDogCompleteApiNet6\WatchDogCompleteApiNet6.csproj", "{B0EA2031-4C36-442F-BC82-618AB0A5DA16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
