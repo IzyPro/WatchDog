@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Description>WatchDog is a Realtime HTTP (Request &amp; Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view http requests made to their web application and also exception caught during runtime in their web applications in Realtime. It leverages on LiteDb a Serverless MongoDB-like database with no configuration and SignalR for real-time monitoring.</Description>
+    <PackageProjectUrl>https://github.com/IzyPro/WatchDog</PackageProjectUrl>
+    <PackageIcon>watchdogLogo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/IzyPro/WatchDog</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Logger; Exception; Request; Response; Viewer; WatchDog; Monitoring; IzyPro; Khelechy</PackageTags>
+    <Authors>Israel Ulelu, Kelechi Onyekwere</Authors>
+    <PackageId>WatchDog.NET</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -59,6 +69,17 @@
 	<EmbeddedResource Include="src\WatchPage\js\moment.min.js">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\Downloads\watchdogLogo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 
