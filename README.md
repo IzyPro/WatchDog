@@ -1,4 +1,4 @@
-# ![WatchDog Logo](https://github.com/IzyPro/WatchDog/blob/main/watchdogLogo.png)
+# ![WatchDog Logo](https://github.com/IzyPro/WatchDog/blob/main/WatchDog/src/WatchPage/images/watchdogWhiteLogo.png)
 # WatchDog
 
 
