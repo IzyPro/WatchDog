@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using WatchDogCompleteTestAPI.Models;
+using WatchDogCompleteApiNet6.Models;
 
-namespace WatchDogCompleteTestAPI.Controllers
+namespace WatchDogCompleteApiNet6.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -15,7 +13,7 @@ namespace WatchDogCompleteTestAPI.Controllers
         {
             return new Product { Id = 1, Name = "Get Test Product", Description = $"This is the response from testGet - {reference}", IsOnSale = true };
             throw new Exception("O get o, then forget");
-            
+
         }
 
         [HttpPost("testPost")]
@@ -37,7 +35,7 @@ namespace WatchDogCompleteTestAPI.Controllers
         {
             throw new AccessViolationException("That one there was a violation, personally i wouldn't have it");
             var product = new Product { Id = id, Name = name, Description = $"This is the response from testPatch", IsOnSale = false };
-            return Json(new { Code = "00", Message = $"Product {id} patched successfully with name change {name}", product});
+            return Json(new { Code = "00", Message = $"Product {id} patched successfully with name change {name}", product });
         }
 
         [HttpDelete("testDelete")]

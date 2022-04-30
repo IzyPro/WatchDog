@@ -13,7 +13,7 @@ namespace WatchDog.src.Services
                 LiteDBHelper.ClearWatchLog();
                 LiteDBHelper.ClearWatchExceptionLog();
             }
-            
+
         }
     }
 }

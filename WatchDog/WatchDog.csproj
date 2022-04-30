@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
     <Description>WatchDog is a Realtime HTTP (Request &amp; Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view http requests made to their web application and also exception caught during runtime in their web applications in Realtime. It leverages on LiteDb a Serverless MongoDB-like database with no configuration and SignalR for real-time monitoring.</Description>
     <PackageProjectUrl>https://github.com/IzyPro/WatchDog</PackageProjectUrl>
     <PackageIcon>watchdogLogo.png</PackageIcon>
@@ -82,6 +82,10 @@
     </None>
   </ItemGroup>
 
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="LiteDB" Version="5.0.11" />
