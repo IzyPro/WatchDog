@@ -60,8 +60,9 @@ namespace WatchDog
 
             app.UseStaticFiles(new StaticFileOptions()
             {
-                FileProvider = new PhysicalFileProvider(
-                  Path.Combine(WatchDogExtension.GetFolder(), @$"src{Path.DirectorySeparatorChar}WatchPage")),
+                FileProvider = new EmbeddedFileProvider(
+                    typeof(WatchDogExtension).GetTypeInfo().Assembly,
+                  "WatchDog.src.WatchPage"),
 
                 RequestPath = new PathString("/WTCHDGstatics")
             });
@@ -87,15 +88,12 @@ namespace WatchDog
 
 
             app.Build();
-
             return app.UseRouter(router =>
             {
-
                 router.MapGet("watchdog", async context =>
                 {
                     context.Response.ContentType = "text/html";
                     await context.Response.SendFileAsync(WatchDogExtension.GetFile());
-
                 });
 
             });

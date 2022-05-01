@@ -1,109 +1,57 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
-    <Description>WatchDog is a Realtime HTTP (Request &amp; Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view http requests made to their web application and also exception caught during runtime in their web applications in Realtime. It leverages on LiteDb a Serverless MongoDB-like database with no configuration and SignalR for real-time monitoring.</Description>
-    <PackageProjectUrl>https://github.com/IzyPro/WatchDog</PackageProjectUrl>
-    <PackageIcon>favicon.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/IzyPro/WatchDog</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>Logger; Exception; Request; Response; Viewer; WatchDog; Monitoring; IzyPro; Khelechy</PackageTags>
-    <Authors>Israel Ulelu, Kelechi Onyekwere</Authors>
-    <PackageId>WatchDog.NET</PackageId>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.1</Version>
-    <PackageReleaseNotes>Multi-Target (.netcoreapp3.1, net6.0 )</PackageReleaseNotes>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+		<Description>WatchDog is a Realtime HTTP (Request &amp; Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view http requests made to their web application and also exception caught during runtime in their web applications in Realtime. It leverages on LiteDb a Serverless MongoDB-like database with no configuration and SignalR for real-time monitoring.</Description>
+		<PackageProjectUrl>https://github.com/IzyPro/WatchDog</PackageProjectUrl>
+		<PackageIcon>favicon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/IzyPro/WatchDog</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>Logger; Exception; Request; Response; Viewer; WatchDog; Monitoring; IzyPro; Khelechy</PackageTags>
+		<Authors>Israel Ulelu, Kelechi Onyekwere</Authors>
+		<PackageId>WatchDog.NET</PackageId>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Version>1.1.0</Version>
+		<PackageReleaseNotes>Static Files Included</PackageReleaseNotes>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="src\WatchPage\css\bootstrap.min.css" />
-    <None Remove="src\WatchPage\css\bootstrap.min.css.map" />
-    <None Remove="src\WatchPage\images\icons\favicon.ico" />
-    <None Remove="src\WatchPage\images\watchdogLogo.png" />
-    <None Remove="src\WatchPage\images\watchdogWhiteLogo.png" />
-    <None Remove="src\WatchPage\index.html" />
-    <None Remove="src\WatchPage\js\bootstrap.min.js" />
-	<None Remove="src\WatchPage\js\main.js" />
-	<None Remove="src\WatchPage\omo.html" />
-	<None Remove="src\WatchPage\signalr\signalr.js" />
-	<None Remove="src\WatchPage\signalr\signalr.min.js" />
-	<EmbeddedResource Include="src\WatchPage\css\bootstrap.min.css">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\css\bootstrap.min.css.map">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\images\icons\favicon.ico">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\images\watchdogLogo.png">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\images\watchdogWhiteLogo.png">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\js\bootstrap.min.js">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\signalr\signalr.js">
-	  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\signalr\signalr.min.js">
-	  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\index.html">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<Resource Include="src\WatchPage\js\main.js">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</Resource>
-	<EmbeddedResource Include="src\WatchPage\js\popper.min.js">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\js\jquery-3.2.1.min.js">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</EmbeddedResource>
-	<EmbeddedResource Include="src\WatchPage\js\moment.min.js">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\..\..\Downloads\favicon.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-
+	<ItemGroup>
+		<None Remove="src\WatchPage\**" />
+		<EmbeddedResource Include="src\WatchPage\**" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<None Include="..\favicon.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="LiteDB" Version="5.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="3.1.22" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.22" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="3.1.22" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.22" />
-    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="LiteDB" Version="5.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="3.1.22" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.22" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="3.1.22" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.22" />
+		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
 
 </Project>
