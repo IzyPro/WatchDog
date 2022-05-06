@@ -9,10 +9,22 @@ namespace WatchDog.src.Models
         public static string[] Blacklist { get; set; }
     }
 
-    public class AutoClearLogsModel
+    public class WatchDogSettings
     {
         public bool IsAutoClear { get; set; }
         public WatchDogAutoClearScheduleEnum ClearTimeSchedule { get; set; } = WatchDogAutoClearScheduleEnum.Weekly;
+        public string SetExternalDbConnString { get; set; } = string.Empty;
+        public WatchDogSqlDriverEnum SqlDriverOption { get; set; } = WatchDogSqlDriverEnum.MSSQL;
+    }
+
+    public static class WatchDogExternalDbConfig
+    {
+        public static string ConnectionString { get; set; } = string.Empty;
+    }
+
+    public static class WatchDogSqlDriverOption
+    {
+        public static WatchDogSqlDriverEnum SqlDriverOption { get; set; } = WatchDogSqlDriverEnum.MSSQL;
     }
 
     public static class AutoClearModel

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using WatchDog.src.Helpers;
 using WatchDog.src.Interfaces;
+using WatchDog.src.Managers;
 using WatchDog.src.Models;
 
 namespace WatchDog.src
@@ -46,13 +47,13 @@ namespace WatchDog.src
             watchExceptionLog.StackTrace = ex.StackTrace;
             watchExceptionLog.Source = ex.Source;
             watchExceptionLog.TypeOf = ex.GetType().ToString();
-            watchExceptionLog.Path = requestModel.Path;
-            watchExceptionLog.Method = requestModel.Method;
-            watchExceptionLog.QueryString = requestModel.QueryString;
-            watchExceptionLog.RequestBody = requestModel.RequestBody;
+            watchExceptionLog.Path = requestModel?.Path;
+            watchExceptionLog.Method = requestModel?.Method;
+            watchExceptionLog.QueryString = requestModel?.QueryString;
+            watchExceptionLog.RequestBody = requestModel?.RequestBody;
 
             //Insert
-            LiteDBHelper.InsertWatchExceptionLog(watchExceptionLog);
+            await DynamicDBManager.InsertWatchExceptionLog(watchExceptionLog);
             await _broadcastHelper.BroadcastExLog(watchExceptionLog);
         }
     }

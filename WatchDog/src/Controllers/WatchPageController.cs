@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using WatchDog.src.Helpers;
+using WatchDog.src.Managers;
 using WatchDog.src.Models;
 
 namespace WatchDog.src.Controllers
@@ -9,9 +11,9 @@ namespace WatchDog.src.Controllers
     public class WatchPageController : Controller
     {
         int PAGE_SIZE = 20;
-        public JsonResult Index(string searchString = "", string verbString = "", string statusCode = "", int pageNumber = 1)
+        public async Task<JsonResult> Index(string searchString = "", string verbString = "", string statusCode = "", int pageNumber = 1)
         {
-            var logs = LiteDBHelper.GetAllWatchLogs();
+            var logs = await DynamicDBManager.GetAllWatchLogs();
             if (logs != null)
             {
                 if (!string.IsNullOrEmpty(searchString))
@@ -35,9 +37,9 @@ namespace WatchDog.src.Controllers
             return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result });
         }
 
-        public JsonResult Exceptions(string searchString = "", int pageNumber = 1)
+        public async Task<JsonResult> Exceptions(string searchString = "", int pageNumber = 1)
         {
-            var logs = LiteDBHelper.GetAllWatchExceptionLogs();
+            var logs = await DynamicDBManager.GetAllWatchExceptionLogs();
             if (logs != null)
             {
                 if (!string.IsNullOrEmpty(searchString))
