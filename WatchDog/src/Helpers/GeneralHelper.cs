@@ -2,7 +2,7 @@
 
 namespace WatchDog.src.Helpers
 {
-    public static class GeneralHelper
+    internal static class GeneralHelper
     {
         public static string ReadStreamInChunks(Stream stream)
         {

@@ -4,7 +4,7 @@ using WatchDog.src.Models;
 
 namespace WatchDog.src.Helpers
 {
-    public static class LiteDBHelper
+    internal static class LiteDBHelper
     {
         public static LiteDatabase db = new LiteDatabase("watchlogs.db");
         static ILiteCollection<WatchLog> _watchLogs = db.GetCollection<WatchLog>("WatchLogs");

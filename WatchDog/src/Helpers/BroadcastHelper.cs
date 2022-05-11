@@ -6,7 +6,7 @@ using WatchDog.src.Models;
 
 namespace WatchDog.src.Helpers
 {
-    public class BroadcastHelper : IBroadcastHelper
+    internal class BroadcastHelper : IBroadcastHelper
     {
         private readonly IHubContext<LoggerHub> _hubContext;
         public BroadcastHelper(IHubContext<LoggerHub> hubContext)

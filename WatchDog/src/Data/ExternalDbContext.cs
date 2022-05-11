@@ -10,12 +10,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WatchDog.src.Enums;
+using WatchDog.src.Exceptions;
 using WatchDog.src.Models;
 using WatchDog.src.Utilities;
 
 namespace WatchDog.src.Data
 {
-    public static class ExternalDbContext
+    internal static class ExternalDbContext
     {
         private static string _connectionString = WatchDogExternalDbConfig.ConnectionString;
 
@@ -37,15 +38,20 @@ namespace WatchDog.src.Data
 
             using (var connection = CreateConnection())
             {
-                connection.Open();
                 try
                 {
+                    connection.Open();
                     _ =  connection.Query(createWatchTablesQuery);
                     connection.Close();
                 }
                 catch (SqlException ae)
                 {
                     Debug.WriteLine(ae.Message.ToString());
+                    throw ae;
+                }
+                catch (Exception ex)
+                {
+                    throw new WatchDogDatabaseException(ex.Message);
                 }
             }
         }

@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using WatchDog.src.Helpers;
 using WatchDog.src.Managers;
 using WatchDog.src.Models;
+using WatchDog.src.Utilities;
 
 namespace WatchDog.src.Controllers
 {
     public class WatchPageController : Controller
     {
-        int PAGE_SIZE = 20;
         public async Task<JsonResult> Index(string searchString = "", string verbString = "", string statusCode = "", int pageNumber = 1)
         {
             var logs = await DynamicDBManager.GetAllWatchLogs();
@@ -33,7 +33,7 @@ namespace WatchDog.src.Controllers
                 }
             }
             logs = logs.OrderByDescending(x => x.StartTime);
-            var result = PaginatedList<WatchLog>.CreateAsync(logs, pageNumber, PAGE_SIZE);
+            var result = PaginatedList<WatchLog>.CreateAsync(logs, pageNumber, Constants.PageSize);
             return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result });
         }
 
@@ -49,7 +49,7 @@ namespace WatchDog.src.Controllers
                 }
             }
             logs = logs.OrderByDescending(x => x.EncounteredAt);
-            var result = PaginatedList<WatchExceptionLog>.CreateAsync(logs, pageNumber, PAGE_SIZE);
+            var result = PaginatedList<WatchExceptionLog>.CreateAsync(logs, pageNumber, Constants.PageSize);
             return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result });
         }
 

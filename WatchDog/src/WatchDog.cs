@@ -12,7 +12,7 @@ using WatchDog.src.Models;
 
 namespace WatchDog.src
 {
-    public class WatchDog
+    internal class WatchDog
     {
         public static RequestModel RequestLog;
         private readonly RequestDelegate _next;
@@ -64,6 +64,8 @@ namespace WatchDog.src
 
                 await DynamicDBManager.InsertWatchLog(watchLog);
                 await _broadcastHelper.BroadcastLog(watchLog);
+
+                await _next.Invoke(context);
             }
             else
             {
