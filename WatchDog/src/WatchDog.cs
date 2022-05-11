@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WatchDog.src.Helpers;
 using WatchDog.src.Interfaces;
+using WatchDog.src.Managers;
 using WatchDog.src.Models;
 
 namespace WatchDog.src
@@ -61,7 +62,7 @@ namespace WatchDog.src
                     EndTime = responseLog.FinishTime
                 };
 
-                LiteDBHelper.InsertWatchLog(watchLog);
+                await DynamicDBManager.InsertWatchLog(watchLog);
                 await _broadcastHelper.BroadcastLog(watchLog);
             }
             else

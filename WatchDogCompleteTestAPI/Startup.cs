@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WatchDog;
+using WatchDog.src.Enums;
 
 namespace WatchDogCompleteTestAPI
 {
@@ -27,7 +28,7 @@ namespace WatchDogCompleteTestAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddWatchDogServices(opt => { opt.IsAutoClear = false; });
+            services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExternalDbConnString = "server=localhost;port=3306;user=kelechi;password=root;database=testdb"; opt.SqlDriverOption = WatchDogSqlDriverEnum.MySql; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

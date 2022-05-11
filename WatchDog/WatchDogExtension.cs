@@ -7,6 +7,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using WatchDog.src.Data;
+using WatchDog.src.Exceptions;
 using WatchDog.src.Helpers;
 using WatchDog.src.Hubs;
 using WatchDog.src.Interfaces;
@@ -22,21 +24,33 @@ namespace WatchDog
         "WatchDog"
         );
 
-        public static IServiceCollection AddWatchDogServices(this IServiceCollection services, [Optional] Action<AutoClearLogsModel> configureOptions)
+        public static IServiceCollection AddWatchDogServices(this IServiceCollection services, [Optional] Action<WatchDogSettings> configureOptions)
         {
-            var options = new AutoClearLogsModel();
+            var options = new WatchDogSettings();
             if (configureOptions != null)
                 configureOptions(options);
+
             AutoClearModel.IsAutoClear = options.IsAutoClear;
             AutoClearModel.ClearTimeSchedule = options.ClearTimeSchedule;
+            WatchDogExternalDbConfig.ConnectionString = options.SetExternalDbConnString;
+            WatchDogSqlDriverOption.SqlDriverOption = options.SqlDriverOption;
 
             services.AddSignalR();
             services.AddMvcCore(x =>
             {
                 x.EnableEndpointRouting = false;
             }).AddApplicationPart(typeof(WatchDogExtension).Assembly);
+
+
             services.AddTransient<IBroadcastHelper, BroadcastHelper>();
             services.AddTransient<ILoggerService, LoggerService>();
+
+            if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
+            {
+                ExternalDbContext.Migrate();
+            }
+
+
             if (AutoClearModel.IsAutoClear)
                 services.AddHostedService<AutoLogClearerBackgroundService>();
             return services;
@@ -52,8 +66,15 @@ namespace WatchDog
         {
             var options = new WatchDogOptionsModel();
             configureOptions(options);
-            if (string.IsNullOrEmpty(options.WatchPageUsername) || string.IsNullOrEmpty(options.WatchPagePassword))
-                throw new ArgumentException("Parameters Username and password are required on .UseWatchLog()");
+            if (string.IsNullOrEmpty(options.WatchPageUsername))
+            {
+                throw new WatchDogAuthenticationException("Parameter Username is required on .UseWatchDog()");
+            }
+            else if (string.IsNullOrEmpty(options.WatchPagePassword))
+            {
+                throw new WatchDogAuthenticationException("Parameter Password is required on .UseWatchDog()");
+            }
+                
 
             app.UseMiddleware<src.WatchDog>(options);
 
