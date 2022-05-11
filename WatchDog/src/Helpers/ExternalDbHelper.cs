@@ -41,8 +41,8 @@ namespace WatchDog.src.Helpers
             parameters.Add("Host", log.Host, DbType.String);
             parameters.Add("IpAddress", log.IpAddress, DbType.String);
             parameters.Add("TimeSpent", log.TimeSpent, DbType.String);
-            parameters.Add("StartTime", log.StartTime.ToString(), DbType.DateTime);
-            parameters.Add("EndTime", log.EndTime.ToString(), DbType.DateTime);
+            parameters.Add("StartTime", log.StartTime.ToString(), DbType.String);
+            parameters.Add("EndTime", log.EndTime.ToString(), DbType.String);
 
             using (var connection = ExternalDbContext.CreateConnection())
             {
@@ -77,7 +77,7 @@ namespace WatchDog.src.Helpers
             parameters.Add("Method", log.Method, DbType.String);
             parameters.Add("QueryString", log.QueryString, DbType.String);
             parameters.Add("RequestBody", log.RequestBody, DbType.String);
-            parameters.Add("EncounteredAt", log.EncounteredAt, DbType.DateTime);
+            parameters.Add("EncounteredAt", log.EncounteredAt.ToString(), DbType.String);
 
             using (var connection = ExternalDbContext.CreateConnection())
             {

@@ -74,7 +74,7 @@ namespace WatchDog
             {
                 throw new WatchDogAuthenticationException("Parameter Password is required on .UseWatchDog()");
             }
-                
+
 
             app.UseMiddleware<src.WatchDog>(options);
 
@@ -90,7 +90,19 @@ namespace WatchDog
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
+            app.Build();
+
+            app.UseRouter(router =>
+            {
+                router.MapGet("watchdog", async context =>
+                {
+                    context.Response.ContentType = "text/html";
+                    await context.Response.SendFileAsync(WatchDogExtension.GetFile());
+                });
+
+            });
+
+            return app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<LoggerHub>("/wtchdlogger");
                 endpoints.MapControllerRoute(
@@ -100,18 +112,6 @@ namespace WatchDog
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-
-
-            app.Build();
-            return app.UseRouter(router =>
-            {
-                router.MapGet("watchdog", async context =>
-                {
-                    context.Response.ContentType = "text/html";
-                    await context.Response.SendFileAsync(WatchDogExtension.GetFile());
-                });
-
             });
 
         }

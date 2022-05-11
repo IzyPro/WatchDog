@@ -17,6 +17,14 @@ namespace WatchDogCompleteTestAPI.Controllers
             throw new Exception("O get o, then forget");
         }
 
+        [HttpGet("testGetthrow")]
+        public Product TestGetThrow(string reference)
+        {
+            throw new Exception("O get o, then forget");
+            return new Product { Id = 1, Name = "Get Test Product", Description = $"This is the response from testGet - {reference}", IsOnSale = true };
+            
+        }
+
         [HttpPost("testPost")]
         public Product TestPost([FromBody] Product product)
         {
