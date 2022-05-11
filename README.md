@@ -95,6 +95,10 @@ app.UseWatchDog(opt =>
  });
 ```
 
+
+>**NOTE**
+>If your projects startup or program class contains app.UseEndpoints(), app.UseMvc() or app.UseRouting() then app.UseWatchDog() should come after `Important`
+
 # ![Request and Response Sample Details](https://github.com/IzyPro/WatchDog/blob/main/requestLog.png)
 
 #### Add list of routes you want to ignore by the logger: `Optional`
@@ -113,11 +117,13 @@ This is used to log in-app exceptions that occur during a particular HTTP reques
 # ![Exception Sample Details](https://github.com/IzyPro/WatchDog/blob/main/exceptionLog.png)
 
 >**NOTE**
->Add Exception Logger before the main WatchDog Middleware
+>Add Exception Logger before the main WatchDog Middleware, preferably at the top of the middleware hierarchy so as to catch possible early exceptions.
 
 
 ```c#
 app.UseWatchDogExceptionLogger();
+
+...
 
 app.UseWatchDog(opt => 
 { 
