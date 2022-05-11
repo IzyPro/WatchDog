@@ -10,7 +10,7 @@ using WatchDog.src.Models;
 
 namespace WatchDog.src.Services
 {
-    public class AutoLogClearerBackgroundService : BackgroundService
+    internal class AutoLogClearerBackgroundService : BackgroundService
     {
         private bool isProcessing;
         private ILogger<AutoLogClearerBackgroundService> logger;

@@ -28,7 +28,8 @@ namespace WatchDogCompleteTestAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExternalDbConnString = "server=localhost;port=3306;user=kelechi;password=root;database=testdb"; opt.SqlDriverOption = WatchDogSqlDriverEnum.MySql; });
+            services.AddWatchDogServices();
+            //services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExternalDbConnString = "Server=(localdb)\\mssqllocaldb;Database=test;Trusted_Connection=True;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,7 +40,6 @@ namespace WatchDogCompleteTestAPI
                 app.UseDeveloperExceptionPage();
             }
             app.UseWatchDogExceptionLogger();
-            app.UseWatchDog(opt => { opt.WatchPageUsername = "admin"; opt.WatchPagePassword = "Qwerty@123"; opt.Blacklist = "Test/testPost, weatherforecast"; });
 
             app.UseHttpsRedirection();
 
@@ -51,6 +51,7 @@ namespace WatchDogCompleteTestAPI
             {
                 endpoints.MapControllers();
             });
+            app.UseWatchDog(opt => { opt.WatchPageUsername = "admin"; opt.WatchPagePassword = "Qwerty@123"; opt.Blacklist = "Test/testPost, weatherforecast"; });
         }
     }
 }

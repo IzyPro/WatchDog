@@ -11,7 +11,7 @@ using WatchDog.src.Models;
 
 namespace WatchDog.src
 {
-    public class WatchDogExceptionLogger
+    internal class WatchDogExceptionLogger
     {
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;

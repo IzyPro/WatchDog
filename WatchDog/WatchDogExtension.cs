@@ -93,18 +93,13 @@ namespace WatchDog
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<LoggerHub>("/wtchdlogger");
-            });
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "WTCHDwatchpage",
-                    template: "WTCHDwatchpage/{action}",
+                    pattern: "WTCHDwatchpage/{action}",
                     defaults: new { controller = "WatchPage", action = "Index" });
-
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
 

@@ -4,7 +4,7 @@ using WatchDog.src.Models;
 
 namespace WatchDog.src.Services
 {
-    public class LoggerService : ILoggerService
+    internal class LoggerService : ILoggerService
     {
         public void ClearWatchLogs()
         {
