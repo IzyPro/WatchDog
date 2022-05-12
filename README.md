@@ -97,7 +97,7 @@ app.UseWatchDog(opt =>
 
 
 >**NOTE**
->If your projects startup or program class contains app.UseEndpoints(), app.UseMvc() or app.UseRouting() then app.UseWatchDog() should come after `Important`
+>If your projects startup or program class contains app.UseMvc() or app.UseRouting() then app.UseWatchDog() should come after `Important`
 
 # ![Request and Response Sample Details](https://github.com/IzyPro/WatchDog/blob/main/requestLog.png)
 
