@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using WatchDog.src.Models;
 
 namespace WatchDog.src.Helpers
 {
@@ -20,6 +21,11 @@ namespace WatchDog.src.Helpers
                 textWriter.Write(readChunk, 0, readChunkLength);
             } while (readChunkLength > 0);
             return textWriter.ToString();
+        }
+
+        public static bool ShouldUseDatetime()
+        {
+            return !string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogSqlDriverOption.SqlDriverOption == Enums.WatchDogSqlDriverEnum.MSSQL;
         }
     }
 }
