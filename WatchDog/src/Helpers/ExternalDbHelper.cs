@@ -40,19 +40,16 @@ namespace WatchDog.src.Helpers
             parameters.Add("IpAddress", log.IpAddress, DbType.String);
             parameters.Add("TimeSpent", log.TimeSpent, DbType.String);
 
-            parameters.Add("StartTime", log.StartTime, DbType.DateTime);
-            parameters.Add("EndTime", log.EndTime, DbType.DateTime);
-        
-            //if (GeneralHelper.ShouldUseString())
-            //{
-            //    parameters.Add("StartTime", log.StartTime.ToString(), DbType.String);
-            //    parameters.Add("EndTime", log.EndTime.ToString(), DbType.String);
-            //}
-            //else
-            //{
-            //    parameters.Add("StartTime", log.StartTime, DbType.DateTime);
-            //    parameters.Add("EndTime", log.EndTime, DbType.DateTime);
-            //}
+            if (GeneralHelper.ShouldUseString())
+            {
+                parameters.Add("StartTime", log.StartTime.ToString(), DbType.String);
+                parameters.Add("EndTime", log.EndTime.ToString(), DbType.String);
+            }
+            else
+            {
+                parameters.Add("StartTime", log.StartTime, DbType.DateTime);
+                parameters.Add("EndTime", log.EndTime, DbType.DateTime);
+            }
 
             using (var connection = ExternalDbContext.CreateConnection())
             {
@@ -90,16 +87,14 @@ namespace WatchDog.src.Helpers
             parameters.Add("QueryString", log.QueryString, DbType.String);
             parameters.Add("RequestBody", log.RequestBody, DbType.String);
 
-            parameters.Add("EncounteredAt", log.EncounteredAt, DbType.DateTime);
-
-            //if (GeneralHelper.ShouldUseString())
-            //{
-            //    parameters.Add("EncounteredAt", log.EncounteredAt.ToString(), DbType.String);
-            //}
-            //else
-            //{
-            //    parameters.Add("EncounteredAt", log.EncounteredAt, DbType.DateTime);
-            //}
+            if (GeneralHelper.ShouldUseString())
+            {
+                parameters.Add("EncounteredAt", log.EncounteredAt.ToString(), DbType.String);
+            }
+            else
+            {
+                parameters.Add("EncounteredAt", log.EncounteredAt, DbType.DateTime);
+            }
 
             using (var connection = ExternalDbContext.CreateConnection())
             {
