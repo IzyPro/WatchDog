@@ -53,11 +53,10 @@ namespace WatchDog.src.Controllers
             return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result });
         }
 
-        public JsonResult ClearLogs()
+        public async Task<JsonResult> ClearLogs()
         {
-            var cleared = LiteDBHelper.ClearWatchLog();
-            var exCleared = LiteDBHelper.ClearWatchExceptionLog();
-            return Json(cleared > 0 && exCleared > 0);
+            var cleared = await DynamicDBManager.ClearLogs(); 
+            return Json(cleared);
         }
 
 

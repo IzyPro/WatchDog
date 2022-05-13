@@ -4,7 +4,6 @@ using Microsoft.IO;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using WatchDog.src.Helpers;
 using WatchDog.src.Interfaces;
 using WatchDog.src.Managers;
 using WatchDog.src.Models;

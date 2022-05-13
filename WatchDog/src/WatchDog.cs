@@ -64,8 +64,6 @@ namespace WatchDog.src
 
                 await DynamicDBManager.InsertWatchLog(watchLog);
                 await _broadcastHelper.BroadcastLog(watchLog);
-
-                await _next.Invoke(context);
             }
             else
             {

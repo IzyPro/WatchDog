@@ -40,6 +40,14 @@ namespace WatchDog.src.Helpers
             return _watchLogs.DeleteAll();
         }
 
+        public static bool ClearAllLogs()
+        {
+            var logs = ClearWatchLog();
+            var exLogs = ClearWatchExceptionLog();
+
+            return logs > 1 && exLogs > 1;
+        }
+
         //Watch Exception Operations
         public static IEnumerable<WatchExceptionLog> GetAllWatchExceptionLogs()
         {

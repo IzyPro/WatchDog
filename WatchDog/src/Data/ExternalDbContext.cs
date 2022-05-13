@@ -2,13 +2,9 @@
 using MySql.Data.MySqlClient;
 using Npgsql;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WatchDog.src.Enums;
 using WatchDog.src.Exceptions;
 using WatchDog.src.Models;
@@ -23,9 +19,9 @@ namespace WatchDog.src.Data
         public static IDbConnection CreateConnection()
             => WatchDogSqlDriverOption.SqlDriverOption switch
             {
-                WatchDogSqlDriverEnum.MSSQL => new SqlConnection(_connectionString),
-                WatchDogSqlDriverEnum.MySql => new MySqlConnection(_connectionString),
-                WatchDogSqlDriverEnum.PostgreSql => new NpgsqlConnection(_connectionString),
+                WatchDogSqlDriverEnum.MSSQL => CreateMSSQLConnection(),
+                WatchDogSqlDriverEnum.MySql => CreateMySQLConnection(),
+                WatchDogSqlDriverEnum.PostgreSql => CreatePostgresConnection(),
                 _ => throw new NotSupportedException()
             };
 
@@ -135,8 +131,8 @@ namespace WatchDog.src.Data
                               host            VARCHAR(30),
                               ipAddress       VARCHAR(30),
                               timeSpent       VARCHAR,
-                              startTime       VARCHAR NOT NULL,
-                              endTime         VARCHAR NOT NULL
+                              startTime       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                              endTime         TIMESTAMP WITHOUT TIME ZONE NOT NULL
                             );
                            CREATE TABLE IF NOT EXISTS {Constants.WatchLogExceptionTableName} (
                                 id            SERIAL PRIMARY KEY,
@@ -148,10 +144,46 @@ namespace WatchDog.src.Data
                                 method        VARCHAR(30),
                                 queryString   VARCHAR(100),
                                 requestBody   VARCHAR,
-                                encounteredAt VARCHAR NOT NULL
+                                encounteredAt TIMESTAMP WITHOUT TIME ZONE NOT NULL
                              );
                         ",
                 _ => ""
             };
+
+        public static NpgsqlConnection CreatePostgresConnection()
+        {
+            try
+            {
+                return new NpgsqlConnection(_connectionString);
+            }
+            catch (Exception ex)
+            {
+                throw new WatchDogDatabaseException(ex.Message);
+            }
+        }
+
+        public static MySqlConnection CreateMySQLConnection()
+        {
+            try
+            {
+                return new MySqlConnection(_connectionString);
+            }
+            catch (Exception ex)
+            {
+                throw new WatchDogDatabaseException(ex.Message);
+            }
+        }
+
+        public static SqlConnection CreateMSSQLConnection()
+        {
+            try
+            {
+                return new SqlConnection(_connectionString);
+            }
+            catch (Exception ex)
+            {
+                throw new WatchDogDatabaseException(ex.Message);
+            }
+        }
     }
 }

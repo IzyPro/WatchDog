@@ -23,9 +23,9 @@ namespace WatchDog.src.Helpers
             return textWriter.ToString();
         }
 
-        public static bool ShouldUseDatetime()
+        public static bool ShouldUseString()
         {
-            return !string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogSqlDriverOption.SqlDriverOption == Enums.WatchDogSqlDriverEnum.MSSQL;
+            return !string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogSqlDriverOption.SqlDriverOption == Enums.WatchDogSqlDriverEnum.PostgreSql;
         }
     }
 }
