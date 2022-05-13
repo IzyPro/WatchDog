@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System;
@@ -88,19 +87,7 @@ namespace WatchDog
                 RequestPath = new PathString("/WTCHDGstatics")
             });
 
-            app.UseRouting();
-
             app.Build();
-
-            app.UseRouter(router =>
-            {
-                router.MapGet("watchdog", async context =>
-                {
-                    context.Response.ContentType = "text/html";
-                    await context.Response.SendFileAsync(WatchDogExtension.GetFile());
-                });
-
-            });
 
             return app.UseEndpoints(endpoints =>
             {
@@ -112,6 +99,11 @@ namespace WatchDog
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapGet("watchdog", async context =>
+                {
+                    context.Response.ContentType = "text/html";
+                    await context.Response.SendFileAsync(WatchDogExtension.GetFile());
+                });
             });
 
         }
