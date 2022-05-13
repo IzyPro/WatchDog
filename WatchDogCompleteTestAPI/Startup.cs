@@ -29,9 +29,9 @@ namespace WatchDogCompleteTestAPI
         {
             services.AddControllers();
             //services.AddWatchDogServices();
-            
+            services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExternalDbConnString = "Server=(localdb)\\mssqllocaldb;Database=test;Trusted_Connection=True;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL; });
             //services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExternalDbConnString = "Server=localhost\\SQLEXPRESS;Database=AquaDb;Trusted_Connection=True;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL; });
-            services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExternalDbConnString = "Server=localhost;Port=5432;Database=pgAuth;User Id=postgres;Password=root;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.PostgreSql; });
+            //services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExternalDbConnString = "Server=localhost;Port=5432;Database=pgAuth;User Id=postgres;Password=root;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.PostgreSql; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
