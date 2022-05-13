@@ -1,8 +1,6 @@
 ﻿using Dapper;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using System.Threading.Tasks;
 using WatchDog.src.Data;
 using WatchDog.src.Models;
@@ -17,9 +15,9 @@ namespace WatchDog.src.Helpers
             var query = @$"SELECT * FROM {Constants.WatchLogTableName}";
             using (var connection = ExternalDbContext.CreateConnection())
             {
-                connection.Open();  
+                connection.Open();
                 var logs = await connection.QueryAsync<WatchLog>(query);
-                connection.Close(); 
+                connection.Close();
                 return logs.AsList();
             }
         }
@@ -41,16 +39,30 @@ namespace WatchDog.src.Helpers
             parameters.Add("Host", log.Host, DbType.String);
             parameters.Add("IpAddress", log.IpAddress, DbType.String);
             parameters.Add("TimeSpent", log.TimeSpent, DbType.String);
-            parameters.Add("StartTime", log.StartTime.ToString(), GeneralHelper.ShouldUseDatetime() ? DbType.DateTime : DbType.String);
-            parameters.Add("EndTime", log.EndTime.ToString(), GeneralHelper.ShouldUseDatetime() ? DbType.DateTime : DbType.String);
+
+            parameters.Add("StartTime", log.StartTime, DbType.DateTime);
+            parameters.Add("EndTime", log.EndTime, DbType.DateTime);
+        
+            //if (GeneralHelper.ShouldUseString())
+            //{
+            //    parameters.Add("StartTime", log.StartTime.ToString(), DbType.String);
+            //    parameters.Add("EndTime", log.EndTime.ToString(), DbType.String);
+            //}
+            //else
+            //{
+            //    parameters.Add("StartTime", log.StartTime, DbType.DateTime);
+            //    parameters.Add("EndTime", log.EndTime, DbType.DateTime);
+            //}
 
             using (var connection = ExternalDbContext.CreateConnection())
             {
+                connection.Open();
                 await connection.ExecuteAsync(query, parameters);
+                connection.Close();
             }
         }
 
-       
+
 
 
         public static async Task<IEnumerable<WatchExceptionLog>> GetAllWatchExceptionLogs()
@@ -77,11 +89,33 @@ namespace WatchDog.src.Helpers
             parameters.Add("Method", log.Method, DbType.String);
             parameters.Add("QueryString", log.QueryString, DbType.String);
             parameters.Add("RequestBody", log.RequestBody, DbType.String);
-            parameters.Add("EncounteredAt", log.EncounteredAt.ToString(), GeneralHelper.ShouldUseDatetime() ? DbType.DateTime : DbType.String);
+
+            parameters.Add("EncounteredAt", log.EncounteredAt, DbType.DateTime);
+
+            //if (GeneralHelper.ShouldUseString())
+            //{
+            //    parameters.Add("EncounteredAt", log.EncounteredAt.ToString(), DbType.String);
+            //}
+            //else
+            //{
+            //    parameters.Add("EncounteredAt", log.EncounteredAt, DbType.DateTime);
+            //}
 
             using (var connection = ExternalDbContext.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
+            }
+        }
+
+        public static async Task<bool> ClearLogs()
+        {
+            var logQuery = @$"truncate table {Constants.WatchLogTableName}";
+            var exQuery = @$"truncate table {Constants.WatchLogExceptionTableName}";
+            using (var connection = ExternalDbContext.CreateConnection())
+            {
+                var logs = await connection.ExecuteAsync(logQuery);
+                var exLogs = await connection.ExecuteAsync(exQuery);
+                return logs > 1 && exLogs > 1;
             }
         }
     }

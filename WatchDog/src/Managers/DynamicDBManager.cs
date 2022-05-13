@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using WatchDog.src.Helpers;
 using WatchDog.src.Models;
@@ -13,6 +11,12 @@ namespace WatchDog.src.Managers
 
         private static bool isExternalDb() => !string.IsNullOrEmpty(_connectionString);
 
+        public static async Task<bool> ClearLogs() =>
+            isExternalDb() switch
+            {
+                true => await ExternalDbHelper.ClearLogs(),
+                false => LiteDBHelper.ClearAllLogs()
+            };
         public static async Task<IEnumerable<WatchLog>> GetAllWatchLogs() =>
             isExternalDb() switch
             {
