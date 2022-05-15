@@ -34,6 +34,10 @@ namespace WatchDog
             WatchDogExternalDbConfig.ConnectionString = options.SetExternalDbConnString;
             WatchDogSqlDriverOption.SqlDriverOption = options.SqlDriverOption;
 
+            if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogSqlDriverOption.SqlDriverOption == 0)
+                throw new WatchDogDBDriverException("Missing DB Driver Option: SQLDriverOption is required at .AddWatchDogServices()");
+            if (WatchDogSqlDriverOption.SqlDriverOption != 0 && string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
+                throw new WatchDogDatabaseException("Missing connection string.");
             services.AddSignalR();
             services.AddMvcCore(x =>
             {

@@ -28,12 +28,7 @@ namespace WatchDogCompleteTestAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            //services.AddWatchDogServices();
-            //services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExternalDbConnString = "Server=(localdb)\\mssqllocaldb;Database=test;Trusted_Connection=True;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL; });
-            //services.AddWatchDogServices(opt => { opt.IsAutoClear = false; opt.SetExternalDbConnString = "Data Source=SQL8003.site4now.net;Initial Catalog=db_a86d7e_wdtest;User Id=db_a86d7e_wdtest_admin;Password=P@ssw0rd"; opt.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL; });
-            //services.AddWatchDogServices(opt => { opt.IsAutoClear = false; opt.SetExternalDbConnString = "Server=MYSQL8001.site4now.net;Database=db_a86d7e_wdtest;Uid=a86d7e_wdtest;Pwd=P@ssw0rd"; opt.SqlDriverOption = WatchDogSqlDriverEnum.MySql; });
-            services.AddWatchDogServices(opt => { opt.IsAutoClear = false; opt.SetExternalDbConnString = "Server=lallah.db.elephantsql.com;Database=eejekqou;User Id=eejekqou;Password=XGhZ04CR9q-TYBFat308uVegRXDI-64s;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.PostgreSql; });
-            
+            services.AddWatchDogServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
