@@ -35,12 +35,12 @@ It leverages on `LiteDb` a Serverless MongoDB-like database with no configuratio
 Install via .NET CLI
 
 ```bash
-dotnet add package WatchDog.NET --version 1.1.0
+dotnet add package WatchDog.NET --version 1.2.0
 ```
 Install via Package Manager
 
 ```bash
-Install-Package WatchDog.NET --version 1.1.0
+Install-Package WatchDog.NET --version 1.2.0
 ```
 
 
