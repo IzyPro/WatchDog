@@ -131,8 +131,8 @@ namespace WatchDog.src.Data
                               host            VARCHAR(30),
                               ipAddress       VARCHAR(30),
                               timeSpent       VARCHAR,
-                              startTime       VARCHAR NOT NULL,
-                              endTime         VARCHAR NOT NULL
+                              startTime       TIMESTAMP NOT NULL,
+                              endTime         TIMESTAMP NOT NULL
                             );
                            CREATE TABLE IF NOT EXISTS {Constants.WatchLogExceptionTableName} (
                                 id            SERIAL PRIMARY KEY,
@@ -144,7 +144,7 @@ namespace WatchDog.src.Data
                                 method        VARCHAR(30),
                                 queryString   VARCHAR(100),
                                 requestBody   VARCHAR,
-                                encounteredAt VARCHAR NOT NULL
+                                encounteredAt TIMESTAMP NOT NULL
                              );
                         ",
                 _ => ""
