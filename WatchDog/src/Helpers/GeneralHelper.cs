@@ -23,7 +23,7 @@ namespace WatchDog.src.Helpers
             return textWriter.ToString();
         }
 
-        public static bool ShouldUseString()
+        public static bool IsPostgres()
         {
             return !string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogSqlDriverOption.SqlDriverOption == Enums.WatchDogSqlDriverEnum.PostgreSql;
         }

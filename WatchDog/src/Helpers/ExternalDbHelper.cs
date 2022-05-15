@@ -40,10 +40,10 @@ namespace WatchDog.src.Helpers
             parameters.Add("IpAddress", log.IpAddress, DbType.String);
             parameters.Add("TimeSpent", log.TimeSpent, DbType.String);
 
-            if (GeneralHelper.ShouldUseString())
+            if (GeneralHelper.IsPostgres())
             {
                 parameters.Add("StartTime", log.StartTime.ToUniversalTime(), DbType.DateTime);
-                parameters.Add("EndTime", log.EndTime.ToUniversalTime(), DbType.DateTimeOffset);
+                parameters.Add("EndTime", log.EndTime.ToUniversalTime(), DbType.DateTime);
             }
             else
             {
@@ -87,7 +87,7 @@ namespace WatchDog.src.Helpers
             parameters.Add("QueryString", log.QueryString, DbType.String);
             parameters.Add("RequestBody", log.RequestBody, DbType.String);
 
-            if (GeneralHelper.ShouldUseString())
+            if (GeneralHelper.IsPostgres())
             {
                 parameters.Add("EncounteredAt", log.EncounteredAt.ToUniversalTime(), DbType.DateTime);
             }

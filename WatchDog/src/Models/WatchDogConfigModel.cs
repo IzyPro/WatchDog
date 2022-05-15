@@ -14,7 +14,7 @@ namespace WatchDog.src.Models
         public bool IsAutoClear { get; set; }
         public WatchDogAutoClearScheduleEnum ClearTimeSchedule { get; set; } = WatchDogAutoClearScheduleEnum.Weekly;
         public string SetExternalDbConnString { get; set; } = string.Empty;
-        public WatchDogSqlDriverEnum SqlDriverOption { get; set; } = WatchDogSqlDriverEnum.MSSQL;
+        public WatchDogSqlDriverEnum SqlDriverOption { get; set; }
     }
 
     public static class WatchDogExternalDbConfig
@@ -24,7 +24,7 @@ namespace WatchDog.src.Models
 
     public static class WatchDogSqlDriverOption
     {
-        public static WatchDogSqlDriverEnum SqlDriverOption { get; set; } = WatchDogSqlDriverEnum.MSSQL;
+        public static WatchDogSqlDriverEnum SqlDriverOption { get; set; }
     }
 
     public static class AutoClearModel
