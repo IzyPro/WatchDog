@@ -42,13 +42,13 @@ namespace WatchDog.src.Helpers
 
             if (GeneralHelper.ShouldUseString())
             {
-                parameters.Add("StartTime", log.StartTime.ToString(), DbType.String);
-                parameters.Add("EndTime", log.EndTime.ToString(), DbType.String);
+                parameters.Add("StartTime", log.StartTime.ToUniversalTime(), DbType.DateTime);
+                parameters.Add("EndTime", log.EndTime.ToUniversalTime(), DbType.DateTimeOffset);
             }
             else
             {
-                parameters.Add("StartTime", log.StartTime, DbType.DateTime);
-                parameters.Add("EndTime", log.EndTime, DbType.DateTime);
+                parameters.Add("StartTime", log.StartTime);
+                parameters.Add("EndTime", log.EndTime);
             }
 
             using (var connection = ExternalDbContext.CreateConnection())
@@ -89,7 +89,7 @@ namespace WatchDog.src.Helpers
 
             if (GeneralHelper.ShouldUseString())
             {
-                parameters.Add("EncounteredAt", log.EncounteredAt.ToString(), DbType.String);
+                parameters.Add("EncounteredAt", log.EncounteredAt.ToUniversalTime(), DbType.DateTime);
             }
             else
             {

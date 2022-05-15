@@ -32,7 +32,7 @@ namespace WatchDogCompleteTestAPI
             //services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExternalDbConnString = "Server=(localdb)\\mssqllocaldb;Database=test;Trusted_Connection=True;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL; });
             //services.AddWatchDogServices(opt => { opt.IsAutoClear = false; opt.SetExternalDbConnString = "Data Source=SQL8003.site4now.net;Initial Catalog=db_a86d7e_wdtest;User Id=db_a86d7e_wdtest_admin;Password=P@ssw0rd"; opt.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL; });
             //services.AddWatchDogServices(opt => { opt.IsAutoClear = false; opt.SetExternalDbConnString = "Server=MYSQL8001.site4now.net;Database=db_a86d7e_wdtest;Uid=a86d7e_wdtest;Pwd=P@ssw0rd"; opt.SqlDriverOption = WatchDogSqlDriverEnum.MySql; });
-            services.AddWatchDogServices(opt => { opt.IsAutoClear = false; opt.SetExternalDbConnString = "Server=kesavan.db.elephantsql.com;Database=piipjkhn;User Id=piipjkhn;Password=cefHfiAOTnUdsqbJSdJMQG4GrTgE_xnA;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.PostgreSql; });
+            services.AddWatchDogServices(opt => { opt.IsAutoClear = false; opt.SetExternalDbConnString = "Server=lallah.db.elephantsql.com;Database=eejekqou;User Id=eejekqou;Password=XGhZ04CR9q-TYBFat308uVegRXDI-64s;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.PostgreSql; });
             
         }
 
