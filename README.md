@@ -18,6 +18,17 @@ It leverages on `LiteDb` a Serverless MongoDB-like database with no configuratio
 - Filtering Option for HTTP Logs using HTTP Methods and StatusCode
 - Logger View Authentication
 - Auto Clear Logs Option
+
+## What's New
+
+- Support for External Databases (local & remote)
+  - Support for MSSQL(SQL Server), MySQL and PostgreSQL Databases
+
+## Fixes
+
+- Fixed Middleware order
+- Fixed Index pages not showing on MVC Apps
+
  
 ## Installation
 
@@ -77,6 +88,18 @@ services.AddWatchDogServices(opt =>
 });
 ```
 
+### Setup Logging to External Db (MSSQL, MySQL & PostgreSQL) `Optional`
+Add Database Connection String and Choose SqlDriver Option
+
+```c#
+services.AddWatchDogServices(opt => 
+{
+   opt.IsAutoClear = false; 
+   opt.SetExternalDbConnString = "Server=localhost;Database=testDb;User Id=postgres;Password=root;"; 
+   opt.SqlDriverOption = WatchDogSqlDriverEnum.PostgreSql; 
+});
+```
+
 
 
 ### Add WatchDog middleware in the HTTP request pipeline in `Startup.cs` under `Configure()`
@@ -98,11 +121,13 @@ app.UseWatchDog(opt =>
 
 >**NOTE**
 >If your projects startup or program class contains app.UseMvc() or app.UseRouting() then app.UseWatchDog() should come after `Important`
+>If your projects startup or program class contains app.UseEndpoints() then app.UseWatchDog() should come before `Important`
 
 # ![Request and Response Sample Details](https://github.com/IzyPro/WatchDog/blob/main/requestLog.png)
 
 #### Add list of routes you want to ignore by the logger: `Optional`
 List of routes, paths or specific strings to be ignored should be a comma separated string like below.
+
 ```c#
 app.UseWatchDog(opt => 
 { 
