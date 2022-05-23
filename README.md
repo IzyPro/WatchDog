@@ -29,7 +29,10 @@ It leverages on `LiteDb` a Serverless MongoDB-like database with no configuratio
 - Fixed Middleware order
 - Fixed Index pages not showing on MVC Apps
 
- 
+
+## Support
+- .NET Core 3.1 and newer
+
 ## Installation
 
 Install via .NET CLI
@@ -160,9 +163,9 @@ app.UseWatchDog(opt =>
 
 ### View Logs and Exception
 Start your server and head to `/watchdog` to view the logs.
->Example: https://myserver.com/watchdog or https://localhost:[your port]/watchdog
+>Example: https://myserver.com/watchdog or https://localhost:[your-port]/watchdog
 
-Still confused? Check out the implementation in the [WatchDogCompleteTestAPI](https://github.com/IzyPro/WatchDog/tree/main/WatchDogCompleteTestAPI) folder
+Still confused? Check out the implementation in the [WatchDogCompleteTestAPI](https://github.com/IzyPro/WatchDog/tree/main/WatchDogCompleteTestAPI) folder or the .NET 6 implementation in the [WatchDogCompleteApiNet6](https://github.com/IzyPro/WatchDog/tree/main/WatchDogCompleteApiNet6) folder.
 
 ## Contribution
 Feel like something is missing? Fork the repo and send a PR.
