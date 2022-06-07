@@ -12,8 +12,8 @@
 		<Authors>Israel Ulelu, Kelechi Onyekwere</Authors>
 		<PackageId>WatchDog.NET</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.1.0</Version>
-		<PackageReleaseNotes>Static Files Included</PackageReleaseNotes>
+		<Version>1.2.0</Version>
+		<PackageReleaseNotes>- Added support for MSSQL(SQL Server), MySQL and PostgreSQL Databases, Fixed Middleware order, Fixed Index pages not showing on MVC Apps</PackageReleaseNotes>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	</PropertyGroup>
 

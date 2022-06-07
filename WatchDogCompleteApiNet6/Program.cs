@@ -20,16 +20,17 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseWatchDogExceptionLogger();
-app.UseWatchDog(conf =>
-{
-    conf.WatchPageUsername = "admin";
-    conf.WatchPagePassword = "Qwerty@123";
-});
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseWatchDog(conf =>
+{
+    conf.WatchPageUsername = "admin";
+    conf.WatchPagePassword = "Qwerty@123";
+});
 
 app.Run();
