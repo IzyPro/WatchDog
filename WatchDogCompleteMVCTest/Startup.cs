@@ -26,7 +26,8 @@ namespace WatchDogCompleteMVCTest
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExternalDbConnString = "Server=localhost;Port=5432;Database=pgAuth;User Id=postgres;Password=root;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.PostgreSql; });
+            services.AddWatchDogServices();
+            //services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExternalDbConnString = "Server=localhost;Port=5432;Database=pgAuth;User Id=postgres;Password=root;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.PostgreSql; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,14 +51,15 @@ namespace WatchDogCompleteMVCTest
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseMvcWithDefaultRoute();
             app.UseWatchDog(opt => { opt.WatchPageUsername = "admin"; opt.WatchPagePassword = "Qwerty@123"; opt.Blacklist = "Test/testPost, weatherforecast"; });
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}",
+                    defaults: new { controller = "Home", action = "Index" });
             });
         }
     }

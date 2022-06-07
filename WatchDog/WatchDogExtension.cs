@@ -78,7 +78,7 @@ namespace WatchDog
                 throw new WatchDogAuthenticationException("Parameter Password is required on .UseWatchDog()");
             }
 
-
+            app.UseRouting();
             app.UseMiddleware<src.WatchDog>(options);
 
 
