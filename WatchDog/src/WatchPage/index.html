@@ -405,6 +405,7 @@
 
         var pageIndex = 1;
         var exPageIndex = 1;
+        var inCodeLogPageIndex = 1;
         document.getElementById('reqLog').style.textDecoration = "underline";
         var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
 
@@ -532,6 +533,38 @@
                             "<td><b>" + data.logs[i].source + "</b></td><td>" + data.logs[i].message + "</td><td>" + data.logs[i].typeOf + "</td><td>" + moment(data.logs[i].encounteredAt).format('LLL') + "</td></tr > ");
                         tr.on('click', populateExceptionModal.bind(null, data.logs[i]));
                         $('#tableBodyEx').append(tr);
+                    }
+                }
+            });
+        }
+        function getInCodeLogs(searchString = "") {
+            $.ajax({
+                type: "GET",
+                url: "/WTCHDwatchpage/Logs?pageNumber=" + inCodeLogPageIndex + "&searchString=" + searchString,
+                context: document.body,
+                success: function (data) {
+                    var totalPages = data.totalPages === 0 ? 1 : data.totalPages
+                    $('#inCodeLogPageMap').text("Page " + data.pageIndex + " of " + totalPages);
+                    if (data.hasNext === false) {
+                        $('#inCodeLogNext').hide();
+                    }
+                    else {
+                        $('#inCodeLogNext').show();
+
+                    }
+
+                    if (data.hasPrevious === false) {
+                        $('#inCodeLogPrev').hide();
+                    }
+                    else {
+                        $('#inCodeLogPrev').show();
+                    }
+
+                    for (var i = 0; i < data.logs.length; i++) {
+                        const tr = $("<tr aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
+                            "<td><b>" + moment(data.logs[i].encounteredAt).format('LLL') + "</b></td><td>" + data.logs[i].callingFrom + " Line:" + data.logs[i].lineNumber + "</td><td>" + data.logs[i].callingMethod + "</td><td>" + data.logs[i].message + "</td></tr > ");
+                        
+                        $('#tableBodyinCodeLog').append(tr);
                     }
                 }
             });

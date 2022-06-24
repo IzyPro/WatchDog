@@ -52,6 +52,21 @@ namespace WatchDog.src.Controllers
             var result = PaginatedList<WatchExceptionLog>.CreateAsync(logs, pageNumber, Constants.PageSize);
             return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result });
         }
+        public async Task<JsonResult> Logs(string searchString = "", int pageNumber = 1)
+        {
+            var logs = await DynamicDBManager.GetAllLogs();
+            if (logs != null)
+            {
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    searchString = searchString.ToLower();
+                    logs = logs.Where(l => l.Message.ToLower().Contains(searchString) || l.CallingMethod.ToLower().Contains(searchString) || l.CallingFrom.ToString().Contains(searchString));
+                }
+            }
+            logs = logs.OrderByDescending(x => x.Timestamp);
+            var result = PaginatedList<WatchLoggerModel>.CreateAsync(logs, pageNumber, Constants.PageSize);
+            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result });
+        }
 
         public async Task<JsonResult> ClearLogs()
         {

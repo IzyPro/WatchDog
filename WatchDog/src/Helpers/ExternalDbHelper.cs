@@ -10,6 +10,7 @@ namespace WatchDog.src.Helpers
 {
     internal static class ExternalDbHelper
     {
+        // WATCHLOG OPERATIONS
         public static async Task<IEnumerable<WatchLog>> GetAllWatchLogs()
         {
             var query = @$"SELECT * FROM {Constants.WatchLogTableName}";
@@ -61,7 +62,7 @@ namespace WatchDog.src.Helpers
 
 
 
-
+        // WATCH EXCEPTION OPERATIONS
         public static async Task<IEnumerable<WatchExceptionLog>> GetAllWatchExceptionLogs()
         {
             var query = @$"SELECT * FROM {Constants.WatchLogExceptionTableName}";
@@ -102,15 +103,60 @@ namespace WatchDog.src.Helpers
             }
         }
 
-        public static async Task<bool> ClearLogs()
+        // LOGS OPERATION
+        public static async Task<IEnumerable<WatchLoggerModel>> GetAllLogs()
         {
-            var logQuery = @$"truncate table {Constants.WatchLogTableName}";
-            var exQuery = @$"truncate table {Constants.WatchLogExceptionTableName}";
+            var query = @$"SELECT * FROM {Constants.LogsTableName}";
             using (var connection = ExternalDbContext.CreateConnection())
             {
-                var logs = await connection.ExecuteAsync(logQuery);
+                connection.Open();
+                var logs = await connection.QueryAsync<WatchLoggerModel>(query);
+                connection.Close();
+                return logs.AsList();
+            }
+        }
+
+        public static async Task InsertLog(WatchLoggerModel log)
+        {
+            var query = @$"INSERT INTO {Constants.LogsTableName} (message,timestamp,callingFrom,callingMethod,lineNumber) " +
+                "VALUES (@Message,@Timestamp,@CallingFrom,@CallingMethod,@LineNumber);";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("Message", log.Message, DbType.String);
+            parameters.Add("Timestamp", log.Timestamp, DbType.String);
+            parameters.Add("CallingFrom", log.CallingFrom, DbType.String);
+            parameters.Add("CallingMethod", log.CallingMethod, DbType.String);
+            parameters.Add("LineNumber", log.LineNumber, DbType.String);
+
+            if (GeneralHelper.IsPostgres())
+            {
+                parameters.Add("EncounteredAt", log.Timestamp.ToUniversalTime(), DbType.DateTime);
+            }
+            else
+            {
+                parameters.Add("EncounteredAt", log.Timestamp, DbType.DateTime);
+            }
+
+            using (var connection = ExternalDbContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(query, parameters);
+            }
+        }
+
+
+
+
+        public static async Task<bool> ClearLogs()
+        {
+            var watchlogQuery = @$"truncate table {Constants.WatchLogTableName}";
+            var exQuery = @$"truncate table {Constants.WatchLogExceptionTableName}";
+            var logQuery = @$"truncate table {Constants.LogsTableName}";
+            using (var connection = ExternalDbContext.CreateConnection())
+            {
+                var watchlogs = await connection.ExecuteAsync(watchlogQuery);
                 var exLogs = await connection.ExecuteAsync(exQuery);
-                return logs > 1 && exLogs > 1;
+                var logs = await connection.ExecuteAsync(logQuery);
+                return watchlogs > 1 && exLogs > 1 && logs > 1;
             }
         }
     }

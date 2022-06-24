@@ -9,12 +9,24 @@ namespace WatchDog.src.Helpers
         public static LiteDatabase db = new LiteDatabase("watchlogs.db");
         static ILiteCollection<WatchLog> _watchLogs = db.GetCollection<WatchLog>("WatchLogs");
         static ILiteCollection<WatchExceptionLog> _watchExLogs = db.GetCollection<WatchExceptionLog>("WatchExceptionLogs");
+        static ILiteCollection<WatchLoggerModel> _logs = db.GetCollection<WatchLoggerModel>("Logs");
 
         public static IEnumerable<WatchLog> GetAllWatchLogs()
         {
             return _watchLogs.FindAll();
         }
 
+        public static bool ClearAllLogs()
+        {
+            var watchLogs = ClearWatchLog();
+            var exLogs = ClearWatchExceptionLog();
+            var logs = ClearLogs();
+
+
+            return watchLogs > 1 && exLogs > 1 && logs > 1;
+        }
+
+        //WATCH lOGS OPERATION
         public static WatchLog GetWatchLogById(int id)
         {
             return _watchLogs.FindById(id);
@@ -40,13 +52,6 @@ namespace WatchDog.src.Helpers
             return _watchLogs.DeleteAll();
         }
 
-        public static bool ClearAllLogs()
-        {
-            var logs = ClearWatchLog();
-            var exLogs = ClearWatchExceptionLog();
-
-            return logs > 1 && exLogs > 1;
-        }
 
         //Watch Exception Operations
         public static IEnumerable<WatchExceptionLog> GetAllWatchExceptionLogs()
@@ -76,6 +81,20 @@ namespace WatchDog.src.Helpers
         public static int ClearWatchExceptionLog()
         {
             return _watchExLogs.DeleteAll();
+        }
+
+        //LOGS OPERATION
+        public static int InsertLog(WatchLoggerModel log)
+        {
+            return _logs.Insert(log);
+        }
+        public static int ClearLogs()
+        {
+            return _logs.DeleteAll();
+        }
+        public static IEnumerable<WatchLoggerModel> GetAllLogs()
+        {
+            return _logs.FindAll();
         }
     }
 }

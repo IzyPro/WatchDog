@@ -17,6 +17,7 @@ namespace WatchDog.src.Managers
                 true => await ExternalDbHelper.ClearLogs(),
                 false => LiteDBHelper.ClearAllLogs()
             };
+        // WATCHLOG OPERATIONS
         public static async Task<IEnumerable<WatchLog>> GetAllWatchLogs() =>
             isExternalDb() switch
             {
@@ -36,6 +37,7 @@ namespace WatchDog.src.Managers
             }
         }
 
+        // WATCH EXCEPTION OPERATIONS
         public static async Task<IEnumerable<WatchExceptionLog>> GetAllWatchExceptionLogs() =>
             isExternalDb() switch
             {
@@ -53,6 +55,22 @@ namespace WatchDog.src.Managers
             {
                 LiteDBHelper.InsertWatchExceptionLog(log);
             }
+        }
+
+        // LOG OPERATIONS
+        public static async Task<IEnumerable<WatchLoggerModel>> GetAllLogs() =>
+            isExternalDb() switch
+            {
+                true => await ExternalDbHelper.GetAllLogs(),
+                false => LiteDBHelper.GetAllLogs()
+            };
+
+        public static async Task InsertLog(WatchLoggerModel log)
+        {
+            if (isExternalDb())
+                await ExternalDbHelper.InsertLog(log);
+            else
+                LiteDBHelper.InsertLog(log);
         }
     }
 }

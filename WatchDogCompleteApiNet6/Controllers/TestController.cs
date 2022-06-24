@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using WatchDog;
+using WatchDog.src;
 using WatchDogCompleteApiNet6.Models;
 
 namespace WatchDogCompleteApiNet6.Controllers
@@ -11,6 +13,7 @@ namespace WatchDogCompleteApiNet6.Controllers
         [HttpGet("testGet")]
         public Product TestGet(string reference)
         {
+            WatchLogger.Log("No wamp");
             return new Product { Id = 1, Name = "Get Test Product", Description = $"This is the response from testGet - {reference}", IsOnSale = true };
             throw new Exception("O get o, then forget");
 
