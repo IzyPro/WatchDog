@@ -117,14 +117,19 @@
     <section class="ftco-section pb-5">
         <div class="container">
             <div class="row d-flex float-right nav nav-tabs mx-1 mx-sm-3 mb-0 pb-0 border-0">
-                <a data-toggle="tab" onclick="makeActive('reqLog', 'excptLog')" href="#requestTab" style="color:black; text-decoration:none; text-underline-offset: 5px">
+                <a data-toggle="tab" onclick="makeActive('reqLog', 'excptLog', 'inCodeLog')" href="#requestTab" style="color:black; text-decoration:none; text-underline-offset: 5px">
                     <div class="active">
                         <h6 id="reqLog" class="font-weight-bold">Request Logs</h6>
                     </div>
                 </a>
-                <a data-toggle="tab" onclick="makeActive('excptLog', 'reqLog')" class="ml-3" href="#exceptionTab" style="color: black; text-decoration: none; text-underline-offset: 5px">
+                <a data-toggle="tab" onclick="makeActive('excptLog', 'reqLog', 'inCodeLog')" class="ml-3" href="#exceptionTab" style="color: black; text-decoration: none; text-underline-offset: 5px">
                     <div class="">
                         <h6 id="excptLog" class="font-weight-bold">Exception Logs</h6>
+                    </div>
+                </a>
+                <a data-toggle="tab" onclick="makeActive('inCodeLog', 'reqLog', 'excptLog')" class="ml-3" href="#incodeTab" style="color: black; text-decoration: none; text-underline-offset: 5px">
+                    <div class="">
+                        <h6 id="inCodeLog" class="font-weight-bold">InCode Logs</h6>
                     </div>
                 </a>
             </div>
@@ -231,6 +236,41 @@
                     <div class="mb-5">
                         <button id="exPrev" class="text-left mr-5 btn-sm btn btn-dark float-left" onclick="exPrevPage(event)">Previous</button>
                         <button id="exNext" class="text-right ml-5 btn-sm btn btn-dark float-right" onclick="exNextPage(event)">Next</button>
+                    </div>
+                </div>
+                <div id="incodeTab" class="tab-pane fade">
+                    <div class="mb-5 row">
+                        <input type="text" name="search" class="form-control col-md-2 m-1" id="inCodeSearchString" />
+                        <button onclick="inCodeSearch()" class="btn-sm btn btn-dark m-1">Search</button>
+                        <a href="#" onclick="backToList(event)" class="m-1 mx-auto text-right col-md-8">Back to Full List</a>
+                        <hr />
+
+                    </div>
+                    <div class="my-auto mb-5">
+                        <b>Realtime Connection: <span id="dot" name="dot" class="dot" style="background-color: dodgerblue"></span></b>
+                    </div>
+                    <div class="mt-3 row">
+                        <div class="col-md-12">
+                            <div class="table">
+                                <table class="table table-hover table-responsive-lg table-lg shadow p-3 mb-5 bg-light rounded">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Encountered At</th>
+                                            <th scope="col">Calling From</th>
+                                            <th scope="col">Calling Method</th>
+                                            <th scope="col">Message</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBodyInCode">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="lead text-center text-muted" id="inCodePageMap"></p>
+                    <div class="mb-5">
+                        <button id="inCodePrev" class="text-left mr-5 btn-sm btn btn-dark float-left" onclick="inCodePrevPage(event)">Previous</button>
+                        <button id="inCodeNext" class="text-right ml-5 btn-sm btn btn-dark float-right" onclick="inCodeNextPage(event)">Next</button>
                     </div>
                 </div>
             </div>
@@ -405,24 +445,31 @@
 
         var pageIndex = 1;
         var exPageIndex = 1;
-        var inCodeLogPageIndex = 1;
+        var inCodePageIndex = 1;
         document.getElementById('reqLog').style.textDecoration = "underline";
         var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
 
         connection.on("getLogs", function (data) {
             if (sessionStorage.getItem("loggedIn") !== null && sessionStorage.getItem("loggedIn") === sessionStorage.getItem("newloggedIn")) {
                 if (data.type === "rqLog") {
+                    console.log("Request LOG: " + data.log)
                     const firstDigitStr = String(data.log.responseStatus)[0];
                     var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
                     const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
                         "<td><b>" + data.log.method + "</b></td><td>" + data.log.path + "</td><td><b class='" + statusColor + "'> " + data.log.responseStatus + "</b></td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.startTime).format('LLL') + "</td></tr>");
                     tr.on('click', populateModal.bind(null, data.log));
                     $('#tableBody').prepend(tr);
-                } else {
+                } else if (data.type === "exLog") {
+                    console.log("Exception LOG: " + data.log)
                     const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
                         "<td><b>" + data.log.source + "</b></td><td>" + data.log.message + "</td><td>" + data.log.typeOf + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
                     tr.on('click', populateExceptionModal.bind(null, data.log));
                     $('#tableBodyEx').prepend(tr);
+                } else if (data.type === "log") {
+                    console.log("INCODE LOG: " + data.log)
+                    const tr = $("<tr aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                        "<td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + data.log.callingFrom + " Line:" + data.log.lineNumber + "</td><td>" + data.log.callingMethod + "</td><td>" + data.log.message + "</td></tr > ");
+                    $('#tableBodyInCode').prepend(tr);
                 }
 
             }
@@ -435,9 +482,11 @@
                 $("[name='dot']").css("backgroundColor", "green");
                 getLogs();
                 getExceptionLogs();
+                getInCodeLogs();
             }).catch(err => {
                 getLogs();
                 getExceptionLogs();
+                getInCodeLogs();
                 $("[name='dot']").css("backgroundColor", "red");
             });
 
@@ -540,31 +589,31 @@
         function getInCodeLogs(searchString = "") {
             $.ajax({
                 type: "GET",
-                url: "/WTCHDwatchpage/Logs?pageNumber=" + inCodeLogPageIndex + "&searchString=" + searchString,
+                url: "/WTCHDwatchpage/Logs?pageNumber=" + inCodePageIndex + "&searchString=" + searchString,
                 context: document.body,
                 success: function (data) {
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
-                    $('#inCodeLogPageMap').text("Page " + data.pageIndex + " of " + totalPages);
+                    $('#inCodePageMap').text("Page " + data.pageIndex + " of " + totalPages);
                     if (data.hasNext === false) {
-                        $('#inCodeLogNext').hide();
+                        $('#inCodeNext').hide();
                     }
                     else {
-                        $('#inCodeLogNext').show();
+                        $('#inCodeNext').show();
 
                     }
 
                     if (data.hasPrevious === false) {
-                        $('#inCodeLogPrev').hide();
+                        $('#inCodePrev').hide();
                     }
                     else {
-                        $('#inCodeLogPrev').show();
+                        $('#inCodePrev').show();
                     }
 
                     for (var i = 0; i < data.logs.length; i++) {
                         const tr = $("<tr aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                            "<td><b>" + moment(data.logs[i].encounteredAt).format('LLL') + "</b></td><td>" + data.logs[i].callingFrom + " Line:" + data.logs[i].lineNumber + "</td><td>" + data.logs[i].callingMethod + "</td><td>" + data.logs[i].message + "</td></tr > ");
+                            "<td><b>" + moment(data.logs[i].timestamp).format('LLL') + "</b></td><td>" + data.logs[i].callingFrom + " Line:" + data.logs[i].lineNumber + "</td><td>" + data.logs[i].callingMethod + "</td><td>" + data.logs[i].message + "</td></tr > ");
                         
-                        $('#tableBodyinCodeLog').append(tr);
+                        $('#tableBodyInCode').append(tr);
                     }
                 }
             });
@@ -593,6 +642,13 @@
             $('#tableBodyEx').empty();
             var ss = $('#exSearchString').val();
             getExceptionLogs(ss);
+        }
+
+        function inCodeSearch() {
+            inCodePageIndex = 1;
+            $('#tableBodyInCode').empty();
+            var ss = $('#inCodeSearchString').val();
+            getInCodeLogs(ss);
         }
 
         function filterVerb(verbString) {
@@ -633,15 +689,24 @@
             getExceptionLogs($('#searchString').val());
         }
 
+        function inCodeNextPage(e) {
+            ++inCodePageIndex;
+            $('#tableBodyInCode').empty();
+            getInCodeLogs($('#searchString').val());
+        }
+
         function backToList(e) {
             pageIndex = 1;
             $('#tableBody').empty();
             $('#tableBodyEx').empty();
+            $('#tableBodyInCode').empty();
             getLogs();
             getExceptionLogs();
+            getInCodeLogs();
 
             $('#searchString').val("");
             $('#exSearchString').val("");
+            $('#inCodeSearchString').val("");
             $('#myVerbDropDown').val("ALL");
             $('#myStatusCodeDropDown').val("ALL");
 
@@ -787,9 +852,10 @@
             e.preventDefault();
         }
 
-        function makeActive(id, removeId) {
+        function makeActive(id, removeId, removeNextId) {
             document.getElementById(id).style.textDecoration = "underline";
             document.getElementById(removeId).style.textDecoration = "none";
+            document.getElementById(removeNextId).style.textDecoration = "none";
         }
     </script>
 

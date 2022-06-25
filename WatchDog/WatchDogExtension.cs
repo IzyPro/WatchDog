@@ -45,7 +45,7 @@ namespace WatchDog
             }).AddApplicationPart(typeof(WatchDogExtension).Assembly);
 
 
-            services.AddTransient<IBroadcastHelper, BroadcastHelper>();
+            services.AddSingleton<IBroadcastHelper, BroadcastHelper>();
             services.AddTransient<ILoggerService, LoggerService>();
 
             if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
@@ -56,6 +56,10 @@ namespace WatchDog
 
             if (AutoClearModel.IsAutoClear)
                 services.AddHostedService<AutoLogClearerBackgroundService>();
+
+            
+            ServiceProviderFactory.ServiceProvider = services.BuildServiceProvider();
+
             return services;
         }
 
