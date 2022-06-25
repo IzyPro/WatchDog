@@ -3,11 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using WatchDog.src.Interfaces;
 
 namespace WatchDog.src.Models
 {
     public static class ServiceProviderFactory
     {
-        public static IServiceProvider ServiceProvider { get; set; }
+        public static IBroadcastHelper BroadcastHelper { get; set; }
     }
 }

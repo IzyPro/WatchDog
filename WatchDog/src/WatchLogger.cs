@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using WatchDog.src.Helpers;
 using WatchDog.src.Hubs;
 using WatchDog.src.Interfaces;
@@ -27,8 +28,7 @@ namespace WatchDog.src
 
             //Insert
             await DynamicDBManager.InsertLog(log);
-            var service = (IBroadcastHelper)ServiceProviderFactory.ServiceProvider.GetService(typeof(IBroadcastHelper));
-            await service.BroadcastLog(log);
+            await ServiceProviderFactory.BroadcastHelper.BroadcastLog(log);
 
         }
     }

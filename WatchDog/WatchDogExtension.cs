@@ -45,7 +45,7 @@ namespace WatchDog
             }).AddApplicationPart(typeof(WatchDogExtension).Assembly);
 
 
-            services.AddSingleton<IBroadcastHelper, BroadcastHelper>();
+            services.AddTransient<IBroadcastHelper, BroadcastHelper>();
             services.AddTransient<ILoggerService, LoggerService>();
 
             if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
@@ -56,9 +56,6 @@ namespace WatchDog
 
             if (AutoClearModel.IsAutoClear)
                 services.AddHostedService<AutoLogClearerBackgroundService>();
-
-            
-            ServiceProviderFactory.ServiceProvider = services.BuildServiceProvider();
 
             return services;
         }
@@ -71,6 +68,7 @@ namespace WatchDog
 
         public static IApplicationBuilder UseWatchDog(this IApplicationBuilder app, Action<WatchDogOptionsModel> configureOptions)
         {
+            ServiceProviderFactory.BroadcastHelper = app.ApplicationServices.GetService<IBroadcastHelper>();
             var options = new WatchDogOptionsModel();
             configureOptions(options);
             if (string.IsNullOrEmpty(options.WatchPageUsername))
