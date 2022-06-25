@@ -56,6 +56,7 @@ namespace WatchDog
 
             if (AutoClearModel.IsAutoClear)
                 services.AddHostedService<AutoLogClearerBackgroundService>();
+
             return services;
         }
 
@@ -67,6 +68,7 @@ namespace WatchDog
 
         public static IApplicationBuilder UseWatchDog(this IApplicationBuilder app, Action<WatchDogOptionsModel> configureOptions)
         {
+            ServiceProviderFactory.BroadcastHelper = app.ApplicationServices.GetService<IBroadcastHelper>();
             var options = new WatchDogOptionsModel();
             configureOptions(options);
             if (string.IsNullOrEmpty(options.WatchPageUsername))
