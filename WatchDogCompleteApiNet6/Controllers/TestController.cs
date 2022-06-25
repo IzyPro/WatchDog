@@ -13,7 +13,7 @@ namespace WatchDogCompleteApiNet6.Controllers
         [HttpGet("testGet")]
         public Product TestGet(string reference)
         {
-            WatchLogger.Log("No wamp");
+            WatchLogger.Log("...TestGet Started...");
             return new Product { Id = 1, Name = "Get Test Product", Description = $"This is the response from testGet - {reference}", IsOnSale = true };
             throw new Exception("O get o, then forget");
 

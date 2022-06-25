@@ -45,7 +45,7 @@ namespace WatchDog
             }).AddApplicationPart(typeof(WatchDogExtension).Assembly);
 
 
-            services.AddTransient<IBroadcastHelper, BroadcastHelper>();
+            services.AddSingleton<IBroadcastHelper, BroadcastHelper>();
             services.AddTransient<ILoggerService, LoggerService>();
 
             if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
