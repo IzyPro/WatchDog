@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using WatchDog.src.Helpers;
-using WatchDog.src.Hubs;
-using WatchDog.src.Interfaces;
 using WatchDog.src.Managers;
 using WatchDog.src.Models;
 

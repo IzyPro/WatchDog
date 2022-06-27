@@ -13,7 +13,9 @@ namespace WatchDogCompleteApiNet6.Controllers
         [HttpGet("testGet")]
         public Product TestGet(string reference)
         {
-            WatchLogger.Log("No wamp");
+            WatchLogger.Log("...TestGet Started...");
+            // Some lines of code
+            WatchLogger.Log("...TestGet Ended...");
             return new Product { Id = 1, Name = "Get Test Product", Description = $"This is the response from testGet - {reference}", IsOnSale = true };
             throw new Exception("O get o, then forget");
 
@@ -22,6 +24,8 @@ namespace WatchDogCompleteApiNet6.Controllers
         [HttpPost("testPost")]
         public Product TestPost([FromBody] Product product)
         {
+            WatchLogger.Log($"Create new product");
+            WatchLogger.Log($"New product created with ID: {product.Id}, Name: {product.Name}, Description: {product.Description}");
             return product;
             throw new ArgumentException("Mumu, pass the right argument");
         }

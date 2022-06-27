@@ -123,18 +123,17 @@ namespace WatchDog.src.Helpers
 
             var parameters = new DynamicParameters();
             parameters.Add("Message", log.Message, DbType.String);
-            parameters.Add("Timestamp", log.Timestamp, DbType.String);
             parameters.Add("CallingFrom", log.CallingFrom, DbType.String);
             parameters.Add("CallingMethod", log.CallingMethod, DbType.String);
-            parameters.Add("LineNumber", log.LineNumber, DbType.String);
+            parameters.Add("LineNumber", log.LineNumber, DbType.Int32);
 
             if (GeneralHelper.IsPostgres())
             {
-                parameters.Add("EncounteredAt", log.Timestamp.ToUniversalTime(), DbType.DateTime);
+                parameters.Add("Timestamp", log.Timestamp.ToUniversalTime(), DbType.DateTime);
             }
             else
             {
-                parameters.Add("EncounteredAt", log.Timestamp, DbType.DateTime);
+                parameters.Add("Timestamp", log.Timestamp, DbType.DateTime);
             }
 
             using (var connection = ExternalDbContext.CreateConnection())

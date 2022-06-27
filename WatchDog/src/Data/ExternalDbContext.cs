@@ -84,6 +84,14 @@ namespace WatchDog.src.Data
                                 requestBody   VARCHAR(max),
                                 encounteredAt VARCHAR(100) NOT NULL
                              );
+                                IF OBJECT_ID('dbo.{Constants.LogsTableName}', 'U') IS NULL CREATE TABLE {Constants.LogsTableName} (
+                                id            INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                                message       VARCHAR(max),
+                                timestamp     VARCHAR(100) NOT NULL,
+                                callingFrom   VARCHAR(max),
+                                callingMethod VARCHAR(100),
+                                lineNumber    INT
+                             );
                         ",
 
                 WatchDogSqlDriverEnum.MySql => @$"
@@ -115,6 +123,14 @@ namespace WatchDog.src.Data
                                 requestBody   TEXT(65535),
                                 encounteredAt VARCHAR(100) NOT NULL
                              );
+                           CREATE TABLE IF NOT EXISTS {Constants.LogsTableName} (
+                                id            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                message       TEXT(65535),
+                                timestamp     VARCHAR(100) NOT NULL,
+                                callingFrom   VARCHAR(100),
+                                callingMethod VARCHAR(100),
+                                lineNumber    INT
+                             );
                         ",
 
                 WatchDogSqlDriverEnum.PostgreSql => @$"
@@ -145,6 +161,14 @@ namespace WatchDog.src.Data
                                 queryString   VARCHAR(100),
                                 requestBody   VARCHAR,
                                 encounteredAt TIMESTAMP with time zone NOT NULL
+                             );
+                           CREATE TABLE IF NOT EXISTS {Constants.LogsTableName} (
+                                id            SERIAL PRIMARY KEY,
+                                message       VARCHAR,
+                                timestamp     TIMESTAMP with time zone NOT NULL,
+                                callingFrom   VARCHAR,
+                                callingMethod VARCHAR(100),
+                                lineNumber    INTEGER
                              );
                         ",
                 _ => ""
