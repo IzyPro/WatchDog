@@ -452,7 +452,6 @@
         connection.on("getLogs", function (data) {
             if (sessionStorage.getItem("loggedIn") !== null && sessionStorage.getItem("loggedIn") === sessionStorage.getItem("newloggedIn")) {
                 if (data.type === "rqLog") {
-                    console.log("Request LOG: " + data.log)
                     const firstDigitStr = String(data.log.responseStatus)[0];
                     var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
                     const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
@@ -460,13 +459,11 @@
                     tr.on('click', populateModal.bind(null, data.log));
                     $('#tableBody').prepend(tr);
                 } else if (data.type === "exLog") {
-                    console.log("Exception LOG: " + data.log)
                     const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
                         "<td><b>" + data.log.source + "</b></td><td>" + data.log.message + "</td><td>" + data.log.typeOf + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
                     tr.on('click', populateExceptionModal.bind(null, data.log));
                     $('#tableBodyEx').prepend(tr);
                 } else if (data.type === "log") {
-                    console.log("INCODE LOG: " + data.log)
                     const tr = $("<tr aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
                         "<td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + data.log.callingFrom + "\nLine:" + data.log.lineNumber + "</td><td>" + data.log.callingMethod + "</td><td>" + data.log.message + "</td></tr > ");
                     $('#tableBodyInCode').prepend(tr);
