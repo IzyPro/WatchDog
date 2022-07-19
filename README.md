@@ -162,7 +162,7 @@ app.UseWatchDog(opt =>
 ```
 ### Log Messages/Events
 ```
-WatchLogger.Log("...WatchDog is awesome...");
+WatchLogger.Log("...TestGet Started...");
 ```
 # ![In-code log messages](https://github.com/IzyPro/WatchDog/blob/main/in-code.jpeg)
 
