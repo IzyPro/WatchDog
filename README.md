@@ -13,7 +13,7 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 
 - RealTime HTTP Request and Response Logger
 - RealTime Exception Logger
-- In-code message and eevent logging
+- In-code message and event logging
 - User Friendly Logger Views
 - Search Option for HTTP and Exception Logs
 - Filtering Option for HTTP Logs using HTTP Methods and StatusCode
