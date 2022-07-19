@@ -4,8 +4,8 @@
 
 ## Introduction
 
-WatchDog is a Realtime HTTP (Request & Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view http requests made to their web application and also exception caught during runtime in their web applications in Realtime.
-It leverages on `LiteDb` a Serverless MongoDB-like database with no configuration and `SignalR` for real-time monitoring.
+WatchDog is a Realtime Message, Event, HTTP (Request & Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view messages, events, http requests made to their web application and also exception caught during runtime in their web applications, all in Realtime.
+It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoDB-like database with no configuration with the option of using your external MSSQL, MySQl or Postgres databases.
 
 # ![Request & Response Viewer](https://github.com/IzyPro/WatchDog/blob/main/watchlog.png)
 
@@ -13,6 +13,7 @@ It leverages on `LiteDb` a Serverless MongoDB-like database with no configuratio
 
 - RealTime HTTP Request and Response Logger
 - RealTime Exception Logger
+- In-code message and eevent logging
 - User Friendly Logger Views
 - Search Option for HTTP and Exception Logs
 - Filtering Option for HTTP Logs using HTTP Methods and StatusCode
@@ -21,8 +22,7 @@ It leverages on `LiteDb` a Serverless MongoDB-like database with no configuratio
 
 ## What's New
 
-- Support for External Databases (local & remote)
-  - Support for MSSQL(SQL Server), MySQL and PostgreSQL Databases
+- In-code logger for messages and events
 
 ## Fixes
 
@@ -38,12 +38,12 @@ It leverages on `LiteDb` a Serverless MongoDB-like database with no configuratio
 Install via .NET CLI
 
 ```bash
-dotnet add package WatchDog.NET --version 1.2.1
+dotnet add package WatchDog.NET --version 1.3.0
 ```
 Install via Package Manager
 
 ```bash
-Install-Package WatchDog.NET --version 1.2.1
+Install-Package WatchDog.NET --version 1.3.0
 ```
 
 
@@ -160,6 +160,12 @@ app.UseWatchDog(opt =>
    opt.Blacklist = "Test/testPost, weatherforecast";
  });
 ```
+### Log Messages/Events
+```
+WatchLogger.Log("...WatchDog is awesome...");
+```
+# ![In-code log messages](https://github.com/IzyPro/WatchDog/blob/main/in-code.jpeg)
+
 
 ### View Logs and Exception
 Start your server and head to `/watchdog` to view the logs.
