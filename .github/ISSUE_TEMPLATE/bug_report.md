@@ -25,8 +25,9 @@ If applicable, add screenshots to help explain your problem.
 
 **Details (please complete the following information):**
  - Project Type: [e.g. API, MVC]
- - Framework Version [e.g. .NET Core 3.1]
- - WatchDog Version [e.g. 1.3.0]
+ - Framework Version [e.g. .NET Core 3.1, .NET 6]
+ - WatchDog Version [e.g. 1.3.0, 1.2.1]
+ - Database [e.g Default, MySQL]
 
 
 **Additional context**
