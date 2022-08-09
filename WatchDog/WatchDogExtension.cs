@@ -95,6 +95,8 @@ namespace WatchDog
 
             app.Build();
 
+            app.UseAuthorization();
+
             return app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<LoggerHub>("/wtchdlogger");

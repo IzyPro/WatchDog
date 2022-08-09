@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using WatchDog.src.Managers;
 using WatchDog.src.Models;
 
-namespace WatchDog.src
+namespace WatchDog
 {
     public class WatchLogger
     {
