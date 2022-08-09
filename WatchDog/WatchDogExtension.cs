@@ -95,8 +95,7 @@ namespace WatchDog
 
             app.Build();
 
-            if(options.UseAuth)
-                app.UseAuthorization();
+            app.UseAuthorization();
 
             return app.UseEndpoints(endpoints =>
             {
