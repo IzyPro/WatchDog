@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using WatchDog;
-using WatchDog.src;
 using WatchDogCompleteApiNet6.Models;
 
 namespace WatchDogCompleteApiNet6.Controllers
