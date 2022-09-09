@@ -119,7 +119,9 @@ namespace WatchDog.src
                             ResponseBody = responseBody,
                             ResponseStatus = context.Response.StatusCode,
                             FinishTime = DateTime.Now,
-                            Headers = context.Response.StatusCode != 200 || context.Response.StatusCode != 201 ? "" : context.Response.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b),
+                            Headers = context.Response.StatusCode == 200 || context.Response.StatusCode == 201
+                                ? string.Empty
+                                : context.Response.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b),
                         };
                         await originalResponseBody.CopyToAsync(originalBodyStream);
                         return responseBodyDto;
