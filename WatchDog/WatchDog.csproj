@@ -8,12 +8,12 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/IzyPro/WatchDog</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>Logger; Exception; Request; Response; Viewer; WatchDog; Monitoring; IzyPro; Khelechy</PackageTags>
+		<PackageTags>Logger; Exception; Request; Response; Viewer; WatchDog; Monitoring; Logging; HTTP; IzyPro; Khelechy</PackageTags>
 		<Authors>Israel Ulelu, Kelechi Onyekwere</Authors>
 		<PackageId>WatchDog.NET</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.3.1</Version>
-		<PackageReleaseNotes>- In-code logger for message and events</PackageReleaseNotes>
+		<Version>1.3.2</Version>
+		<PackageReleaseNotes>- Database Field Length Fix</PackageReleaseNotes>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	</PropertyGroup>
 
