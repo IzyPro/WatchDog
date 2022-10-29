@@ -10,8 +10,7 @@ namespace WatchDog.src.Services
         {
             if (AutoClearModel.IsAutoClear)
             {
-                LiteDBHelper.ClearWatchLog();
-                LiteDBHelper.ClearWatchExceptionLog();
+                LiteDBHelper.ClearAllLogs();
             }
 
         }
