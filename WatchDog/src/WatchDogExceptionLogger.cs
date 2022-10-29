@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.IO;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -13,14 +11,10 @@ namespace WatchDog.src
     internal class WatchDogExceptionLogger
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger _logger;
-        private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
         private readonly IBroadcastHelper _broadcastHelper;
-        public WatchDogExceptionLogger(RequestDelegate next, ILoggerFactory loggerFactory, IBroadcastHelper broadcastHelper)
+        public WatchDogExceptionLogger(RequestDelegate next, IBroadcastHelper broadcastHelper)
         {
             _next = next;
-            _logger = loggerFactory.CreateLogger<WatchDogExceptionLogger>();
-            _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
             _broadcastHelper = broadcastHelper;
         }
 

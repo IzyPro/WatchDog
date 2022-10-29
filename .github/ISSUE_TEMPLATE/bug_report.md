@@ -28,6 +28,7 @@ If applicable, add screenshots to help explain your problem.
  - Framework Version [e.g. .NET Core 3.1, .NET 6]
  - WatchDog Version [e.g. 1.3.0, 1.2.1]
  - Database [e.g Default, MySQL]
+ - Browser [e.g Chrome, Edge]
 
 
 **Additional context**

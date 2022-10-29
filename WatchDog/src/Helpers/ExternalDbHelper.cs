@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using WatchDog.src.Data;
@@ -11,15 +10,35 @@ namespace WatchDog.src.Helpers
     internal static class ExternalDbHelper
     {
         // WATCHLOG OPERATIONS
-        public static async Task<IEnumerable<WatchLog>> GetAllWatchLogs()
+        public static async Task<Page<WatchLog>> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber)
         {
-            var query = @$"SELECT * FROM {Constants.WatchLogTableName}";
+            var query = @$"SELECT * FROM {Constants.WatchLogTableName} ";
+
+            if (!string.IsNullOrEmpty(searchString) || !string.IsNullOrEmpty(verbString) || !string.IsNullOrEmpty(statusCode))
+                query += "WHERE ";
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                query += $"{nameof(WatchLog.Path)} LIKE '%{searchString}%' OR {nameof(WatchLog.Method)} LIKE '%{searchString}%' OR {nameof(WatchLog.ResponseStatus)} LIKE '%{searchString}%' OR {nameof(WatchLog.QueryString)} LIKE '%{searchString}%' ";
+            }
+
+            if (!string.IsNullOrEmpty(verbString))
+            {
+                query += $"{nameof(WatchLog.Method)} LIKE '%{verbString}%' ";
+            }
+
+            if (!string.IsNullOrEmpty(statusCode))
+            {
+                query += $"{nameof(WatchLog.ResponseStatus)} LIKE '%{statusCode}%' ";
+            }
+            query += $"ORDER BY {nameof(WatchLog.StartTime)} DESC";
             using (var connection = ExternalDbContext.CreateConnection())
             {
                 connection.Open();
                 var logs = await connection.QueryAsync<WatchLog>(query);
                 connection.Close();
-                return logs.AsList();
+                return logs.ToPaginatedList(pageNumber);
             }
         }
 
@@ -63,13 +82,19 @@ namespace WatchDog.src.Helpers
 
 
         // WATCH EXCEPTION OPERATIONS
-        public static async Task<IEnumerable<WatchExceptionLog>> GetAllWatchExceptionLogs()
+        public static async Task<Page<WatchExceptionLog>> GetAllWatchExceptionLogs(string searchString, int pageNumber)
         {
-            var query = @$"SELECT * FROM {Constants.WatchLogExceptionTableName}";
+            var query = @$"SELECT * FROM {Constants.WatchLogExceptionTableName} ";
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                query += $"WHERE {nameof(WatchExceptionLog.Source)} LIKE '%{searchString}%' OR {nameof(WatchExceptionLog.Message)} LIKE '%{searchString}%' OR {nameof(WatchExceptionLog.StackTrace)} LIKE '%{searchString}%' ";
+            }
+            query += $"ORDER BY {nameof(WatchExceptionLog.EncounteredAt)} DESC";
             using (var connection = ExternalDbContext.CreateConnection())
             {
                 var logs = await connection.QueryAsync<WatchExceptionLog>(query);
-                return logs.AsList();
+                return logs.ToPaginatedList(pageNumber);
             }
         }
 
@@ -104,28 +129,45 @@ namespace WatchDog.src.Helpers
         }
 
         // LOGS OPERATION
-        public static async Task<IEnumerable<WatchLoggerModel>> GetAllLogs()
+        public static async Task<Page<WatchLoggerModel>> GetAllLogs(string searchString, string logLevelString, int pageNumber)
         {
-            var query = @$"SELECT * FROM {Constants.LogsTableName}";
+            var query = @$"SELECT * FROM {Constants.LogsTableName} ";
+
+            if (!string.IsNullOrEmpty(searchString) || !string.IsNullOrEmpty(logLevelString))
+                query += "WHERE ";
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                query += $"{nameof(WatchLoggerModel.CallingFrom)} LIKE '%{searchString}%' OR {nameof(WatchLoggerModel.CallingMethod)} LIKE '%{searchString}%' OR {nameof(WatchLoggerModel.Message)} LIKE '%{searchString}%' ";
+            }
+
+            if (!string.IsNullOrEmpty(logLevelString))
+            {
+                query += $"{nameof(WatchLoggerModel.LogLevel)} LIKE '%{logLevelString}%' ";
+            }
+            query += $"ORDER BY {nameof(WatchLoggerModel.Timestamp)} DESC";
+
             using (var connection = ExternalDbContext.CreateConnection())
             {
                 connection.Open();
                 var logs = await connection.QueryAsync<WatchLoggerModel>(query);
                 connection.Close();
-                return logs.AsList();
+                return logs.ToPaginatedList(pageNumber);
             }
         }
 
         public static async Task InsertLog(WatchLoggerModel log)
         {
-            var query = @$"INSERT INTO {Constants.LogsTableName} (message,timestamp,callingFrom,callingMethod,lineNumber) " +
-                "VALUES (@Message,@Timestamp,@CallingFrom,@CallingMethod,@LineNumber);";
+            var query = @$"INSERT INTO {Constants.LogsTableName} (message,timestamp,callingFrom,callingMethod,lineNumber,logLevel) " +
+                "VALUES (@Message,@Timestamp,@CallingFrom,@CallingMethod,@LineNumber,@LogLevel);";
 
             var parameters = new DynamicParameters();
             parameters.Add("Message", log.Message, DbType.String);
             parameters.Add("CallingFrom", log.CallingFrom, DbType.String);
             parameters.Add("CallingMethod", log.CallingMethod, DbType.String);
             parameters.Add("LineNumber", log.LineNumber, DbType.Int32);
+            parameters.Add("LogLevel", log.LogLevel, DbType.String);
 
             if (GeneralHelper.IsPostgres())
             {
