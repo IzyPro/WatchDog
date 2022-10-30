@@ -44,13 +44,14 @@ namespace WatchDog.src.Helpers
 
         public static async Task InsertWatchLog(WatchLog log)
         {
+            bool isPostgres = GeneralHelper.IsPostgres();
             var query = @$"INSERT INTO {Constants.WatchLogTableName} (responseBody,responseStatus,requestBody,queryString,path,requestHeaders,responseHeaders,method,host,ipAddress,timeSpent,startTime,endTime) " +
                 "VALUES (@ResponseBody,@ResponseStatus,@RequestBody,@QueryString,@Path,@RequestHeaders,@ResponseHeaders,@Method,@Host,@IpAddress,@TimeSpent,@StartTime,@EndTime);";
 
             var parameters = new DynamicParameters();
-            parameters.Add("ResponseBody", log.ResponseBody, DbType.String);
+            parameters.Add("ResponseBody", isPostgres ? log.ResponseBody.Replace("\u0000", "") : log.ResponseBody, DbType.String);
             parameters.Add("ResponseStatus", log.ResponseStatus, DbType.Int32);
-            parameters.Add("RequestBody", log.RequestBody, DbType.String);
+            parameters.Add("RequestBody", isPostgres ? log.RequestBody.Replace("\u0000", "") : log.RequestBody, DbType.String);
             parameters.Add("QueryString", log.QueryString, DbType.String);
             parameters.Add("Path", log.Path, DbType.String);
             parameters.Add("RequestHeaders", log.RequestHeaders, DbType.String);
@@ -60,7 +61,7 @@ namespace WatchDog.src.Helpers
             parameters.Add("IpAddress", log.IpAddress, DbType.String);
             parameters.Add("TimeSpent", log.TimeSpent, DbType.String);
 
-            if (GeneralHelper.IsPostgres())
+            if (isPostgres)
             {
                 parameters.Add("StartTime", log.StartTime.ToUniversalTime(), DbType.DateTime);
                 parameters.Add("EndTime", log.EndTime.ToUniversalTime(), DbType.DateTime);

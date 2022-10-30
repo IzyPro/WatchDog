@@ -4,15 +4,15 @@ using WatchDog.src.Models;
 
 namespace WatchDog.src.Services
 {
-    internal class LoggerService : ILoggerService
-    {
-        public void ClearWatchLogs()
-        {
-            if (AutoClearModel.IsAutoClear)
-            {
-                LiteDBHelper.ClearAllLogs();
-            }
+    //internal class LoggerService : ILoggerService
+    //{
+    //    public void ClearWatchLogs()
+    //    {
+    //        if (AutoClearModel.IsAutoClear)
+    //        {
+    //            LiteDBHelper.ClearAllLogs();
+    //        }
 
-        }
-    }
+    //    }
+    //}
 }
