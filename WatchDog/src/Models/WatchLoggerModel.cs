@@ -10,5 +10,6 @@ namespace WatchDog.src.Models
         public string CallingFrom { get; set; }
         public string CallingMethod { get; set; }
         public int LineNumber { get; set; }
+        public string LogLevel { get; set; }
     }
 }

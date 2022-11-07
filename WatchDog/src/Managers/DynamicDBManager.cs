@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using WatchDog.src.Helpers;
 using WatchDog.src.Models;
 
@@ -18,11 +17,11 @@ namespace WatchDog.src.Managers
                 false => LiteDBHelper.ClearAllLogs()
             };
         // WATCHLOG OPERATIONS
-        public static async Task<IEnumerable<WatchLog>> GetAllWatchLogs() =>
+        public static async Task<Page<WatchLog>> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber) =>
             isExternalDb() switch
             {
-                true => await ExternalDbHelper.GetAllWatchLogs(),
-                false => LiteDBHelper.GetAllWatchLogs()
+                true => await ExternalDbHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber),
+                false => LiteDBHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber)
             };
 
         public static async Task InsertWatchLog(WatchLog log)
@@ -38,11 +37,11 @@ namespace WatchDog.src.Managers
         }
 
         // WATCH EXCEPTION OPERATIONS
-        public static async Task<IEnumerable<WatchExceptionLog>> GetAllWatchExceptionLogs() =>
+        public static async Task<Page<WatchExceptionLog>> GetAllWatchExceptionLogs(string searchString, int pageNumber) =>
             isExternalDb() switch
             {
-                true => await ExternalDbHelper.GetAllWatchExceptionLogs(),
-                false => LiteDBHelper.GetAllWatchExceptionLogs()
+                true => await ExternalDbHelper.GetAllWatchExceptionLogs(searchString, pageNumber),
+                false => LiteDBHelper.GetAllWatchExceptionLogs(searchString, pageNumber)
             };
 
         public static async Task InsertWatchExceptionLog(WatchExceptionLog log)
@@ -58,11 +57,11 @@ namespace WatchDog.src.Managers
         }
 
         // LOG OPERATIONS
-        public static async Task<IEnumerable<WatchLoggerModel>> GetAllLogs() =>
+        public static async Task<Page<WatchLoggerModel>> GetAllLogs(string searchString, string logLevelString, int pageNumber) =>
             isExternalDb() switch
             {
-                true => await ExternalDbHelper.GetAllLogs(),
-                false => LiteDBHelper.GetAllLogs()
+                true => await ExternalDbHelper.GetAllLogs(searchString, logLevelString, pageNumber),
+                false => LiteDBHelper.GetAllLogs(searchString, logLevelString, pageNumber)
             };
 
         public static async Task InsertLog(WatchLoggerModel log)

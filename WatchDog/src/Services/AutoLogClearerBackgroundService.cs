@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WatchDog.src.Enums;
-using WatchDog.src.Interfaces;
+using WatchDog.src.Managers;
 using WatchDog.src.Models;
 
 namespace WatchDog.src.Services
@@ -76,21 +75,11 @@ namespace WatchDog.src.Services
         {
             try
             {
-                using (var scope = serviceProvider.CreateScope())
-                {
-                    var loggerService = scope.ServiceProvider.GetService<ILoggerService>();
-                    try
-                    {
-                        logger.LogInformation("Log Clearer Background service is starting");
-                        logger.LogInformation($"Log is clearing...");
-                        loggerService.ClearWatchLogs();
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError(ex.Message);
-                    }
-
-                }
+                logger.LogInformation("Log Clearer Background service is starting");
+                logger.LogInformation($"Log is clearing...");
+                var result = await DynamicDBManager.ClearLogs();
+                if(result)
+                    logger.LogInformation($"Log Cleared Successfully!");
             }
             catch (Exception ex)
             {
@@ -103,6 +92,5 @@ namespace WatchDog.src.Services
             logger.LogInformation("Log Clearer Background service is stopping");
             return Task.CompletedTask;
         }
-
     }
 }

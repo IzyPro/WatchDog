@@ -240,9 +240,15 @@
                 </div>
                 <div id="incodeTab" class="tab-pane fade">
                     <div class="mb-5 row">
+                        <select id="myLogLevelDropDown" class="form-control col-md-2 m-1" aria-label="Default select Log Level">
+                            <option selected>ALL</option>
+                            <option value="Info">Info</option>
+                            <option value="Warning">Warning</option>
+                            <option value="Error">Error</option>
+                        </select>
                         <input type="text" name="search" class="form-control col-md-2 m-1" id="inCodeSearchString" />
                         <button onclick="inCodeSearch()" class="btn-sm btn btn-dark m-1">Search</button>
-                        <a href="#" onclick="backToList(event)" class="m-1 mx-auto text-right col-md-8">Back to Full List</a>
+                        <a href="#" onclick="backToList(event)" class="m-1 mx-auto text-right col-md-6">Back to Full List</a>
                         <hr />
 
                     </div>
@@ -258,6 +264,7 @@
                                             <th scope="col">Encountered At</th>
                                             <th scope="col">Origin</th>
                                             <th scope="col">Method</th>
+                                            <th scope="col">LogLevel</th>
                                             <th scope="col">Message</th>
                                         </tr>
                                     </thead>
@@ -352,13 +359,13 @@
                     </button>
                     <h3 class="lead fa-underline">WatchLog Exceptions</h3>
                     <div class="">
-                        <p style="word-wrap"><b>Message: </b> <span id="exMessage"></span></p>
-                        <p style="word-wrap"><b>TypeOf: </b> <span id="exTypeOf"></span></p>
-                        <p style="word-wrap"><b>Source: </b> <span id="exSource"></span></p>
-                        <p style="word-wrap"><b>Method: </b> <span id="exMethod"></span></p>
-                        <p style="word-wrap"><b>Path: </b> <span id="exPath"></span></p>
-                        <p style="word-wrap"><b>Query: </b> <span id="exQuery"></span></p>
-                        <p style="word-wrap"><b>Encountered At: </b> <span id="exTime"></span></p>
+                        <p style="word-wrap: break-word"><b>Message: </b> <span id="exMessage"></span></p>
+                        <p style="word-wrap: break-word"><b>TypeOf: </b> <span id="exTypeOf"></span></p>
+                        <p style="word-wrap: break-word"><b>Source: </b> <span id="exSource"></span></p>
+                        <p style="word-wrap: break-word"><b>Method: </b> <span id="exMethod"></span></p>
+                        <p style="word-wrap: break-word"><b>Path: </b> <span id="exPath"></span></p>
+                        <p style="word-wrap: break-word"><b>Query: </b> <span id="exQuery"></span></p>
+                        <p style="word-wrap: break-word"><b>Encountered At: </b> <span id="exTime"></span></p>
                     </div>
                     <div class="">
                         <a href="#" id="exStackTraceCopy" onclick="copyToClipboard(event, 'exStackTrace', 'exStackTraceCopy')" style="display:none" class="float-right">Copy</a>
@@ -368,6 +375,32 @@
                         <a href="#" id="exReqBodyCopy" onclick="copyToClipboard(event, 'exReqBody', 'exReqBodyCopy')" style="display:none" class="float-right">Copy</a>
                         <p class="lead"><b>Request Body:</b> </p>
                         <pre id="exReqBody" class="bg-light p-2"></pre>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="myInCodeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-5 shadow-lg">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="lead fa-underline mb-3">In-Code Log</h3>
+                    <div class="">
+                        <p style="word-wrap: break-word"><b>From File: </b> <span id="incodeFrom"></span></p>
+                        <p style="word-wrap: break-word"><b>Method: </b> <span id="incodeMethod"></span></p>
+                        <p style="word-wrap: break-word"><b>Line: </b> <span id="incodeLine"></span></p>
+                        <p style="word-wrap: break-word"><b>Log Level: </b> <span id="incodeLogLevel"></span></p>
+                        <p style="word-wrap: break-word"><b>Encountered At: </b> <span id="incodeTime"></span></p>
+                    </div>
+                    <div class="">
+                        <a href="#" id="incodeMessageCopy" onclick="copyToClipboard(event, 'incodeMessage', 'incodeMessageCopy')" style="display:none" class="float-right">Copy</a>
+                        <p class="lead"><b>Message:</b> </p>
+                        <pre id="incodeMessage" class="bg-light p-2"></pre>
                     </div>
 
                 </div>
@@ -455,17 +488,18 @@
                     const firstDigitStr = String(data.log.responseStatus)[0];
                     var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
                     const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                        "<td><b>" + data.log.method + "</b></td><td>" + data.log.path + "</td><td><b class='" + statusColor + "'> " + data.log.responseStatus + "</b></td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.startTime).format('LLL') + "</td></tr>");
+                        "<td><b>" + data.log.method + "</b></td><td>" + truncate(data.log.path, 50) + "</td><td><b class='" + statusColor + "'> " + data.log.responseStatus + "</b></td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.startTime).format('LLL') + "</td></tr>");
                     tr.on('click', populateModal.bind(null, data.log));
                     $('#tableBody').prepend(tr);
                 } else if (data.type === "exLog") {
                     const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                        "<td><b>" + data.log.source + "</b></td><td>" + data.log.message + "</td><td>" + data.log.typeOf + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
+                        "<td><b>" + data.log.source + "</b></td><td>" + truncate(data.log.message, 50) + "</td><td>" + data.log.typeOf + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
                     tr.on('click', populateExceptionModal.bind(null, data.log));
                     $('#tableBodyEx').prepend(tr);
                 } else if (data.type === "log") {
-                    const tr = $("<tr aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                        "<td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + data.log.callingFrom + "\nLine:" + data.log.lineNumber + "</td><td>" + data.log.callingMethod + "</td><td>" + data.log.message + "</td></tr > ");
+                    const tr = $("<tr data-toggle='modal' data-target='#myInCodeModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                        "<td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + data.log.callingFrom + "\nLine:" + data.log.lineNumber + "</td><td>" + data.log.callingMethod + "</td><td>" + data.log.logLevel  + "</td><td>" + truncate(data.log.message, 50) + "</td></tr > ");
+                    tr.on('click', populateInCodeModal.bind(null, data.log));
                     $('#tableBodyInCode').prepend(tr);
                 }
 
@@ -494,7 +528,6 @@
             } else {
                 filterVerb($(this).val());
             }
-
         });
 
         $("#myStatusCodeDropDown").change(function (event) {
@@ -504,7 +537,14 @@
             } else {
                 filterStatusCode($(this).val());
             }
-
+        });
+        $("#myLogLevelDropDown").change(function (event) {
+            $('#tableBodyInCode').empty();
+            if ($("#myLogLevelDropDown")[0].selectedIndex === 0) {
+                getInCodeLogs($('#inCodeSearchString').val(), "")
+            } else {
+                filterLogLevel($(this).val());
+            }
         });
 
         function getLogs(searchString = "", verb = "", statusCode = "") {
@@ -520,7 +560,6 @@
                     }
                     else {
                         $('#next').show();
-
                     }
 
                     if (data.hasPrevious === false) {
@@ -541,7 +580,7 @@
                                 const firstDigitStr = String(data.logs[i].responseStatus)[0];
                                 var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
                                 const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                                    "<td><b>" + data.logs[i].method + "</b></td><td>" + data.logs[i].path + "</td><td><b class='" + statusColor + "'> " + data.logs[i].responseStatus + "</b ></td ><td>" + data.logs[i].timeSpent + "</td><td>" + moment(data.logs[i].startTime).format('LLL') + "</td></tr > ");
+                                    "<td><b>" + data.logs[i].method + "</b></td><td>" + truncate(data.logs[i].path, 50) + "</td><td><b class='" + statusColor + "'> " + data.logs[i].responseStatus + "</b ></td ><td>" + data.logs[i].timeSpent + "</td><td>" + moment(data.logs[i].startTime).format('LLL') + "</td></tr > ");
                                 tr.on('click', populateModal.bind(null, data.logs[i]));
                                 $('#tableBody').append(tr);
                             }
@@ -576,17 +615,17 @@
 
                     for (var i = 0; i < data.logs.length; i++) {
                         const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                            "<td><b>" + data.logs[i].source + "</b></td><td>" + data.logs[i].message + "</td><td>" + data.logs[i].typeOf + "</td><td>" + moment(data.logs[i].encounteredAt).format('LLL') + "</td></tr > ");
+                            "<td><b>" + data.logs[i].source + "</b></td><td>" + truncate(data.logs[i].message, 50) + "</td><td>" + data.logs[i].typeOf + "</td><td>" + moment(data.logs[i].encounteredAt).format('LLL') + "</td></tr > ");
                         tr.on('click', populateExceptionModal.bind(null, data.logs[i]));
                         $('#tableBodyEx').append(tr);
                     }
                 }
             });
         }
-        function getInCodeLogs(searchString = "") {
+        function getInCodeLogs(searchString = "", logLevelString = "") {
             $.ajax({
                 type: "GET",
-                url: "/WTCHDwatchpage/Logs?pageNumber=" + inCodePageIndex + "&searchString=" + searchString,
+                url: "/WTCHDwatchpage/Logs?pageNumber=" + inCodePageIndex + "&searchString=" + searchString + "&logLevelString=" + logLevelString,
                 context: document.body,
                 success: function (data) {
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
@@ -607,9 +646,9 @@
                     }
 
                     for (var i = 0; i < data.logs.length; i++) {
-                        const tr = $("<tr aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                            "<td><b>" + moment(data.logs[i].timestamp).format('LLL') + "</b></td><td>" + data.logs[i].callingFrom + "\nLine:" + data.logs[i].lineNumber + "</td><td>" + data.logs[i].callingMethod + "</td><td>" + data.logs[i].message + "</td></tr > ");
-                        
+                        const tr = $("<tr data-toggle='modal' data-target='#myInCodeModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
+                            "<td><b>" + moment(data.logs[i].timestamp).format('LLL') + "</b></td><td>" + data.logs[i].callingFrom + "\nLine:" + data.logs[i].lineNumber + "</td><td>" + data.logs[i].callingMethod + "</td><td>" + data.logs[i].logLevel + "</td><td>" + truncate(data.logs[i].message, 50) + "</td></tr > ");
+                        tr.on('click', populateInCodeModal.bind(null, data.logs[i]));
                         $('#tableBodyInCode').append(tr);
                     }
                 }
@@ -635,15 +674,15 @@
         }
 
         function exSearch() {
-            exPageIndex = 1;
             $('#tableBodyEx').empty();
+            exPageIndex = 1;
             var ss = $('#exSearchString').val();
-            getExceptionLogs(ss);
+            getExceptionLogs(ss, $('#myLogLevelDropDown').val() == "ALL" ? "" : $('#myLogLevelDropDown').val());
         }
 
         function inCodeSearch() {
-            inCodePageIndex = 1;
             $('#tableBodyInCode').empty();
+            inCodePageIndex = 1;
             var ss = $('#inCodeSearchString').val();
             getInCodeLogs(ss);
         }
@@ -658,6 +697,12 @@
             pageIndex = 1;
             $('#tableBody').empty();
             getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), statusCodeString);
+        }
+
+        function filterLogLevel(logLevelString) {
+            inCodePageIndex = 1;
+            $('#tableBodyInCode').empty();
+            getInCodeLogs($('#searchString').val(), logLevelString);
         }
 
         function nextPage() {
@@ -692,8 +737,17 @@
             getInCodeLogs($('#searchString').val());
         }
 
+        function inCodePrevPage(e) {
+            if (inCodePageIndex > 1)
+                --inCodePageIndex;
+            $('#tableBodyInCode').empty();
+            getInCodeLogs($('#searchString').val());
+        }
+
         function backToList(e) {
             pageIndex = 1;
+            inCodePageIndex = 1;
+            exPageIndex = 1;
             $('#tableBody').empty();
             $('#tableBodyEx').empty();
             $('#tableBodyInCode').empty();
@@ -706,6 +760,7 @@
             $('#inCodeSearchString').val("");
             $('#myVerbDropDown').val("ALL");
             $('#myStatusCodeDropDown').val("ALL");
+            $('#myLogLevelDropDown').val("ALL");
 
             e = e || window.event;
             e.preventDefault();
@@ -815,6 +870,28 @@
             }
         }
 
+        function populateInCodeModal(data) {
+            console.log(data);
+            $('#incodeFrom').text(data.callingFrom);
+            $('#incodeLine').text(data.lineNumber);
+            $('#incodeMethod').text(data.callingMethod);
+            $('#incodeTime').text(moment(data.timeStamp).format('LLL'));
+            $('#incodeLogLevel').text(data.logLevel);
+            $('#incodeMessage').text(data.message);
+
+            if (data.message != null && data.message !== "") {
+                document.getElementById("incodeMessageCopy").style.display = "block";
+                //var element = document.getElementById("incodeMessage");
+                //if (data.message.includes("{")) {
+                //    var obj = JSON.parse(element.innerText);
+                //    element.innerHTML = JSON.stringify(obj, undefined, 2);
+                //}
+            } else {
+                document.getElementById("incodeMessageCopy").style.display = "none";
+            }
+            
+        }
+
         function generateUUID() { // Public Domain/MIT
             var d = new Date().getTime();//Timestamp
             var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
@@ -853,6 +930,14 @@
             document.getElementById(id).style.textDecoration = "underline";
             document.getElementById(removeId).style.textDecoration = "none";
             document.getElementById(removeNextId).style.textDecoration = "none";
+        }
+
+        function truncate(str, num) {
+            if (str.length > num) {
+                return str.slice(0, num) + "...";
+            } else {
+                return str;
+            }
         }
     </script>
 

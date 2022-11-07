@@ -90,7 +90,8 @@ namespace WatchDog.src.Data
                                 timestamp     VARCHAR(100) NOT NULL,
                                 callingFrom   VARCHAR(100),
                                 callingMethod VARCHAR(100),
-                                lineNumber    INT
+                                lineNumber    INT,
+                                logLevel      VARCHAR(30)
                              );
                         ",
 
@@ -129,7 +130,8 @@ namespace WatchDog.src.Data
                                 timestamp     VARCHAR(100) NOT NULL,
                                 callingFrom   VARCHAR(100),
                                 callingMethod VARCHAR(100),
-                                lineNumber    INT
+                                lineNumber    INT,
+                                logLevel      VARCHAR(30)
                              );
                         ",
 
@@ -168,7 +170,8 @@ namespace WatchDog.src.Data
                                 timestamp     TIMESTAMP with time zone NOT NULL,
                                 callingFrom   VARCHAR,
                                 callingMethod VARCHAR(100),
-                                lineNumber    INTEGER
+                                lineNumber    INTEGER,
+                                logLevel      VARCHAR(30)
                              );
                         ",
                 _ => ""

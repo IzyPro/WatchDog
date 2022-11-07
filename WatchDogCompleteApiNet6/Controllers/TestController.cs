@@ -50,5 +50,12 @@ namespace WatchDogCompleteApiNet6.Controllers
             return $"Product with ID: {id} deleted successfully";
             throw new NullReferenceException("Pass the id oponu");
         }
+
+        [HttpPost("testFile")]
+        public string TestFile([FromForm] FileTest model)
+        {
+            WatchLogger.LogError("File Upload Error");
+            return $"File with id {model.Id} created successfully"; 
+        }
     }
 }
