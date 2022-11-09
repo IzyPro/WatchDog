@@ -34,9 +34,13 @@ namespace WatchDog.src
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var watchLog = new WatchLog();
-
-            if (!context.Request.Path.ToString().Contains("WTCHDwatchpage") && !context.Request.Path.ToString().Contains("watchdog") && !context.Request.Path.ToString().Contains("WTCHDGstatics") && !context.Request.Path.ToString().Contains("favicon") && !context.Request.Path.ToString().Contains("wtchdlogger") && !WatchDogConfigModel.Blacklist.Contains(context.Request.Path.ToString().Remove(0, 1), StringComparer.OrdinalIgnoreCase))
+            var requestPath = context.Request.Path.ToString().Remove(0,1);
+            if (!requestPath.Contains("WTCHDwatchpage") &&
+                !requestPath.Contains("watchdog") &&
+                !requestPath.Contains("WTCHDGstatics") &&
+                !requestPath.Contains("favicon") &&
+                !requestPath.Contains("wtchdlogger") &&
+                !WatchDogConfigModel.Blacklist.Contains(requestPath, StringComparer.OrdinalIgnoreCase))
             {
                 //Request handling comes here
                 var requestLog = await LogRequest(context);
@@ -45,7 +49,7 @@ namespace WatchDog.src
                 var timeSpent = responseLog.FinishTime.Subtract(requestLog.StartTime);
                 //Build General WatchLog, Join from requestLog and responseLog
 
-                watchLog = new WatchLog
+                var watchLog = new WatchLog
                 {
                     IpAddress = context.Connection.RemoteIpAddress.ToString(),
                     ResponseStatus = responseLog.ResponseStatus,
@@ -74,7 +78,6 @@ namespace WatchDog.src
         private async Task<RequestModel> LogRequest(HttpContext context)
         {
             var startTime = DateTime.Now;
-            List<string> requestHeaders = new List<string>();
 
             var requestBodyDto = new RequestModel()
             {
@@ -102,7 +105,6 @@ namespace WatchDog.src
 
         private async Task<ResponseModel> LogResponse(HttpContext context)
         {
-            var responseBody = string.Empty;
             using (var originalBodyStream = context.Response.Body)
             {
                 try
@@ -112,7 +114,7 @@ namespace WatchDog.src
                         context.Response.Body = originalResponseBody;
                         await _next(context);
                         context.Response.Body.Seek(0, SeekOrigin.Begin);
-                        responseBody = await new StreamReader(context.Response.Body).ReadToEndAsync();
+                        var responseBody = await new StreamReader(context.Response.Body).ReadToEndAsync();
                         context.Response.Body.Seek(0, SeekOrigin.Begin);
                         var responseBodyDto = new ResponseModel
                         {
