@@ -125,6 +125,16 @@ namespace WatchDog.src
                         return responseBodyDto;
                     }
                 }
+                catch (OutOfMemoryException ex)
+                {
+                    return new ResponseModel
+                    {
+                        ResponseBody = "OutOfMemoryException occured while trying to read response body",
+                        ResponseStatus = context.Response.StatusCode,
+                        FinishTime = DateTime.Now,
+                        Headers = context.Response.Headers.ContentLength > 0 ? context.Response.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b) : string.Empty,
+                    };
+                }
                 finally
                 {
                     context.Response.Body = originalBodyStream;
