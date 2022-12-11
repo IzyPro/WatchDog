@@ -22,12 +22,12 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 
 ## What's New
 
-- In-code logger for messages and events
+- Log Level (Info, Error, Warning)
+- Optimized Queries
 
 ## Fixes
 
-- Fixed Middleware order
-- Fixed Index pages not showing on MVC Apps
+- Postgres byte error
 
 
 ## Support
@@ -38,12 +38,12 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 Install via .NET CLI
 
 ```bash
-dotnet add package WatchDog.NET --version 1.3.2
+dotnet add package WatchDog.NET --version 1.3.3-rc
 ```
 Install via Package Manager
 
 ```bash
-Install-Package WatchDog.NET --version 1.3.2
+Install-Package WatchDog.NET --version 1.3.3-rc
 ```
 
 
@@ -165,7 +165,7 @@ app.UseWatchDog(opt =>
 ```
 WatchLogger.Log("...TestGet Started...");
 ```
-# ![In-code log messages](https://github.com/IzyPro/WatchDog/blob/main/in-code.jpeg)
+# ![In-code log messages](https://github.com/IzyPro/WatchDog/blob/main/in-code.png)
 
 
 ### View Logs and Exception
