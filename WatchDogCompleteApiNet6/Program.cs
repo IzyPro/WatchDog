@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using WatchDog;
 using WatchDog.src.Enums;
 

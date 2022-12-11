@@ -28,6 +28,11 @@ namespace WatchDogCompleteMVCTest.Controllers
             return View();
         }
 
+        public IActionResult Hello()
+        {
+            return Json(new {Data = "Hello"});
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

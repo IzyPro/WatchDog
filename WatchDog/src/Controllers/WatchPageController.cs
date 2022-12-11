@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using WatchDog.src.Helpers;
 using WatchDog.src.Managers;
 using WatchDog.src.Models;
 
@@ -12,18 +13,18 @@ namespace WatchDog.src.Controllers
         public async Task<JsonResult> Index(string searchString = "", string verbString = "", string statusCode = "", int pageNumber = 1)
         {
             var result = await DynamicDBManager.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber);
-            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result.Data });
+            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result.Data }, GeneralHelper.CamelCaseSerializer);
         }
 
         public async Task<JsonResult> Exceptions(string searchString = "", int pageNumber = 1)
         {
             var result = await DynamicDBManager.GetAllWatchExceptionLogs(searchString, pageNumber);
-            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result.Data });
+            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result.Data }, GeneralHelper.CamelCaseSerializer);
         }
         public async Task<JsonResult> Logs(string searchString = "", string logLevelString = "", int pageNumber = 1)
         {
             var result = await DynamicDBManager.GetAllLogs(searchString, logLevelString, pageNumber);
-            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result .Data});
+            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result .Data}, GeneralHelper.CamelCaseSerializer);
         }
 
         public async Task<JsonResult> ClearLogs()

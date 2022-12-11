@@ -1,4 +1,8 @@
-﻿using System.IO;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.IO;
+using System.Text.Json;
+using WatchDog.src.Enums;
 using WatchDog.src.Models;
 
 namespace WatchDog.src.Helpers
@@ -27,5 +31,18 @@ namespace WatchDog.src.Helpers
         {
             return !string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogSqlDriverOption.SqlDriverOption == Enums.WatchDogSqlDriverEnum.PostgreSql;
         }
+
+        public static dynamic CamelCaseSerializer
+            => WatchDog.Serializer switch
+            {
+                WatchDogSerializerEnum.Newtonsoft => new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                },
+                _ => new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                }
+            };
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WatchDog.src.Enums;
 using WatchDog.src.Helpers;
 using WatchDog.src.Interfaces;
 using WatchDog.src.Managers;
@@ -15,6 +16,7 @@ namespace WatchDog.src
     internal class WatchDog
     {
         public static RequestModel RequestLog;
+        public static WatchDogSerializerEnum Serializer;
         private readonly RequestDelegate _next;
         private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
         private readonly IBroadcastHelper _broadcastHelper;
@@ -27,6 +29,7 @@ namespace WatchDog.src
             _recyclableMemoryStreamManager = new RecyclableMemoryStreamManager();
             _broadcastHelper = broadcastHelper;
 
+            Serializer = options.Serializer;
             WatchDogConfigModel.UserName = _options.WatchPageUsername;
             WatchDogConfigModel.Password = _options.WatchPagePassword;
             WatchDogConfigModel.Blacklist = String.IsNullOrEmpty(_options.Blacklist) ? new string[] { } : _options.Blacklist.Replace(" ", string.Empty).Split(',');

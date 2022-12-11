@@ -44,7 +44,6 @@ namespace WatchDog
                 x.EnableEndpointRouting = false;
             }).AddApplicationPart(typeof(WatchDogExtension).Assembly);
 
-
             services.AddSingleton<IBroadcastHelper, BroadcastHelper>();
 
             if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
@@ -96,6 +95,9 @@ namespace WatchDog
 
             app.UseAuthorization();
 
+            if (!string.IsNullOrEmpty(options.CorsPolicy))
+                app.UseCors(options.CorsPolicy);
+
             return app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<LoggerHub>("/wtchdlogger");
@@ -112,7 +114,6 @@ namespace WatchDog
                     await context.Response.SendFileAsync(WatchDogExtension.GetFile());
                 });
             });
-
         }
 
 
