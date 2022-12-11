@@ -46,7 +46,6 @@ namespace WatchDog
 
 
             services.AddSingleton<IBroadcastHelper, BroadcastHelper>();
-            //services.AddTransient<ILoggerService, LoggerService>();
 
             if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
             {
