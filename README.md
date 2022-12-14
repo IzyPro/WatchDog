@@ -27,11 +27,16 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 ## What's New
 
 - Log Level (Info, Error, Warning)
+- Extra AutoClear Durations (Hourly, Every6Hours, Every12Hours)
 - Optimized Queries
+- Cors Support
+- Global Json Serializer Support
 
 ## Fixes
 
 - Postgres byte error
+- OutOfRangeException
+- Embedded DB Memory Release on Clear Logs
 
 
 ## Support
@@ -73,15 +78,6 @@ services.AddWatchDogServices();
 
 ### Setup AutoClear Logs `Optional`
 This clears the logs after a specific duration.
-```c#
-services.AddWatchDogServices(opt => 
-{ 
-   opt.IsAutoClear = true; 
-});
-```
-
-
-
 >**NOTE**
 >When `IsAutoClear = true`
 >Default Schedule Time is set to Weekly,  override the settings like below:
@@ -133,15 +129,20 @@ app.UseWatchDog(opt =>
 
 # ![Request and Response Sample Details](https://github.com/IzyPro/WatchDog/blob/main/requestLog.png)
 
-#### Add list of routes you want to ignore by the logger: `Optional`
-List of routes, paths or specific strings to be ignored should be a comma separated string like below.
+#### Optional Configurations: `Optional`
+- Blacklist: List of routes, paths or specific strings to be ignored (should be a comma separated string like below).
+- Serializer: If not default, specify the type of global json serializer/converter used
+- CorsPolicy: Policy Name if project uses CORS
 
 ```c#
 app.UseWatchDog(opt => 
 { 
    opt.WatchPageUsername = "admin"; 
    opt.WatchPagePassword = "Qwerty@123"; 
-   opt.Blacklist = "Test/testPost, weatherforecast";
+   //Optional
+   opt.Blacklist = "Test/testPost, weatherforecast"; //Prevent logging for specified endpoints
+   opt.Serializer = WatchDogSerializerEnum.Newtonsoft; //If your project use a global json converter
+   opt.CorsPolicy = "MyCorsPolicy"
  });
 ```
 
@@ -162,15 +163,14 @@ app.UseWatchDog(opt =>
 { 
    opt.WatchPageUsername = "admin"; 
    opt.WatchPagePassword = "Qwerty@123"; 
-   //Optional
-   opt.Blacklist = "Test/testPost, weatherforecast";
-   opt.Serializer = WatchDogSerializerEnum.Newtonsoft; //If you use a global json converter
-   opt.CorsPolicy = "MyCorsPolicy"
+   ...
  });
 ```
 ### Log Messages/Events
 ```
 WatchLogger.Log("...TestGet Started...");
+WatchLogger.LogWarning(JsonConvert.Serialize(model));
+WatchLogger.LogError(res.Content);
 ```
 # ![In-code log messages](https://github.com/IzyPro/WatchDog/blob/main/in-code.png)
 
