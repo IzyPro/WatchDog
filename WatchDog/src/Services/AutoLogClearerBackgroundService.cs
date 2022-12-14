@@ -39,6 +39,15 @@ namespace WatchDog.src.Services
 
                 switch (schedule)
                 {
+                    case WatchDogAutoClearScheduleEnum.Hourly:
+                        minute = TimeSpan.FromMinutes(60);
+                        break;
+                    case WatchDogAutoClearScheduleEnum.Every6Hours:
+                        minute = TimeSpan.FromHours(6);
+                        break;
+                    case WatchDogAutoClearScheduleEnum.Every12Hours:
+                        minute = TimeSpan.FromHours(12);
+                        break;
                     case WatchDogAutoClearScheduleEnum.Daily:
                         minute = TimeSpan.FromDays(1);
                         break;

@@ -20,12 +20,12 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToLower();
-                query += $"{nameof(WatchLog.Path)} LIKE '%{searchString}%' OR {nameof(WatchLog.Method)} LIKE '%{searchString}%' OR {nameof(WatchLog.ResponseStatus)} LIKE '%{searchString}%' OR {nameof(WatchLog.QueryString)} LIKE '%{searchString}%' ";
+                query += $"{nameof(WatchLog.Path)} LIKE '%{searchString}%' OR {nameof(WatchLog.Method)} LIKE '%{searchString}%' OR {nameof(WatchLog.ResponseStatus)} LIKE '%{searchString}%' OR {nameof(WatchLog.QueryString)} LIKE '%{searchString}%' " + (string.IsNullOrEmpty(statusCode) || string.IsNullOrEmpty(verbString) ? "" : "AND ");
             }
 
             if (!string.IsNullOrEmpty(verbString))
             {
-                query += $"{nameof(WatchLog.Method)} LIKE '%{verbString}%' ";
+                query += $"{nameof(WatchLog.Method)} LIKE '%{verbString}%' " + (string.IsNullOrEmpty(statusCode) ? "" : "AND ");
             }
 
             if (!string.IsNullOrEmpty(statusCode))

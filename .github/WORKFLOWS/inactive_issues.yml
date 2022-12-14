@@ -1,7 +1,7 @@
 name: Close inactive issues
 on:
   schedule:
-    - cron: "30 1 * * *"
+    - cron: "30 12 * * *"
 
 jobs:
   close-issues:
@@ -10,7 +10,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@v4
+      - uses: actions/stale@v5
         with:
           days-before-issue-stale: 30
           days-before-issue-close: 14

@@ -6,5 +6,8 @@
         Weekly,
         Monthly,
         Quarterly,
+        Hourly,
+        Every6Hours,
+        Every12Hours
     }
 }

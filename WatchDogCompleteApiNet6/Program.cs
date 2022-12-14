@@ -1,4 +1,7 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using WatchDog;
+using WatchDog.src.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +11,9 @@ builder.Services.AddControllers();
 //builder.Services.AddWatchDogServices();
 builder.Services.AddWatchDogServices(opt =>
 {
-    opt.SqlDriverOption = WatchDog.src.Enums.WatchDogSqlDriverEnum.MSSQL;
+    opt.IsAutoClear = true;
+    opt.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Monthly;
+    opt.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL;
     opt.SetExternalDbConnString = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=test;";
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,6 +41,7 @@ app.UseWatchDog(conf =>
 {
     conf.WatchPageUsername = "admin";
     conf.WatchPagePassword = "Qwerty@123";
+    conf.Blacklist = "/auth";
 });
 
 app.Run();

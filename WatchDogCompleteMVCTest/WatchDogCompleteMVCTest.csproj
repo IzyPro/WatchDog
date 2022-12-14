@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.31" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WatchDog\WatchDog.csproj" />
   </ItemGroup>
 

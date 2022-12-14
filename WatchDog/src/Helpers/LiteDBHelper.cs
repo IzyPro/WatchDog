@@ -37,6 +37,7 @@ namespace WatchDog.src.Helpers
             var exLogs = ClearWatchExceptionLog();
             var logs = ClearLogs();
 
+            db.Rebuild();
 
             return watchLogs > 1 && exLogs > 1 && logs > 1;
         }

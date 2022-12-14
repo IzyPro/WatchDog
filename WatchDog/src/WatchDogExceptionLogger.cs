@@ -26,8 +26,7 @@ namespace WatchDog.src
             }
             catch (Exception ex)
             {
-                var requestLog = WatchDog.RequestLog;
-                await LogException(ex, requestLog);
+                await LogException(ex, WatchDog.RequestLog);
                 throw;
             }
         }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,9 @@ namespace WatchDogCompleteMVCTest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            //services.AddControllersWithViews();
+            services.AddMvc(opt => opt.EnableEndpointRouting = false); ;
+            services.AddControllersWithViews().AddNewtonsoftJson(opt => opt.SerializerSettings.ContractResolver = new DefaultContractResolver());
             services.AddWatchDogServices();
             //services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExternalDbConnString = "Server=localhost;Port=5432;Database=pgAuth;User Id=postgres;Password=root;"; opt.SqlDriverOption = WatchDogSqlDriverEnum.PostgreSql; });
         }
@@ -51,8 +54,13 @@ namespace WatchDogCompleteMVCTest
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseMvcWithDefaultRoute();
-            app.UseWatchDog(opt => { opt.WatchPageUsername = "admin"; opt.WatchPagePassword = "Qwerty@123"; opt.Blacklist = "Test/testPost, weatherforecast"; });
+            //app.UseMvcWithDefaultRoute();
+            app.UseMvc(route => route.MapRoute(
+                name: "default",
+                template: "{controller=Home}/{action=Index}/{id?}"
+            ));
+
+            app.UseWatchDog(opt => { opt.WatchPageUsername = "admin"; opt.WatchPagePassword = "Qwerty@123"; opt.Blacklist = "Test/testPost, weatherforecast"; opt.Serializer = WatchDogSerializerEnum.Newtonsoft; });
 
             app.UseEndpoints(endpoints =>
             {
