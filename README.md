@@ -42,12 +42,12 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 Install via .NET CLI
 
 ```bash
-dotnet add package WatchDog.NET --version 1.3.3-rc
+dotnet add package WatchDog.NET --version 1.3.3
 ```
 Install via Package Manager
 
 ```bash
-Install-Package WatchDog.NET --version 1.3.3-rc
+Install-Package WatchDog.NET --version 1.3.3
 ```
 
 
@@ -127,7 +127,7 @@ app.UseWatchDog(opt =>
 
 
 >**NOTE**
-> If your project uses authentication, then `app.UseWatchDog();` should come before app.UseRouting(), app.UseAuthentication(), app.UseAuthorization(), app.UseEndpoints() in that order
+> If your project uses authentication, then `app.UseWatchDog();` should come before app.UseRouting(), app.UseAuthentication(), app.UseAuthorization(), in that order
 <!--- >If your projects startup or program class contains app.UseMvc() or app.UseRouting() then app.UseWatchDog() should come after `Important`
 >If your projects startup or program class contains app.UseEndpoints() then app.UseWatchDog() should come before `Important` -->
 
@@ -162,7 +162,10 @@ app.UseWatchDog(opt =>
 { 
    opt.WatchPageUsername = "admin"; 
    opt.WatchPagePassword = "Qwerty@123"; 
+   //Optional
    opt.Blacklist = "Test/testPost, weatherforecast";
+   opt.Serializer = WatchDogSerializerEnum.Newtonsoft; //If you use a global json converter
+   opt.CorsPolicy = "MyCorsPolicy"
  });
 ```
 ### Log Messages/Events
