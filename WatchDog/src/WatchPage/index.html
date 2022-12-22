@@ -391,6 +391,7 @@
                     </button>
                     <h3 class="lead fa-underline mb-3">In-Code Log</h3>
                     <div class="">
+                        <p style="word-wrap: break-word"><b>Event Id: </b> <span id="incodeEventId"></span></p>
                         <p style="word-wrap: break-word"><b>From File: </b> <span id="incodeFrom"></span></p>
                         <p style="word-wrap: break-word"><b>Method: </b> <span id="incodeMethod"></span></p>
                         <p style="word-wrap: break-word"><b>Line: </b> <span id="incodeLine"></span></p>
@@ -498,7 +499,7 @@
                     $('#tableBodyEx').prepend(tr);
                 } else if (data.type === "log") {
                     const tr = $("<tr data-toggle='modal' data-target='#myInCodeModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                        "<td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + data.log.callingFrom + "\nLine:" + data.log.lineNumber + "</td><td>" + data.log.callingMethod + "</td><td>" + data.log.logLevel  + "</td><td>" + truncate(data.log.message, 50) + "</td></tr > ");
+                        "<td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + (data.log.callingFrom ??= '') + "\nLine:" + data.log.lineNumber + "</td><td>" + (data.log.callingMethod ??= '') + "</td><td>" + data.log.logLevel  + "</td><td>" + truncate(data.log.message, 50) + "</td></tr > ");
                     tr.on('click', populateInCodeModal.bind(null, data.log));
                     $('#tableBodyInCode').prepend(tr);
                 }
@@ -647,7 +648,7 @@
 
                     for (var i = 0; i < data.logs.length; i++) {
                         const tr = $("<tr data-toggle='modal' data-target='#myInCodeModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                            "<td><b>" + moment(data.logs[i].timestamp).format('LLL') + "</b></td><td>" + data.logs[i].callingFrom + "\nLine:" + data.logs[i].lineNumber + "</td><td>" + data.logs[i].callingMethod + "</td><td>" + data.logs[i].logLevel + "</td><td>" + truncate(data.logs[i].message, 50) + "</td></tr > ");
+                            "<td><b>" + moment(data.logs[i].timestamp).format('LLL') + "</b></td><td>" + (data.logs[i].callingFrom ??= '') + "\nLine:" + data.logs[i].lineNumber + "</td><td>" + (data.logs[i].callingMethod ??= '') + "</td><td>" + data.logs[i].logLevel + "</td><td>" + truncate(data.logs[i].message, 50) + "</td></tr > ");
                         tr.on('click', populateInCodeModal.bind(null, data.logs[i]));
                         $('#tableBodyInCode').append(tr);
                     }
@@ -871,25 +872,19 @@
         }
 
         function populateInCodeModal(data) {
-            console.log(data);
             $('#incodeFrom').text(data.callingFrom);
             $('#incodeLine').text(data.lineNumber);
             $('#incodeMethod').text(data.callingMethod);
             $('#incodeTime').text(moment(data.timeStamp).format('LLL'));
             $('#incodeLogLevel').text(data.logLevel);
             $('#incodeMessage').text(data.message);
+            $('#incodeEventId').text(data.eventId);
 
             if (data.message != null && data.message !== "") {
                 document.getElementById("incodeMessageCopy").style.display = "block";
-                //var element = document.getElementById("incodeMessage");
-                //if (data.message.includes("{")) {
-                //    var obj = JSON.parse(element.innerText);
-                //    element.innerHTML = JSON.stringify(obj, undefined, 2);
-                //}
             } else {
                 document.getElementById("incodeMessageCopy").style.display = "none";
             }
-            
         }
 
         function generateUUID() { // Public Domain/MIT

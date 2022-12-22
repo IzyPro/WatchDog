@@ -140,7 +140,7 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToLower();
-                query += $"{nameof(WatchLoggerModel.CallingFrom)} LIKE '%{searchString}%' OR {nameof(WatchLoggerModel.CallingMethod)} LIKE '%{searchString}%' OR {nameof(WatchLoggerModel.Message)} LIKE '%{searchString}%' ";
+                query += $"{nameof(WatchLoggerModel.CallingFrom)} LIKE '%{searchString}%' OR {nameof(WatchLoggerModel.CallingMethod)} LIKE '%{searchString}%' OR {nameof(WatchLoggerModel.Message)} LIKE '%{searchString}%' OR {nameof(WatchLoggerModel.EventId)} LIKE '%{searchString}%' " + (string.IsNullOrEmpty(logLevelString) ? "" : "AND ");
             }
 
             if (!string.IsNullOrEmpty(logLevelString))
@@ -160,8 +160,8 @@ namespace WatchDog.src.Helpers
 
         public static async Task InsertLog(WatchLoggerModel log)
         {
-            var query = @$"INSERT INTO {Constants.LogsTableName} (message,timestamp,callingFrom,callingMethod,lineNumber,logLevel) " +
-                "VALUES (@Message,@Timestamp,@CallingFrom,@CallingMethod,@LineNumber,@LogLevel);";
+            var query = @$"INSERT INTO {Constants.LogsTableName} (message,eventId,timestamp,callingFrom,callingMethod,lineNumber,logLevel) " +
+                "VALUES (@Message,@EventId,@Timestamp,@CallingFrom,@CallingMethod,@LineNumber,@LogLevel);";
 
             var parameters = new DynamicParameters();
             parameters.Add("Message", log.Message, DbType.String);
@@ -169,6 +169,7 @@ namespace WatchDog.src.Helpers
             parameters.Add("CallingMethod", log.CallingMethod, DbType.String);
             parameters.Add("LineNumber", log.LineNumber, DbType.Int32);
             parameters.Add("LogLevel", log.LogLevel, DbType.String);
+            parameters.Add("EventId", log.EventId, DbType.String);
 
             if (GeneralHelper.IsPostgres())
             {

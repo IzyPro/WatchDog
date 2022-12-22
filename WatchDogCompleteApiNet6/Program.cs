@@ -8,14 +8,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-//builder.Services.AddWatchDogServices();
-builder.Services.AddWatchDogServices(opt =>
-{
-    opt.IsAutoClear = true;
-    opt.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Monthly;
-    opt.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL;
-    opt.SetExternalDbConnString = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=test;";
-});
+builder.Logging.AddWatchDogLogger();
+builder.Services.AddWatchDogServices();
+//builder.Services.AddWatchDogServices(opt =>
+//{
+//    opt.IsAutoClear = true;
+//    opt.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Monthly;
+//    opt.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL;
+//    opt.SetExternalDbConnString = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=test;";
+//});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
