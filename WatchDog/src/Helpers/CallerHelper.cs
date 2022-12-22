@@ -16,14 +16,12 @@ namespace WatchDog.src.Helpers
 
                 switch (name)
                 {
-                    case "WatchDog":
                     case "Microsoft.Extensions.Logging":
                     case "Microsoft.Extensions.Logging.Abstractions":
                     case "System.Runtime.CompilerServices":
+                    case "WatchDog":
                         continue;
                 }
-                var filename = stackFrames[i].GetFileName();
-                var line = stackFrames[i].GetFileLineNumber();
 
                 return (method?.Name ?? string.Empty, stackFrames[i].GetFileName() ?? string.Empty, stackFrames[i].GetFileLineNumber());
             }

@@ -41,19 +41,12 @@ namespace WatchDog
 
         public bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None && _shouldLog;
 
-        //public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter, [CallerMemberName] string callerName = "", [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
-        //{
-        //    if (IsEnabled(logLevel))
-        //    {
-
-        //    }
-        //}
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
             if (IsEnabled(logLevel))
             {
                 var message = formatter(state, exception) ?? string.Empty;
-                var (callerName, filePath, lineNumber) = _shouldLogCallerInfo ? new System.Diagnostics.StackTrace(1).GetFrames().GetCaller() : (string.Empty, string.Empty, 0);
+                var (callerName, filePath, lineNumber) = _shouldLogCallerInfo ? new System.Diagnostics.StackTrace(1, fNeedFileInfo: true).GetFrames().GetCaller() : (string.Empty, string.Empty, 0);
                 var eventID = eventId.Name;
 
                 switch (logLevel)

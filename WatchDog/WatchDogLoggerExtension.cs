@@ -10,8 +10,8 @@ namespace WatchDog
     {
         //
         // Summary:
-        //     Uses build in ILogger. WARNING: Enabling caller info is performance intensive
-        public static ILoggingBuilder AddWatchDogLogger(this ILoggingBuilder builder, bool logCallerInfo = false, bool log = true)
+        //     Uses built in ILogger. Note: caller info has an overhead of about <= 4ms
+        public static ILoggingBuilder AddWatchDogLogger(this ILoggingBuilder builder, bool logCallerInfo = true, bool log = true)
         {
             builder.Services.AddSingleton<ILoggerProvider, WatchDogLoggerProvider>(_ => new WatchDogLoggerProvider(log, logCallerInfo));
             return builder;
