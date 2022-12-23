@@ -4,14 +4,14 @@
     <title>WatchDog</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/x-icon" href="WTCHDGstatics/images/icons/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="./WTCHDGstatics/images/icons/favicon.ico" />
 
-    <script src="WTCHDGstatics/js/jquery-3.2.1.min.js"></script>
-    <script src="WTCHDGstatics/js/popper.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="WTCHDGstatics/css/bootstrap.min.css" />
-    <script src="WTCHDGstatics/js/bootstrap.min.js"></script>
-    <script src="WTCHDGstatics/signalr/signalr.js"></script>
-    <script src="WTCHDGstatics/js/moment.min.js"></script>
+    <script src="./WTCHDGstatics/js/jquery-3.2.1.min.js"></script>
+    <script src="./WTCHDGstatics/js/popper.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./WTCHDGstatics/css/bootstrap.min.css" />
+    <script src="./WTCHDGstatics/js/bootstrap.min.js"></script>
+    <script src="./WTCHDGstatics/signalr/signalr.js"></script>
+    <script src="./WTCHDGstatics/js/moment.min.js"></script>
 
     <style>
         body {
@@ -480,7 +480,7 @@
         var exPageIndex = 1;
         var inCodePageIndex = 1;
         document.getElementById('reqLog').style.textDecoration = "underline";
-        var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
+        var connection = new signalR.HubConnectionBuilder().withUrl("./wtchdlogger").build();
 
         connection.on("getLogs", function (data) {
             if (sessionStorage.getItem("loggedIn") !== null && sessionStorage.getItem("loggedIn") === sessionStorage.getItem("newloggedIn")) {
@@ -550,7 +550,7 @@
         function getLogs(searchString = "", verb = "", statusCode = "") {
             $.ajax({
                 type: "GET",
-                url: "/WTCHDwatchpage?pageNumber=" + pageIndex + "&searchString=" + searchString + "&verbString=" + verb + "&statusCode=" + statusCode,
+                url: "./WTCHDwatchpage?pageNumber=" + pageIndex + "&searchString=" + searchString + "&verbString=" + verb + "&statusCode=" + statusCode,
                 context: document.body,
                 success: function (data) {
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
@@ -593,7 +593,7 @@
         function getExceptionLogs(searchString = "") {
             $.ajax({
                 type: "GET",
-                url: "/WTCHDwatchpage/Exceptions?pageNumber=" + exPageIndex + "&searchString=" + searchString,
+                url: "./WTCHDwatchpage/Exceptions?pageNumber=" + exPageIndex + "&searchString=" + searchString,
                 context: document.body,
                 success: function (data) {
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
@@ -625,7 +625,7 @@
         function getInCodeLogs(searchString = "", logLevelString = "") {
             $.ajax({
                 type: "GET",
-                url: "/WTCHDwatchpage/Logs?pageNumber=" + inCodePageIndex + "&searchString=" + searchString + "&logLevelString=" + logLevelString,
+                url: "./WTCHDwatchpage/Logs?pageNumber=" + inCodePageIndex + "&searchString=" + searchString + "&logLevelString=" + logLevelString,
                 context: document.body,
                 success: function (data) {
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
@@ -659,7 +659,7 @@
         function clearLogs() {
             $.ajax({
                 type: "POST",
-                url: "/WTCHDwatchpage/ClearLogs",
+                url: "./WTCHDwatchpage/ClearLogs",
                 success: function (data) {
                     window.location.reload()
                 }
@@ -777,7 +777,7 @@
             if (form.checkValidity()) {
                 $.ajax({
                     type: "POST",
-                    url: "/WTCHDwatchpage/Auth",
+                    url: "./WTCHDwatchpage/Auth",
                     data: {
                         username: $("#uname").val(),
                         password: $("#psw").val()
