@@ -4,7 +4,7 @@
 [![WatchDog](https://img.shields.io/badge/WatchDog-blueviolet)](https://github.com/IzyPro/WatchDog)
 [![Version](https://img.shields.io/nuget/vpre/WatchDog.NET?color=orange)](https://www.nuget.org/packages/WatchDog.NET#versions-tab)
 [![MIT License](https://img.shields.io/github/license/IzyPro/WatchDog?color=Green)](https://github.com/IzyPro/WatchDog/blob/main/LICENSE) 
-[![WatchDog](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2FIzyPro%2FWatchDog)](https://twitter.com/intent/tweet?hashtags=WatchDog&original_referer=https%3A%2F%2Fdeveloper.twitter.com%2F&ref_src=twsrc%5Etfw%7Ctwcamp%5Ebuttonembed%7Ctwterm%5Eshare%7Ctwgr%5E&related=twitterapi%2Ctwitter&text=Hello%2C%20world!%0DCheck%20out%20this%20awesome%20developer%20tool&url=https%3A%2F%2Fgithub.com%2FIzyPro%2FWatchDog&via=WatchDog)
+[![WatchDog](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2FIzyPro%2FWatchDog)](https://twitter.com/intent/tweet?hashtags=WatchDog&original_referer=https%3A%2F%2Fdeveloper.twitter.com%2F&ref_src=twsrc%5Etfw%7Ctwcamp%5Ebuttonembed%7Ctwterm%5Eshare%7Ctwgr%5E&related=twitterapi%2Ctwitter&text=Hello%2C%20world!%0DCheck%20out%20this%20awesome%20developer%20tool&url=https%3A%2F%2Fgithub.com%2FIzyPro%2FWatchDog&via=WatchDogDotDev)
 
 ## Introduction
 
