@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using MongoDB.Driver;
 using MySql.Data.MySqlClient;
 using Npgsql;
 using System;
@@ -9,6 +10,7 @@ using WatchDog.src.Enums;
 using WatchDog.src.Exceptions;
 using WatchDog.src.Models;
 using WatchDog.src.Utilities;
+using static WatchDog.src.Models.WatchDogMongoModels;
 
 namespace WatchDog.src.Data
 {
@@ -50,6 +52,17 @@ namespace WatchDog.src.Data
                     throw new WatchDogDatabaseException(ex.Message);
                 }
             }
+
+            //
+        }
+
+        public static void MigrateNoSql()
+        {
+            var mongoClient = CreateMongoDBConnection();
+            var database = mongoClient.GetDatabase(Constants.WatchDogDatabaseName);
+            _ = database.GetCollection<WatchLog>(Constants.WatchLogTableName);
+            _ = database.GetCollection<WatchExceptionLog>(Constants.WatchLogExceptionTableName);
+            _ = database.GetCollection<WatchLoggerModel>(Constants.LogsTableName);
         }
 
         public static string GetSqlQueryString() =>
@@ -208,6 +221,18 @@ namespace WatchDog.src.Data
                 return new SqlConnection(_connectionString);
             }
             catch (Exception ex)
+            {
+                throw new WatchDogDatabaseException(ex.Message);
+            }
+        }
+
+        public static MongoClient CreateMongoDBConnection()
+        {
+            try
+            {
+                return new MongoClient(_connectionString);
+
+            }catch (Exception ex)
             {
                 throw new WatchDogDatabaseException(ex.Message);
             }

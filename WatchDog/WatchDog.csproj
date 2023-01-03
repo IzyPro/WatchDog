@@ -51,6 +51,7 @@
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="3.1.22" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.22" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.0" />
+		<PackageReference Include="MongoDB.Driver" Version="2.18.0" />
 		<PackageReference Include="MySql.Data" Version="8.0.29" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Npgsql" Version="[5.0.0,5.0.10]" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
