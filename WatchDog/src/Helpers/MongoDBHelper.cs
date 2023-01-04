@@ -20,6 +20,7 @@ namespace WatchDog.src.Helpers
         static IMongoCollection<WatchLog> _watchLogs = database.GetCollection<WatchLog>(Constants.WatchLogTableName);
         static IMongoCollection<WatchExceptionLog> _watchExLogs = database.GetCollection<WatchExceptionLog>(Constants.WatchLogExceptionTableName);
         static IMongoCollection<WatchLoggerModel> _logs = database.GetCollection<WatchLoggerModel>(Constants.LogsTableName);
+        static IMongoCollection<Sequence> _counter = database.GetCollection<Sequence>(Constants.WatchDogMongoCounterTableName);
 
         public static Page<WatchLog> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber)
         {
@@ -50,6 +51,7 @@ namespace WatchDog.src.Helpers
 
         public static async Task InsertWatchLog(WatchLog log)
         {
+            log.Id = GetSequenceId();   
              await _watchLogs.InsertOneAsync(log);
         }
 
@@ -91,6 +93,7 @@ namespace WatchDog.src.Helpers
 
         public static async Task InsertWatchExceptionLog(WatchExceptionLog log)
         {
+            log.Id = GetSequenceId();
             await _watchExLogs.InsertOneAsync(log);
         }
 
@@ -116,6 +119,7 @@ namespace WatchDog.src.Helpers
         //LOGS OPERATION
         public static async Task InsertLog(WatchLoggerModel log)
         {
+            log.Id = GetSequenceId();   
             await _logs.InsertOneAsync(log);
         }
         public static async Task<bool> ClearLogs()
@@ -139,6 +143,16 @@ namespace WatchDog.src.Helpers
         }
 
 
+        public static int GetSequenceId()
+        {
+            var filter = Builders<Sequence>.Filter.Eq(a => a._Id, "sequenceId");
+            var update = Builders<Sequence>.Update.Inc(a => a.Value, 1);
+            var sequence = _counter.FindOneAndUpdate(filter, update);
+
+            return sequence.Value;
+        }
+
+
         public static async Task<bool> ClearAllLogs()
         {
             var watchLogs = await ClearWatchLog();
@@ -147,6 +161,8 @@ namespace WatchDog.src.Helpers
 
             return watchLogs && exLogs && logs;
         }
+
+
 
 
     }
