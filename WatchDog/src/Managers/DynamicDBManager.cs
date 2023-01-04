@@ -42,7 +42,7 @@ namespace WatchDog.src.Managers
             };
 
         // WATCHLOG OPERATIONS
-        public static async Task<Page<WatchLog<object>>> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber) =>
+        public static async Task<Page<WatchLog>> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber) =>
             GetTargetDbEnum switch
             {
                 TargetDbEnum.SqlDb => await ExternalDbHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber),
