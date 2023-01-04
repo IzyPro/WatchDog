@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using WatchDog;
 using WatchDog.src.Enums;
+using WatchDog.src.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,26 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// optional mail notification
+// var mailKitConfig = new MailKitConfig();
+// mailKitConfig.mailKitClient = new MailKitClient()
+// {
+//    account = "input@gmail.com",
+//    password = "xxxxxxxxxx",
+//    useSsl = false,
+//    port = 587,
+//    hostUrl = "smtp.gmail.com"
+// };
+// mailKitConfig.mailSetting = new MailSetting()
+// {
+//    senderName = "testSender",
+//    senderAddress = "xxxxxxxxx@gmail.com",
+//    receiverName = "testReceiver",
+//    receiverAddress = "xxxxxxxx@gmail.com",
+//    subject = "testSMTP",
+// };
+// app.UseWatchDogExceptionLogger(mailKitConfig);
 
 app.UseWatchDogExceptionLogger();
 

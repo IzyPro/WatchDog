@@ -58,10 +58,10 @@ namespace WatchDog
             return services;
         }
 
-        public static IApplicationBuilder UseWatchDogExceptionLogger(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseWatchDogExceptionLogger(this IApplicationBuilder builder, MailKitConfig? mailKitConfig = null)
         {
-
-            return builder.UseMiddleware<src.WatchDogExceptionLogger>();
+            if (mailKitConfig == null) { mailKitConfig = new MailKitConfig(); mailKitConfig.enableMailKit = false; }
+            return builder.UseMiddleware<src.WatchDogExceptionLogger>(mailKitConfig);
         }
 
         public static IApplicationBuilder UseWatchDog(this IApplicationBuilder app, Action<WatchDogOptionsModel> configureOptions)

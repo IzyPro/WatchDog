@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using WatchDog.src.Helpers;
 using WatchDog.src.Interfaces;
 using WatchDog.src.Managers;
 using WatchDog.src.Models;
@@ -12,8 +13,10 @@ namespace WatchDog.src
     {
         private readonly RequestDelegate _next;
         private readonly IBroadcastHelper _broadcastHelper;
-        public WatchDogExceptionLogger(RequestDelegate next, IBroadcastHelper broadcastHelper)
+        private readonly MailKitConfig? _mailKitConfig;
+        public WatchDogExceptionLogger(MailKitConfig? mailKitConfig, RequestDelegate next, IBroadcastHelper broadcastHelper)
         {
+            _mailKitConfig = mailKitConfig;
             _next = next;
             _broadcastHelper = broadcastHelper;
         }
@@ -27,6 +30,12 @@ namespace WatchDog.src
             catch (Exception ex)
             {
                 await LogException(ex, WatchDog.RequestLog);
+                if (_mailKitConfig.enableMailKit)
+                {
+                    var mailKitHelper = new MailKitHelper(_mailKitConfig.mailKitClient);
+                    _mailKitConfig.mailSetting.exception = ex;
+                    mailKitHelper.SendMail(_mailKitConfig.mailSetting);
+                }       
                 throw;
             }
         }
