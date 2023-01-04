@@ -53,7 +53,6 @@ namespace WatchDog.src.Data
                 }
             }
 
-            //
         }
 
         public static void MigrateNoSql()

@@ -139,5 +139,15 @@ namespace WatchDog.src.Helpers
         }
 
 
+        public static async Task<bool> ClearAllLogs()
+        {
+            var watchLogs = await ClearWatchLog();
+            var exLogs = await ClearWatchExceptionLog();
+            var logs = await ClearLogs();
+
+            return watchLogs && exLogs && logs;
+        }
+
+
     }
 }

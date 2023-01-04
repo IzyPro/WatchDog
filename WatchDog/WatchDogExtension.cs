@@ -33,11 +33,17 @@ namespace WatchDog
             AutoClearModel.ClearTimeSchedule = options.ClearTimeSchedule;
             WatchDogExternalDbConfig.ConnectionString = options.SetExternalDbConnString;
             WatchDogSqlDriverOption.SqlDriverOption = options.SqlDriverOption;
+            WatchDogMongoDbOption.UseMongoDbOption = options.UseMongoDbOption;
 
-            if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogSqlDriverOption.SqlDriverOption == 0)
-                throw new WatchDogDBDriverException("Missing DB Driver Option: SQLDriverOption is required at .AddWatchDogServices()");
+            if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogSqlDriverOption.SqlDriverOption == 0 && WatchDogMongoDbOption.UseMongoDbOption == false)
+                throw new WatchDogDBDriverException("Missing DB Driver Option: SQLDriverOption or UseMongoDbOption is required at .AddWatchDogServices()");
             if (WatchDogSqlDriverOption.SqlDriverOption != 0 && string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
                 throw new WatchDogDatabaseException("Missing connection string.");
+            if(WatchDogSqlDriverOption.SqlDriverOption != 0  && WatchDogMongoDbOption.UseMongoDbOption == true)
+                throw new WatchDogDBDriverException("You cannot use both SQLDriverOption and UseMongoDbOption at the same time");
+            if (WatchDogMongoDbOption.UseMongoDbOption == true && string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
+                throw new WatchDogDatabaseException("Missing connection string.");
+
             services.AddSignalR();
             services.AddMvcCore(x =>
             {
@@ -48,7 +54,15 @@ namespace WatchDog
 
             if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
             {
-                ExternalDbContext.Migrate();
+                if (WatchDogMongoDbOption.UseMongoDbOption)
+                {
+                    ExternalDbContext.MigrateNoSql();
+                }
+                else
+                {
+                    ExternalDbContext.Migrate();
+                }
+
             }
 
 
