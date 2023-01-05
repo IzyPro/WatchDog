@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System;
@@ -51,6 +52,7 @@ namespace WatchDog
             }).AddApplicationPart(typeof(WatchDogExtension).Assembly);
 
             services.AddSingleton<IBroadcastHelper, BroadcastHelper>();
+            services.AddSingleton<IMemoryCache, MemoryCache>();
 
             if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
             {
