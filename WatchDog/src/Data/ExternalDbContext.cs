@@ -119,6 +119,7 @@ namespace WatchDog.src.Data
                              );
                                 IF OBJECT_ID('dbo.{Constants.LogsTableName}', 'U') IS NULL CREATE TABLE {Constants.LogsTableName} (
                                 id            INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                                eventId       VARCHAR(100),
                                 message       VARCHAR(max),
                                 timestamp     VARCHAR(100) NOT NULL,
                                 callingFrom   VARCHAR(100),
@@ -159,6 +160,7 @@ namespace WatchDog.src.Data
                              );
                            CREATE TABLE IF NOT EXISTS {Constants.LogsTableName} (
                                 id            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                eventId       VARCHAR(100),
                                 message       TEXT(65535),
                                 timestamp     VARCHAR(100) NOT NULL,
                                 callingFrom   VARCHAR(100),
@@ -199,6 +201,7 @@ namespace WatchDog.src.Data
                              );
                            CREATE TABLE IF NOT EXISTS {Constants.LogsTableName} (
                                 id            SERIAL PRIMARY KEY,
+                                eventId       VARCHAR(100),
                                 message       VARCHAR,
                                 timestamp     TIMESTAMP with time zone NOT NULL,
                                 callingFrom   VARCHAR,

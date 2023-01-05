@@ -17,6 +17,8 @@ builder.Services.AddWatchDogServices(opt =>
     opt.UseMongoDbOption = true;    
     opt.SetExternalDbConnString = "mongodb://localhost:27017";
 });
+builder.Logging.AddWatchDogLogger();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
