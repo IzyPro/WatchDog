@@ -1,9 +1,10 @@
 ﻿namespace WatchDog.src.Enums
 {
-    public enum WatchDogSqlDriverEnum
+    public enum WatchDogDbDriverEnum
     {
         MSSQL = 1,
         MySql,
-        PostgreSql
+        PostgreSql,
+        Mongo
     }
 }

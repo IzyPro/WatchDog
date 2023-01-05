@@ -9,10 +9,8 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using WatchDog.src.Enums;
 using WatchDog.src.Exceptions;
-using WatchDog.src.Helpers;
 using WatchDog.src.Models;
 using WatchDog.src.Utilities;
-using static WatchDog.src.Models.WatchDogMongoModels;
 
 namespace WatchDog.src.Data
 {
@@ -20,15 +18,14 @@ namespace WatchDog.src.Data
     {
         private static string _connectionString = WatchDogExternalDbConfig.ConnectionString;
 
-        public static IDbConnection CreateConnection()
-            => WatchDogSqlDriverOption.SqlDriverOption switch
+        public static IDbConnection CreateSQLConnection()
+            => WatchDogDatabaseDriverOption.DatabaseDriverOption switch
             {
-                WatchDogSqlDriverEnum.MSSQL => CreateMSSQLConnection(),
-                WatchDogSqlDriverEnum.MySql => CreateMySQLConnection(),
-                WatchDogSqlDriverEnum.PostgreSql => CreatePostgresConnection(),
+                WatchDogDbDriverEnum.MSSQL => CreateMSSQLConnection(),
+                WatchDogDbDriverEnum.MySql => CreateMySQLConnection(),
+                WatchDogDbDriverEnum.PostgreSql => CreatePostgresConnection(),
                 _ => throw new NotSupportedException()
             };
-
 
         public static void Migrate() => BootstrapTables();
 
@@ -36,7 +33,7 @@ namespace WatchDog.src.Data
         {
             var createWatchTablesQuery = GetSqlQueryString();
 
-            using (var connection = CreateConnection())
+            using (var connection = CreateSQLConnection())
             {
                 try
                 {
@@ -86,9 +83,9 @@ namespace WatchDog.src.Data
         }
 
         public static string GetSqlQueryString() =>
-            WatchDogSqlDriverOption.SqlDriverOption switch
+            WatchDogDatabaseDriverOption.DatabaseDriverOption switch
             {
-                WatchDogSqlDriverEnum.MSSQL => @$"
+                WatchDogDbDriverEnum.MSSQL => @$"
                                   IF OBJECT_ID('dbo.{Constants.WatchLogTableName}', 'U') IS NULL CREATE TABLE {Constants.WatchLogTableName} (
                                   id              INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
                                   responseBody    VARCHAR(max),
@@ -129,7 +126,7 @@ namespace WatchDog.src.Data
                              );
                         ",
 
-                WatchDogSqlDriverEnum.MySql => @$"
+                WatchDogDbDriverEnum.MySql => @$"
                              CREATE TABLE IF NOT EXISTS {Constants.WatchLogTableName} (
                               id              INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                               responseBody    TEXT(65535),
@@ -170,7 +167,7 @@ namespace WatchDog.src.Data
                              );
                         ",
 
-                WatchDogSqlDriverEnum.PostgreSql => @$"
+                WatchDogDbDriverEnum.PostgreSql => @$"
                              CREATE TABLE IF NOT EXISTS {Constants.WatchLogTableName} (
                               id              SERIAL PRIMARY KEY,
                               responseBody    VARCHAR,
@@ -254,8 +251,8 @@ namespace WatchDog.src.Data
             try
             {
                 return new MongoClient(_connectionString);
-
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new WatchDogDatabaseException(ex.Message);
             }

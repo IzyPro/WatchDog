@@ -7,7 +7,7 @@ using WatchDog.src.Utilities;
 
 namespace WatchDog.src.Helpers
 {
-    internal static class ExternalDbHelper
+    internal static class SQLDbHelper
     {
         // WATCHLOG OPERATIONS
         public static async Task<Page<WatchLog>> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber)
@@ -33,7 +33,7 @@ namespace WatchDog.src.Helpers
                 query += $"{nameof(WatchLog.ResponseStatus)} LIKE '%{statusCode}%' ";
             }
             query += $"ORDER BY {nameof(WatchLog.StartTime)} DESC";
-            using (var connection = ExternalDbContext.CreateConnection())
+            using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 connection.Open();
                 var logs = await connection.QueryAsync<WatchLog>(query);
@@ -72,7 +72,7 @@ namespace WatchDog.src.Helpers
                 parameters.Add("EndTime", log.EndTime);
             }
 
-            using (var connection = ExternalDbContext.CreateConnection())
+            using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 connection.Open();
                 await connection.ExecuteAsync(query, parameters);
@@ -92,7 +92,7 @@ namespace WatchDog.src.Helpers
                 query += $"WHERE {nameof(WatchExceptionLog.Source)} LIKE '%{searchString}%' OR {nameof(WatchExceptionLog.Message)} LIKE '%{searchString}%' OR {nameof(WatchExceptionLog.StackTrace)} LIKE '%{searchString}%' ";
             }
             query += $"ORDER BY {nameof(WatchExceptionLog.EncounteredAt)} DESC";
-            using (var connection = ExternalDbContext.CreateConnection())
+            using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 var logs = await connection.QueryAsync<WatchExceptionLog>(query);
                 return logs.ToPaginatedList(pageNumber);
@@ -123,7 +123,7 @@ namespace WatchDog.src.Helpers
                 parameters.Add("EncounteredAt", log.EncounteredAt, DbType.DateTime);
             }
 
-            using (var connection = ExternalDbContext.CreateConnection())
+            using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
             }
@@ -149,7 +149,7 @@ namespace WatchDog.src.Helpers
             }
             query += $"ORDER BY {nameof(WatchLoggerModel.Timestamp)} DESC";
 
-            using (var connection = ExternalDbContext.CreateConnection())
+            using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 connection.Open();
                 var logs = await connection.QueryAsync<WatchLoggerModel>(query);
@@ -180,7 +180,7 @@ namespace WatchDog.src.Helpers
                 parameters.Add("Timestamp", log.Timestamp, DbType.DateTime);
             }
 
-            using (var connection = ExternalDbContext.CreateConnection())
+            using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
             }
@@ -194,7 +194,7 @@ namespace WatchDog.src.Helpers
             var watchlogQuery = @$"truncate table {Constants.WatchLogTableName}";
             var exQuery = @$"truncate table {Constants.WatchLogExceptionTableName}";
             var logQuery = @$"truncate table {Constants.LogsTableName}";
-            using (var connection = ExternalDbContext.CreateConnection())
+            using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 var watchlogs = await connection.ExecuteAsync(watchlogQuery);
                 var exLogs = await connection.ExecuteAsync(exQuery);

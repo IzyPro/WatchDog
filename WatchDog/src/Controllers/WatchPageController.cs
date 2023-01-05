@@ -54,12 +54,7 @@ namespace WatchDog.src.Controllers
 
             if (username.ToLower() == WatchDogConfigModel.UserName.ToLower() && password == WatchDogConfigModel.Password)
             {
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(1))
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(2))
-                    .SetPriority(CacheItemPriority.Normal)
-                    .SetSize(1024);
-                _cache.Set("isAuth", "true", cacheEntryOptions);
+                _cache.Set("isAuth", "true", GeneralHelper.cacheEntryOptions);
                 return Json(true);
             }
             else

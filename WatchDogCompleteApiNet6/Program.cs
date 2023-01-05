@@ -13,8 +13,8 @@ builder.Services.AddWatchDogServices(opt =>
 {
     opt.IsAutoClear = true;
     opt.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Monthly;
-   // opt.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL;
-    opt.UseMongoDbOption = true;    
+    opt.DbDriverOption = WatchDogDbDriverEnum.Mongo;
+    //opt.UseMongoDbOption = true;    
     opt.SetExternalDbConnString = "mongodb://localhost:27017";
 });
 builder.Logging.AddWatchDogLogger();

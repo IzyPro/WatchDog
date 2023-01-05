@@ -15,27 +15,27 @@ namespace WatchDog.src.Managers
         }
         private static string _connectionString = WatchDogExternalDbConfig.ConnectionString;
 
-        private static bool isExternalDb() => !string.IsNullOrEmpty(_connectionString);
+        //private static bool isExternalDb() => !string.IsNullOrEmpty(_connectionString);
 
         private static TargetDbEnum GetTargetDbEnum
         {
-            get{
+            get {
                 if (string.IsNullOrEmpty(_connectionString))
                 {
                     return TargetDbEnum.LiteDb;
                 }
-                if (WatchDogSqlDriverOption.SqlDriverOption != 0)
+                if (WatchDogDatabaseDriverOption.DatabaseDriverOption == Enums.WatchDogDbDriverEnum.Mongo)
                 {
-                    return TargetDbEnum.SqlDb;
+                    return TargetDbEnum.MongoDb;
                 }
-                return TargetDbEnum.MongoDb;
+                return TargetDbEnum.SqlDb;
             }
         }
 
         public static async Task<bool> ClearLogs() =>
             GetTargetDbEnum switch
             {
-                TargetDbEnum.SqlDb => await ExternalDbHelper.ClearLogs(),
+                TargetDbEnum.SqlDb => await SQLDbHelper.ClearLogs(),
                 TargetDbEnum.LiteDb => LiteDBHelper.ClearAllLogs(),
                 TargetDbEnum.MongoDb => await MongoDBHelper.ClearAllLogs(),
                 _ => throw new NotImplementedException()
@@ -45,7 +45,7 @@ namespace WatchDog.src.Managers
         public static async Task<Page<WatchLog>> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber) =>
             GetTargetDbEnum switch
             {
-                TargetDbEnum.SqlDb => await ExternalDbHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber),
+                TargetDbEnum.SqlDb => await SQLDbHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber),
                 TargetDbEnum.LiteDb => LiteDBHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber),
                 TargetDbEnum.MongoDb => MongoDBHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber),
                 _ => throw new NotImplementedException()
@@ -53,11 +53,10 @@ namespace WatchDog.src.Managers
 
         public static async Task InsertWatchLog(WatchLog log)
         {
-            var dbOption = GetTargetDbEnum;
-            switch (dbOption)
+            switch (GetTargetDbEnum)
             {
                 case TargetDbEnum.SqlDb: 
-                    await ExternalDbHelper.InsertWatchLog(log);
+                    await SQLDbHelper.InsertWatchLog(log);
                     break;
                 case TargetDbEnum.LiteDb:
                     LiteDBHelper.InsertWatchLog(log);
@@ -73,20 +72,18 @@ namespace WatchDog.src.Managers
         public static async Task<Page<WatchExceptionLog>> GetAllWatchExceptionLogs(string searchString, int pageNumber) =>
             GetTargetDbEnum switch
             {
-                TargetDbEnum.SqlDb => await ExternalDbHelper.GetAllWatchExceptionLogs(searchString, pageNumber),
+                TargetDbEnum.SqlDb => await SQLDbHelper.GetAllWatchExceptionLogs(searchString, pageNumber),
                 TargetDbEnum.LiteDb => LiteDBHelper.GetAllWatchExceptionLogs(searchString, pageNumber),
                 TargetDbEnum.MongoDb => MongoDBHelper.GetAllWatchExceptionLogs(searchString, pageNumber),
                 _ => throw new NotImplementedException()
-
             };
 
         public static async Task InsertWatchExceptionLog(WatchExceptionLog log)
         {
-            var dbOption = GetTargetDbEnum;
-            switch (dbOption)
+            switch (GetTargetDbEnum)
             {
                 case TargetDbEnum.SqlDb:
-                    await ExternalDbHelper.InsertWatchExceptionLog(log);
+                    await SQLDbHelper.InsertWatchExceptionLog(log);
                     break;
                 case TargetDbEnum.LiteDb:
                     LiteDBHelper.InsertWatchExceptionLog(log);
@@ -101,18 +98,17 @@ namespace WatchDog.src.Managers
         public static async Task<Page<WatchLoggerModel>> GetAllLogs(string searchString, string logLevelString, int pageNumber) =>
             GetTargetDbEnum switch
             {
-                TargetDbEnum.SqlDb => await ExternalDbHelper.GetAllLogs(searchString, logLevelString, pageNumber),
+                TargetDbEnum.SqlDb => await SQLDbHelper.GetAllLogs(searchString, logLevelString, pageNumber),
                 TargetDbEnum.LiteDb => LiteDBHelper.GetAllLogs(searchString, logLevelString, pageNumber),
                 TargetDbEnum.MongoDb => MongoDBHelper.GetAllLogs(searchString, logLevelString, pageNumber),
                 _ => throw new NotImplementedException()
             };
 
         public static async Task InsertLog(WatchLoggerModel log)
-        { 
-            var dbOption = GetTargetDbEnum;
-            switch (dbOption) {
+        {
+            switch (GetTargetDbEnum) {
                 case TargetDbEnum.SqlDb: 
-                    await ExternalDbHelper.InsertLog(log);
+                    await SQLDbHelper.InsertLog(log);
                     break;
                 case TargetDbEnum.LiteDb:
                     LiteDBHelper.InsertLog(log);

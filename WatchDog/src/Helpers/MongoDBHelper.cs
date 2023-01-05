@@ -1,20 +1,14 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
+﻿using MongoDB.Driver;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WatchDog.src.Data;
 using WatchDog.src.Models;
 using WatchDog.src.Utilities;
-using static WatchDog.src.Models.WatchDogMongoModels;
 
 namespace WatchDog.src.Helpers
 {
     internal class MongoDBHelper
     {
-
         public static MongoClient mongoClient = ExternalDbContext.CreateMongoDBConnection();
         static IMongoDatabase database = mongoClient.GetDatabase(Constants.WatchDogDatabaseName);
         static IMongoCollection<WatchLog> _watchLogs = database.GetCollection<WatchLog>(Constants.WatchLogTableName);
@@ -161,9 +155,5 @@ namespace WatchDog.src.Helpers
 
             return watchLogs && exLogs && logs;
         }
-
-
-
-
     }
 }
