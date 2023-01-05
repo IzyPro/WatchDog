@@ -62,5 +62,23 @@ namespace WatchDog.src.Controllers
                 return Json(false);
             }
         }
+
+        public JsonResult LogOut()
+        {
+            _cache.Remove("isAuth");
+            return Json(true); 
+        }
+
+        public JsonResult IsAuth()
+        {
+            if (!_cache.TryGetValue("isAuth", out string isAuth))
+            {
+                return Json(false);
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
     }
 }

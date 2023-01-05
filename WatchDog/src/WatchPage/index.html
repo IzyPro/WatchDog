@@ -475,14 +475,13 @@
                     }
                 });
             });
-            if (sessionStorage.getItem("loggedIn") === null) {
-                $('#myLoginModal').modal('show');
 
-            } else {
-                if (sessionStorage.getItem("loggedIn") !== sessionStorage.getItem("newloggedIn")) {
-                    $('#myLoginModal').modal('show');
-                }
-            }
+            hasAuth().then(
+                (data) => {
+                    if (data === false) {
+                        $('#myLoginModal').modal('show');
+                    }
+                })
         });
 
         var pageIndex = 1;
@@ -492,28 +491,29 @@
         var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
 
         connection.on("getLogs", function (data) {
-            if (sessionStorage.getItem("loggedIn") !== null && sessionStorage.getItem("loggedIn") === sessionStorage.getItem("newloggedIn")) {
-                if (data.type === "rqLog") {
-                    const firstDigitStr = String(data.log.responseStatus)[0];
-                    var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
-                    const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                        "<td><b>" + data.log.method + "</b></td><td>" + truncate(data.log.path, 50) + "</td><td><b class='" + statusColor + "'> " + data.log.responseStatus + "</b></td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.startTime).format('LLL') + "</td></tr>");
-                    tr.on('click', populateModal.bind(null, data.log));
-                    $('#tableBody').prepend(tr);
-                } else if (data.type === "exLog") {
-                    const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                        "<td><b>" + data.log.source + "</b></td><td>" + truncate(data.log.message, 50) + "</td><td>" + data.log.typeOf + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
-                    tr.on('click', populateExceptionModal.bind(null, data.log));
-                    $('#tableBodyEx').prepend(tr);
-                } else if (data.type === "log") {
-                    const tr = $("<tr data-toggle='modal' data-target='#myInCodeModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                        "<td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + (data.log.callingFrom ??= '') + "\nLine:" + data.log.lineNumber + "</td><td>" + (data.log.callingMethod ??= '') + "</td><td>" + data.log.logLevel  + "</td><td>" + truncate(data.log.message, 50) + "</td></tr > ");
-                    tr.on('click', populateInCodeModal.bind(null, data.log));
-                    $('#tableBodyInCode').prepend(tr);
-                }
-
-            }
-
+            hasAuth().then(
+                (authData) => {
+                    if (authData === true) {
+                        if (data.type === "rqLog") {
+                            const firstDigitStr = String(data.log.responseStatus)[0];
+                            var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
+                            const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                                "<td><b>" + data.log.method + "</b></td><td>" + truncate(data.log.path, 50) + "</td><td><b class='" + statusColor + "'> " + data.log.responseStatus + "</b></td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.startTime).format('LLL') + "</td></tr>");
+                            tr.on('click', populateModal.bind(null, data.log));
+                            $('#tableBody').prepend(tr);
+                        } else if (data.type === "exLog") {
+                            const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                                "<td><b>" + data.log.source + "</b></td><td>" + truncate(data.log.message, 50) + "</td><td>" + data.log.typeOf + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
+                            tr.on('click', populateExceptionModal.bind(null, data.log));
+                            $('#tableBodyEx').prepend(tr);
+                        } else if (data.type === "log") {
+                            const tr = $("<tr data-toggle='modal' data-target='#myInCodeModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                                "<td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + (data.log.callingFrom ??= '') + "\nLine:" + data.log.lineNumber + "</td><td>" + (data.log.callingMethod ??= '') + "</td><td>" + data.log.logLevel + "</td><td>" + truncate(data.log.message, 50) + "</td></tr > ");
+                            tr.on('click', populateInCodeModal.bind(null, data.log));
+                            $('#tableBodyInCode').prepend(tr);
+                        }
+                    }
+                })
         });
 
         connection
@@ -578,22 +578,13 @@
                         $('#prev').show();
                     }
 
-                    if (sessionStorage.getItem("loggedIn") === null) {
-                        $('#myLoginModal').modal('show');
-
-                    } else {
-                        if (sessionStorage.getItem("loggedIn") !== sessionStorage.getItem("newloggedIn")) {
-                            $('#myLoginModal').modal('show');
-                        } else {
-                            for (var i = 0; i < data.logs.length; i++) {
-                                const firstDigitStr = String(data.logs[i].responseStatus)[0];
-                                var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
-                                const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                                    "<td><b>" + data.logs[i].method + "</b></td><td>" + truncate(data.logs[i].path, 50) + "</td><td><b class='" + statusColor + "'> " + data.logs[i].responseStatus + "</b ></td ><td>" + data.logs[i].timeSpent + "</td><td>" + moment(data.logs[i].startTime).format('LLL') + "</td></tr > ");
-                                tr.on('click', populateModal.bind(null, data.logs[i]));
-                                $('#tableBody').append(tr);
-                            }
-                        }
+                    for (var i = 0; i < data.logs.length; i++) {
+                        const firstDigitStr = String(data.logs[i].responseStatus)[0];
+                        var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
+                        const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
+                            "<td><b>" + data.logs[i].method + "</b></td><td>" + truncate(data.logs[i].path, 50) + "</td><td><b class='" + statusColor + "'> " + data.logs[i].responseStatus + "</b ></td ><td>" + data.logs[i].timeSpent + "</td><td>" + moment(data.logs[i].startTime).format('LLL') + "</td></tr > ");
+                        tr.on('click', populateModal.bind(null, data.logs[i]));
+                        $('#tableBody').append(tr);
                     }
 
                 }
@@ -776,8 +767,13 @@
         }
 
         function logOut() {
-            sessionStorage.clear();
-            window.location.reload();
+            $.ajax({
+                type: "GET",
+                url: "/WTCHDwatchpage/LogOut",
+                success: function (data) {
+                    window.location.reload()
+                }
+            });
         }
 
         function login() {
@@ -793,12 +789,6 @@
                     },
                     context: document.body,
                     success: function (data) {
-                        if (data === true) {
-                            sessionStorage.setItem("newloggedIn", generateUUID())
-                            sessionStorage.setItem("loggedIn", sessionStorage.getItem("newloggedIn"))
-                        } else {
-                            sessionStorage.setItem("loggedIn", null)
-                        }
 
                         window.location.reload()
                     }
@@ -806,6 +796,23 @@
             }
 
         }
+
+        function hasAuth() {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    type: "GET",
+                    url: "/WTCHDwatchpage/IsAuth",
+                    success: function (data) {
+                        resolve(data) // Resolve promise and when success
+                    },
+                    error: function (err) {
+                        reject(err) // Reject the promise and go to catch()
+                    }
+                });
+            });
+        }
+
+       
 
         function populateModal(data) {
             $('#host').text(data.host);
@@ -893,22 +900,6 @@
             } else {
                 document.getElementById("incodeMessageCopy").style.display = "none";
             }
-        }
-
-        function generateUUID() { // Public Domain/MIT
-            var d = new Date().getTime();//Timestamp
-            var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                var r = Math.random() * 16;//random number between 0 and 16
-                if (d > 0) {//Use timestamp until depleted
-                    r = (d + r) % 16 | 0;
-                    d = Math.floor(d / 16);
-                } else {//Use microseconds since page-load if supported
-                    r = (d2 + r) % 16 | 0;
-                    d2 = Math.floor(d2 / 16);
-                }
-                return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-            });
         }
 
         function sleep(time) {
