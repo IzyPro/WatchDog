@@ -475,6 +475,14 @@
                     }
                 });
             });
+            if (sessionStorage.getItem("loggedIn") === null) {
+                $('#myLoginModal').modal('show');
+
+            } else {
+                if (sessionStorage.getItem("loggedIn") !== sessionStorage.getItem("newloggedIn")) {
+                    $('#myLoginModal').modal('show');
+                }
+            }
         });
 
         var pageIndex = 1;

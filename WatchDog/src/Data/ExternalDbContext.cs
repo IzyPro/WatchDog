@@ -1,4 +1,6 @@
 ﻿using Dapper;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using MySql.Data.MySqlClient;
 using Npgsql;
 using System;
@@ -7,8 +9,10 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using WatchDog.src.Enums;
 using WatchDog.src.Exceptions;
+using WatchDog.src.Helpers;
 using WatchDog.src.Models;
 using WatchDog.src.Utilities;
+using static WatchDog.src.Models.WatchDogMongoModels;
 
 namespace WatchDog.src.Data
 {
@@ -49,6 +53,35 @@ namespace WatchDog.src.Data
                 {
                     throw new WatchDogDatabaseException(ex.Message);
                 }
+            }
+
+        }
+
+        public static void MigrateNoSql()
+        {
+            var mongoClient = CreateMongoDBConnection();
+            var database = mongoClient.GetDatabase(Constants.WatchDogDatabaseName);
+            _ = database.GetCollection<WatchLog>(Constants.WatchLogTableName);
+            _ = database.GetCollection<WatchExceptionLog>(Constants.WatchLogExceptionTableName);
+            _ = database.GetCollection<WatchLoggerModel>(Constants.LogsTableName);
+
+            //Seed counterDb
+            var filter = new BsonDocument("name", Constants.WatchDogMongoCounterTableName);
+
+            // Check if the collection exists
+            var collections = database.ListCollections(new ListCollectionsOptions { Filter = filter });
+
+            bool exists = collections.Any();
+            var _counter = database.GetCollection<Sequence>(Constants.WatchDogMongoCounterTableName);
+
+            if (!exists)
+            {
+                var sequence = new Sequence
+                {
+                    _Id = "sequenceId",
+                    Value = 0
+                };
+                _counter.InsertOne(sequence);
             }
         }
 
@@ -211,6 +244,18 @@ namespace WatchDog.src.Data
                 return new SqlConnection(_connectionString);
             }
             catch (Exception ex)
+            {
+                throw new WatchDogDatabaseException(ex.Message);
+            }
+        }
+
+        public static MongoClient CreateMongoDBConnection()
+        {
+            try
+            {
+                return new MongoClient(_connectionString);
+
+            }catch (Exception ex)
             {
                 throw new WatchDogDatabaseException(ex.Message);
             }
