@@ -56,29 +56,38 @@ namespace WatchDog.src.Data
 
         public static void MigrateNoSql()
         {
-            var mongoClient = CreateMongoDBConnection();
-            var database = mongoClient.GetDatabase(Constants.WatchDogDatabaseName);
-            _ = database.GetCollection<WatchLog>(Constants.WatchLogTableName);
-            _ = database.GetCollection<WatchExceptionLog>(Constants.WatchLogExceptionTableName);
-            _ = database.GetCollection<WatchLoggerModel>(Constants.LogsTableName);
-
-            //Seed counterDb
-            var filter = new BsonDocument("name", Constants.WatchDogMongoCounterTableName);
-
-            // Check if the collection exists
-            var collections = database.ListCollections(new ListCollectionsOptions { Filter = filter });
-
-            bool exists = collections.Any();
-            var _counter = database.GetCollection<Sequence>(Constants.WatchDogMongoCounterTableName);
-
-            if (!exists)
+            try
             {
-                var sequence = new Sequence
+
+                var mongoClient = CreateMongoDBConnection();
+                var database = mongoClient.GetDatabase(Constants.WatchDogDatabaseName);
+                _ = database.GetCollection<WatchLog>(Constants.WatchLogTableName);
+                _ = database.GetCollection<WatchExceptionLog>(Constants.WatchLogExceptionTableName);
+                _ = database.GetCollection<WatchLoggerModel>(Constants.LogsTableName);
+
+                //Seed counterDb
+                var filter = new BsonDocument("name", Constants.WatchDogMongoCounterTableName);
+
+                // Check if the collection exists
+                var collections = database.ListCollections(new ListCollectionsOptions { Filter = filter });
+
+                bool exists = collections.Any();
+                var _counter = database.GetCollection<Sequence>(Constants.WatchDogMongoCounterTableName);
+
+                if (!exists)
                 {
-                    _Id = "sequenceId",
-                    Value = 0
-                };
-                _counter.InsertOne(sequence);
+                    var sequence = new Sequence
+                    {
+                        _Id = "sequenceId",
+                        Value = 0
+                    };
+                    _counter.InsertOne(sequence);
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message.ToString());
+                throw new WatchDogDatabaseException(ex.Message);
             }
         }
 
