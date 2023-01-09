@@ -130,7 +130,7 @@ app.UseWatchDog(opt =>
 # ![Request and Response Sample Details](https://github.com/IzyPro/WatchDog/blob/main/requestLog.png)
 
 #### Optional Configurations: `Optional`
-- Blacklist: List of routes, paths or specific strings to be ignored (should be a comma separated string like below).
+- Blacklist: List of routes, paths or endpoints to be ignored (should be a comma separated string like below).
 - Serializer: If not default, specify the type of global json serializer/converter used
 - CorsPolicy: Policy Name if project uses CORS
 
@@ -140,7 +140,7 @@ app.UseWatchDog(opt =>
    opt.WatchPageUsername = "admin"; 
    opt.WatchPagePassword = "Qwerty@123"; 
    //Optional
-   opt.Blacklist = "Test/testPost, weatherforecast"; //Prevent logging for specified endpoints
+   opt.Blacklist = "Test/testPost, api/auth/login"; //Prevent logging for specified endpoints
    opt.Serializer = WatchDogSerializerEnum.Newtonsoft; //If your project use a global json converter
    opt.CorsPolicy = "MyCorsPolicy"
  });
