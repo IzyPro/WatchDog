@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using System.Linq;
 using System.Threading.Tasks;
 using WatchDog.src.Data;
@@ -18,6 +19,32 @@ namespace WatchDog.src.Helpers
 
         public static Page<WatchLog> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber)
         {
+            //var results =
+            //from log in _watchLogs.AsQueryable()
+            //where log.Method.Contains("POST")
+            //select new WatchLog
+            //{
+            //    Id = log.Id,
+            //    Method = log.Method,
+            //    EndTime = log.EndTime,
+            //    Host = log.Host,
+            //    IpAddress = log.IpAddress,
+            //    Path = log.Path,
+            //    QueryString = log.QueryString,
+            //    StartTime = log.StartTime,
+            //    ResponseStatus = log.ResponseStatus,
+            //    TimeSpent = log.TimeSpent,
+            //    RequestBody = log.RequestBody,
+            //    RequestHeaders = log.RequestHeaders,
+            //    ResponseBody = log.ResponseBody,
+            //    ResponseHeaders = log.ResponseHeaders
+            //};
+
+
+            var q = _watchLogs.AsQueryable().Where(x => x.Path.ToLower() == searchString.ToLower());
+
+
+
             var query = _watchLogs.AsQueryable<WatchLog>();
             if (!string.IsNullOrEmpty(searchString))
             {

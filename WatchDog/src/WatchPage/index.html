@@ -587,6 +587,12 @@
                         $('#tableBody').append(tr);
                     }
 
+                },
+                error: function (error) {
+                    console.log(error);
+                    if (error.status === 401) {
+                        $('#myLoginModal').modal('show');
+                    }
                 }
             });
         }
@@ -618,6 +624,12 @@
                             "<td><b>" + data.logs[i].source + "</b></td><td>" + truncate(data.logs[i].message, 50) + "</td><td>" + data.logs[i].typeOf + "</td><td>" + moment(data.logs[i].encounteredAt).format('LLL') + "</td></tr > ");
                         tr.on('click', populateExceptionModal.bind(null, data.logs[i]));
                         $('#tableBodyEx').append(tr);
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                    if (error.status === 401) {
+                        $('#myLoginModal').modal('show');
                     }
                 }
             });
@@ -651,6 +663,12 @@
                         tr.on('click', populateInCodeModal.bind(null, data.logs[i]));
                         $('#tableBodyInCode').append(tr);
                     }
+                },
+                error: function (error) {
+                    console.log(error);
+                    if (error.status === 401) {
+                        $('#myLoginModal').modal('show');
+                    }
                 }
             });
         }
@@ -662,6 +680,12 @@
                 url: "/WTCHDwatchpage/ClearLogs",
                 success: function (data) {
                     window.location.reload()
+                },
+                error: function (error) {
+                    console.log(error);
+                    if (error.status === 401) {
+                        $('#myLoginModal').modal('show');
+                    }
                 }
             });
         }
