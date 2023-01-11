@@ -123,7 +123,7 @@ app.UseWatchDog(opt =>
 
 
 >**NOTE**
-> If your project uses authentication, then `app.UseWatchDog();` should come before app.UseRouting(), app.UseAuthentication(), app.UseAuthorization(), in that order
+> If your project uses authentication, then `app.UseWatchDog();` should come after app.UseRouting(), app.UseAuthentication(), app.UseAuthorization(), in that order
 <!--- >If your projects startup or program class contains app.UseMvc() or app.UseRouting() then app.UseWatchDog() should come after `Important`
 >If your projects startup or program class contains app.UseEndpoints() then app.UseWatchDog() should come before `Important` -->
 
