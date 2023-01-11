@@ -41,9 +41,6 @@ namespace WatchDog.src.Helpers
             //};
 
 
-            var q = _watchLogs.AsQueryable().Where(x => x.Path.ToLower() == searchString.ToLower());
-
-
 
             var query = _watchLogs.AsQueryable<WatchLog>();
             if (!string.IsNullOrEmpty(searchString))
