@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Linq;
+using MongoDB.Driver.Linq;
+using MySqlX.XDevAPI.Common;
 using System.Threading.Tasks;
 using WatchDog.src.Data;
 using WatchDog.src.Models;
@@ -19,9 +20,10 @@ namespace WatchDog.src.Helpers
 
         public static Page<WatchLog> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber)
         {
+
             //var results =
             //from log in _watchLogs.AsQueryable()
-            //where log.Method.Contains("POST")
+            //where log.Path.Contains(searchString) | log.Method.Contains(searchString)
             //select new WatchLog
             //{
             //    Id = log.Id,
@@ -41,24 +43,33 @@ namespace WatchDog.src.Helpers
             //};
 
 
+            searchString = searchString?.ToLower();
 
-            var query = _watchLogs.AsQueryable<WatchLog>();
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                searchString = searchString.ToLower();
-                query.Where(l => l.Path.ToLower().Contains(searchString) || l.Method.ToLower().Contains(searchString) || l.ResponseStatus.ToString().Contains(searchString) || (!string.IsNullOrEmpty(l.QueryString) && l.QueryString.ToLower().Contains(searchString)));
-            }
+            var filter = Builders<WatchLog>.Filter.Eq("Method", verbString.ToLower());
+            var result = _watchLogs.Find(filter).ToEnumerable();
+            var q = _watchLogs.AsQueryable<WatchLog>()
+                .Where(l => (string.IsNullOrEmpty(verbString) ? true : l.Method.ToLower() == verbString.ToLower()));
 
-            if (!string.IsNullOrEmpty(verbString))
-            {
-                query.Where(l => l.Method.ToLower() == verbString.ToLower());
-            }
+            return q.OrderByDescending(x => x.StartTime).ToPaginatedList(pageNumber);
 
-            if (!string.IsNullOrEmpty(statusCode))
-            {
-                query.Where(l => l.ResponseStatus.ToString() == statusCode);
-            }
-            return query.OrderByDescending(x => x.StartTime).ToPaginatedList(pageNumber);
+
+            //var query = _watchLogs.AsQueryable<WatchLog>();
+            //if (!string.IsNullOrEmpty(searchString))
+            //{
+            //    searchString = searchString.ToLower();
+            //    query.Where(l => l.Path.ToLower().Contains(searchString) || l.Method.ToLower().Contains(searchString) || l.ResponseStatus.ToString().Contains(searchString) || (!string.IsNullOrEmpty(l.QueryString) && l.QueryString.ToLower().Contains(searchString)));
+            //}
+
+            //if (!string.IsNullOrEmpty(verbString))
+            //{
+            //    query.Where(l => l.Method.ToLower() == verbString.ToLower());
+            //}
+
+            //if (!string.IsNullOrEmpty(statusCode))
+            //{
+            //    query.Where(l => l.ResponseStatus.ToString() == statusCode);
+            //}
+            //return query.OrderByDescending(x => x.StartTime).ToPaginatedList(pageNumber);
         }
 
         //WATCH lOGS OPERATION

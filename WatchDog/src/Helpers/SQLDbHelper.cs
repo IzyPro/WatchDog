@@ -32,7 +32,7 @@ namespace WatchDog.src.Helpers
             {
                 query += $"{nameof(WatchLog.ResponseStatus)} LIKE '%{statusCode}%' ";
             }
-            query += $"ORDER BY {nameof(WatchLog.StartTime)} DESC";
+            //query += $"ORDER BY {nameof(WatchLog.StartTime)} DESC";
             using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 connection.Open();
@@ -91,7 +91,7 @@ namespace WatchDog.src.Helpers
                 searchString = searchString.ToLower();
                 query += $"WHERE {nameof(WatchExceptionLog.Source)} LIKE '%{searchString}%' OR {nameof(WatchExceptionLog.Message)} LIKE '%{searchString}%' OR {nameof(WatchExceptionLog.StackTrace)} LIKE '%{searchString}%' ";
             }
-            query += $"ORDER BY {nameof(WatchExceptionLog.EncounteredAt)} DESC";
+            //query += $"ORDER BY {nameof(WatchExceptionLog.EncounteredAt)} DESC";
             using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 var logs = await connection.QueryAsync<WatchExceptionLog>(query);
@@ -147,7 +147,7 @@ namespace WatchDog.src.Helpers
             {
                 query += $"{nameof(WatchLoggerModel.LogLevel)} LIKE '%{logLevelString}%' ";
             }
-            query += $"ORDER BY {nameof(WatchLoggerModel.Timestamp)} DESC";
+            //query += $"ORDER BY {nameof(WatchLoggerModel.Timestamp)} DESC";
 
             using (var connection = ExternalDbContext.CreateSQLConnection())
             {

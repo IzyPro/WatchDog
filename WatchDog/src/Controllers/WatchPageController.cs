@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using WatchDog.src.Filters;
 using WatchDog.src.Helpers;
@@ -23,21 +24,21 @@ namespace WatchDog.src.Controllers
         public async Task<JsonResult> Index(string searchString = "", string verbString = "", string statusCode = "", int pageNumber = 1)
         {
             var result = await DynamicDBManager.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber);
-            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result.Data }, GeneralHelper.CamelCaseSerializer);
+            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result.Data.OrderByDescending(x => x.StartTime) }, GeneralHelper.CamelCaseSerializer);
         }
 
         [CustomAuthenticationFilter]
         public async Task<JsonResult> Exceptions(string searchString = "", int pageNumber = 1)
         {
             var result = await DynamicDBManager.GetAllWatchExceptionLogs(searchString, pageNumber);
-            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result.Data }, GeneralHelper.CamelCaseSerializer);
+            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result.Data.OrderByDescending(x => x.EncounteredAt) }, GeneralHelper.CamelCaseSerializer);
         }
 
         [CustomAuthenticationFilter]
         public async Task<JsonResult> Logs(string searchString = "", string logLevelString = "", int pageNumber = 1)
         {
             var result = await DynamicDBManager.GetAllLogs(searchString, logLevelString, pageNumber);
-            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result .Data}, GeneralHelper.CamelCaseSerializer);
+            return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result.Data.OrderByDescending(x => x.Timestamp) }, GeneralHelper.CamelCaseSerializer);
         }
 
         [CustomAuthenticationFilter]

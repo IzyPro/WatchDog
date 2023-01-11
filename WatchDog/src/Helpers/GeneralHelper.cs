@@ -52,7 +52,6 @@ namespace WatchDog.src.Helpers
                 return new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromMinutes(5))
                     .SetPriority(CacheItemPriority.High);
-                    //.SetSize(1024);
             }
         }
     }

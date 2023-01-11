@@ -64,7 +64,6 @@ namespace WatchDog.src.Managers
                 case TargetDbEnum.MongoDb:
                     await MongoDBHelper.InsertWatchLog(log);
                     break;
-
             }
         }
 
