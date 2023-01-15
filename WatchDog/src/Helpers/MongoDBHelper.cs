@@ -34,31 +34,6 @@ namespace WatchDog.src.Helpers
 
             var result = _watchLogs.Find(filter).ToEnumerable().ToPaginatedList(pageNumber);
             return result;
-
-            //var q = _watchLogs.AsQueryable<WatchLog>()
-            //    .Where(l => l.Method.ToLower() == verbString.ToLower());
-
-            //return q.OrderByDescending(x => x.StartTime).ToPaginatedList(pageNumber);
-
-
-            var query = _watchLogs.AsQueryable<WatchLog>();
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                searchString = searchString.ToLower();
-                query.Where(l => l.Path.ToLower().Contains(searchString) || l.Method.ToLower().Contains(searchString) || l.ResponseStatus.ToString().Contains(searchString) || (!string.IsNullOrEmpty(l.QueryString) && l.QueryString.ToLower().Contains(searchString)));
-            }
-
-            if (!string.IsNullOrEmpty(verbString))
-            {
-                query.Where(l => l.Method.ToLower() == verbString.ToLower());
-            }
-
-            if (!string.IsNullOrEmpty(statusCode))
-            {
-                query.Where(l => l.ResponseStatus.ToString() == statusCode);
-            }
-            var res = query.ToPaginatedList(pageNumber);
-            return res;
         }
 
         //WATCH lOGS OPERATION
@@ -95,13 +70,15 @@ namespace WatchDog.src.Helpers
         //Watch Exception Operations
         public static Page<WatchExceptionLog> GetAllWatchExceptionLogs(string searchString, int pageNumber)
         {
-            var query = _watchExLogs.AsQueryable();
+            searchString = searchString?.ToLower();
+            var builder = Builders<WatchExceptionLog>.Filter;
+            var filter = builder.Empty;
+
             if (!string.IsNullOrEmpty(searchString))
-            {
-                searchString = searchString.ToLower();
-                query.Where(l => l.Message.ToLower().Contains(searchString) || l.StackTrace.ToLower().Contains(searchString) || l.Source.ToLower().Contains(searchString));
-            }
-            return query.ToPaginatedList(pageNumber);
+                filter &= builder.Where(l => l.Message.ToLower().Contains(searchString) || l.StackTrace.ToLower().Contains(searchString) || l.Source.ToLower().Contains(searchString));
+
+            var result = _watchExLogs.Find(filter).ToEnumerable().ToPaginatedList(pageNumber);
+            return result;
         }
 
         public static async Task<WatchExceptionLog> GetWatchExceptionLogById(int id)
@@ -147,17 +124,20 @@ namespace WatchDog.src.Helpers
         }
         public static Page<WatchLoggerModel> GetAllLogs(string searchString, string logLevelString, int pageNumber)
         {
-            var query = _logs.AsQueryable();
+            searchString = searchString?.ToLower();
+            var builder = Builders<WatchLoggerModel>.Filter;
+            var filter = builder.Empty;
+
             if (!string.IsNullOrEmpty(searchString))
-            {
-                searchString = searchString.ToLower();
-                query.Where(l => l.Message.ToLower().Contains(searchString) || l.CallingMethod.ToLower().Contains(searchString) || l.CallingFrom.ToLower().Contains(searchString));
-            }
+                filter &= builder.Where(l => l.Message.ToLower().Contains(searchString) || l.CallingMethod.ToLower().Contains(searchString) || l.CallingFrom.ToLower().Contains(searchString));
+
             if (!string.IsNullOrEmpty(logLevelString))
             {
-                query.Where(l => l.LogLevel.ToLower() == logLevelString.ToLower());
+               filter &= builder.Where(l => l.LogLevel.ToLower() == logLevelString.ToLower());
             }
-            return query.ToPaginatedList(pageNumber);
+
+            var result = _logs.Find(filter).ToEnumerable().ToPaginatedList(pageNumber);
+            return result;
         }
 
 
