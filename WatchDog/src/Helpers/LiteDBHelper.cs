@@ -120,7 +120,7 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToLower();
-                query.Where(l => l.Message.ToLower().Contains(searchString) || l.CallingMethod.ToLower().Contains(searchString) || l.CallingFrom.ToLower().Contains(searchString) || l.EventId.ToLower().Contains(searchString));
+                query.Where(l => l.Message.ToLower().Contains(searchString) || l.CallingMethod.ToLower().Contains(searchString) || l.CallingFrom.ToLower().Contains(searchString) || (!string.IsNullOrEmpty(l.EventId) && l.EventId.ToLower().Contains(searchString)));
             }
             if (!string.IsNullOrEmpty(logLevelString))
             {

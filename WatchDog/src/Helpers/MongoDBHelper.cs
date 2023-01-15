@@ -30,9 +30,8 @@ namespace WatchDog.src.Helpers
 
             if (!string.IsNullOrEmpty(searchString))
                 filter &= builder.Where(l => l.Path.ToLower().Contains(searchString) || l.Method.ToLower().Contains(searchString) || (!string.IsNullOrEmpty(l.QueryString) && l.QueryString.ToLower().Contains(searchString)));
-                //filter &= builder.Where(l => l.Path.ToLower().Contains(searchString) || l.Method.ToLower().Contains(searchString) || l.ResponseStatus.ToString().Contains(searchString) || (!string.IsNullOrEmpty(l.QueryString) && l.QueryString.ToLower().Contains(searchString)));
 
-            var result = _watchLogs.Find(filter).ToEnumerable().ToPaginatedList(pageNumber);
+            var result = _watchLogs.Find(filter).ToPaginatedList(pageNumber);
             return result;
         }
 
@@ -77,7 +76,7 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
                 filter &= builder.Where(l => l.Message.ToLower().Contains(searchString) || l.StackTrace.ToLower().Contains(searchString) || l.Source.ToLower().Contains(searchString));
 
-            var result = _watchExLogs.Find(filter).ToEnumerable().ToPaginatedList(pageNumber);
+            var result = _watchExLogs.Find(filter).ToPaginatedList(pageNumber);
             return result;
         }
 
@@ -129,14 +128,14 @@ namespace WatchDog.src.Helpers
             var filter = builder.Empty;
 
             if (!string.IsNullOrEmpty(searchString))
-                filter &= builder.Where(l => l.Message.ToLower().Contains(searchString) || l.CallingMethod.ToLower().Contains(searchString) || l.CallingFrom.ToLower().Contains(searchString));
+                filter &= builder.Where(l => l.Message.ToLower().Contains(searchString) || l.CallingMethod.ToLower().Contains(searchString) || l.CallingFrom.ToLower().Contains(searchString) || (!string.IsNullOrEmpty(l.EventId) && l.EventId.ToLower().Contains(searchString)));
 
             if (!string.IsNullOrEmpty(logLevelString))
             {
-               filter &= builder.Where(l => l.LogLevel.ToLower() == logLevelString.ToLower());
+               filter &= builder.Eq(l => l.LogLevel, logLevelString);
             }
 
-            var result = _logs.Find(filter).ToEnumerable().ToPaginatedList(pageNumber);
+            var result = _logs.Find(filter).ToPaginatedList(pageNumber);
             return result;
         }
 
