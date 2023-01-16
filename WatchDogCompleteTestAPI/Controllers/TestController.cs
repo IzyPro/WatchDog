@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel.DataAnnotations;
 using WatchDogCompleteTestAPI.Models;
@@ -10,9 +11,15 @@ namespace WatchDogCompleteTestAPI.Controllers
     [Route("[controller]")]
     public class TestController : Controller
     {
+        private readonly ILogger<TestController> _logger;
+        public TestController(ILogger<TestController> logger)
+        {
+            _logger = logger;
+        }
         [HttpGet("testGet")]
         public Product TestGet(string reference)
         {
+            _logger.LogInformation("....Test Log....");
             return new Product { Id = 1, Name = "Get Test Product", Description = $"This is the response from testGet - {reference}", IsOnSale = true };
         }
 
