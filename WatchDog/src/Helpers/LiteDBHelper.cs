@@ -28,7 +28,7 @@ namespace WatchDog.src.Helpers
             {
                 query.Where(l => l.ResponseStatus.ToString() == statusCode);
             }
-            return query.OrderByDescending(x => x.StartTime).ToPaginatedList(pageNumber);
+            return query.ToPaginatedList(pageNumber);
         }
 
         public static bool ClearAllLogs()
@@ -78,7 +78,7 @@ namespace WatchDog.src.Helpers
                 searchString = searchString.ToLower();
                 query.Where(l => l.Message.ToLower().Contains(searchString) || l.StackTrace.ToLower().Contains(searchString) || l.Source.ToLower().Contains(searchString));
             }
-            return query.OrderByDescending(x => x.EncounteredAt).ToPaginatedList(pageNumber);
+            return query.ToPaginatedList(pageNumber);
         }
 
         public static WatchExceptionLog GetWatchExceptionLogById(int id)
@@ -120,13 +120,13 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToLower();
-                query.Where(l => l.Message.ToLower().Contains(searchString) || l.CallingMethod.ToLower().Contains(searchString) || l.CallingFrom.ToLower().Contains(searchString));
+                query.Where(l => l.Message.ToLower().Contains(searchString) || l.CallingMethod.ToLower().Contains(searchString) || l.CallingFrom.ToLower().Contains(searchString) || (!string.IsNullOrEmpty(l.EventId) && l.EventId.ToLower().Contains(searchString)));
             }
             if (!string.IsNullOrEmpty(logLevelString))
             {
                 query.Where(l => l.LogLevel.ToLower() == logLevelString.ToLower());
             }
-            return query.OrderByDescending(x => x.Timestamp).ToPaginatedList(pageNumber);
+            return query.ToPaginatedList(pageNumber);
         }
     }
 }
