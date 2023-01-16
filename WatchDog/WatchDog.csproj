@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
-		<Description>WatchDog is a Realtime Message, Event, HTTP (Request &amp; Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view messages, events, http requests made to their web application and also exception caught during runtime in their web applications, all in Realtime. It leverages SignalR for real-time monitoring and LiteDb a Serverless MongoDB-like database with no configuration with the option of using your external MSSQL, MySQl or Postgres databases.</Description>
+		<Description>WatchDog is a Realtime Message, Event, HTTP (Request &amp; Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view messages, events, http requests made to their web application and also exception caught during runtime in their web applications, all in Realtime. It leverages SignalR for real-time monitoring and LiteDb a Serverless MongoDB-like database with no configuration with the option of using your external databases.</Description>
 		<PackageProjectUrl>https://github.com/IzyPro/WatchDog</PackageProjectUrl>
 		<PackageIcon>favicon.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -12,7 +12,7 @@
 		<Authors>Israel Ulelu, Kelechi Onyekwere</Authors>
 		<PackageId>WatchDog.NET</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.3.3</Version>
+		<Version>1.4.0</Version>
 		<PackageReleaseNotes>- Query Optimization, Log Level (Info, Error, Warning), Extra AutoClear Durations (Hourly, Every6Hours, Every12Hours), Cors Support, Global Json Serializer Support, [Fix] Postgres Byte error, [Fix] OutOfRangeException, [Fix] Embedded DB Memory Release on Clear Logs</PackageReleaseNotes>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	</PropertyGroup>
