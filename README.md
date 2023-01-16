@@ -9,14 +9,13 @@
 ## Introduction
 
 WatchDog is a Realtime Message, Event, HTTP (Request & Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view messages, events, http requests made to their web application and also exception caught during runtime in their web applications, all in Realtime.
-It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoDB-like database with no configuration with the option of using your external MSSQL, MySQl or Postgres databases.
+It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoDB-like database with no configuration with the option of using your external databases (MSSQL, MySQl, Postgres, MongoDB).
 
 # ![Request & Response Viewer](https://github.com/IzyPro/WatchDog/blob/main/watchlog.png)
 
 ## General Features
 
-- RealTime HTTP Request and Response Logger
-- RealTime Exception Logger
+- RealTime HTTP Request, Response, and Exception Logger
 - In-code message and event logging
 - User Friendly Logger Views
 - Search Option for HTTP and Exception Logs
@@ -26,17 +25,13 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 
 ## What's New
 
-- Log Level (Info, Error, Warning)
-- Extra AutoClear Durations (Hourly, Every6Hours, Every12Hours)
-- Optimized Queries
-- Cors Support
-- Global Json Serializer Support
+- MongoDB Support
+- ILogger Support (Sink ILogger logs to WatchDog)
+- Trace/Event ID in Logs
 
-## Fixes
+### Breaking Changes
 
-- Postgres byte error
-- OutOfRangeException
-- Embedded DB Memory Release on Clear Logs
+- SqlDriverOption is now DbDriverOption (>= 1.4.0)
 
 
 ## Support
@@ -47,12 +42,12 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 Install via .NET CLI
 
 ```bash
-dotnet add package WatchDog.NET --version 1.3.3
+dotnet add package WatchDog.NET --version 1.4.0
 ```
 Install via Package Manager
 
 ```bash
-Install-Package WatchDog.NET --version 1.3.3
+Install-Package WatchDog.NET --version 1.4.0
 ```
 
 
@@ -91,15 +86,15 @@ services.AddWatchDogServices(opt =>
 });
 ```
 
-### Setup Logging to External Db (MSSQL, MySQL & PostgreSQL) `Optional`
-Add Database Connection String and Choose SqlDriver Option
+### Setup Logging to External Db (MSSQL, MySQL, PostgreSQL & MongoDb) `Optional`
+Add Database Connection String and Choose DbDriver Option
 
 ```c#
 services.AddWatchDogServices(opt => 
 {
    opt.IsAutoClear = false; 
    opt.SetExternalDbConnString = "Server=localhost;Database=testDb;User Id=postgres;Password=root;"; 
-   opt.SqlDriverOption = WatchDogSqlDriverEnum.PostgreSql; 
+   opt.DbDriverOption = WatchDogSqlDriverEnum.PostgreSql; 
 });
 ```
 
@@ -168,12 +163,32 @@ app.UseWatchDog(opt =>
 ```
 ### Log Messages/Events
 ```
-WatchLogger.Log("...TestGet Started...");
+WatchLogger.Log("...Test Log...");
 WatchLogger.LogWarning(JsonConvert.Serialize(model));
-WatchLogger.LogError(res.Content);
+WatchLogger.LogError(res.Content, eventId: reference);
 ```
+
 # ![In-code log messages](https://github.com/IzyPro/WatchDog/blob/main/in-code.png)
 
+#### Sink Logs from ILogger
+You can also sink logs from the .NET ILogger into WatchDog
+
+For .NET 6 and above
+```
+builder.Logging.AddWatchDogLogger();
+```
+For .NET Core 3.1, configure logging and add `.AddWatchDogLogger()` to the `CreateHostBuilder` method of the `Program.cs` class
+```
+Host.CreateDefaultBuilder(args)
+ .ConfigureLogging( logging =>
+ {
+     logging.AddWatchDogLogger();
+ })
+ .ConfigureWebHostDefaults(webBuilder =>
+ {
+     webBuilder.UseStartup<Startup>();
+ });
+```
 
 ### View Logs and Exception
 Start your server and head to `/watchdog` to view the logs.
