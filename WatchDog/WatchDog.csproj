@@ -13,7 +13,7 @@
 		<PackageId>WatchDog.NET</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Version>1.4.0</Version>
-		<PackageReleaseNotes>- Query Optimization, Log Level (Info, Error, Warning), Extra AutoClear Durations (Hourly, Every6Hours, Every12Hours), Cors Support, Global Json Serializer Support, [Fix] Postgres Byte error, [Fix] OutOfRangeException, [Fix] Embedded DB Memory Release on Clear Logs</PackageReleaseNotes>
+		<PackageReleaseNotes>- MongoDB Support, ILogger Support, Trace/Event ID</PackageReleaseNotes>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	</PropertyGroup>
 
