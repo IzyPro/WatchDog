@@ -38,7 +38,7 @@ namespace WatchDog.src.Helpers
                 connection.Open();
                 var logs = await connection.QueryAsync<WatchLog>(query);
                 connection.Close();
-                return logs.ToPaginatedList(pageNumber);
+                return logs.ToPaginatedList(orderby: (x => x.StartTime), pageNumber);
             }
         }
 
@@ -95,7 +95,7 @@ namespace WatchDog.src.Helpers
             using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 var logs = await connection.QueryAsync<WatchExceptionLog>(query);
-                return logs.ToPaginatedList(pageNumber);
+                return logs.ToPaginatedList(orderby: (x => x.EncounteredAt), pageNumber);
             }
         }
 
@@ -154,7 +154,7 @@ namespace WatchDog.src.Helpers
                 connection.Open();
                 var logs = await connection.QueryAsync<WatchLoggerModel>(query);
                 connection.Close();
-                return logs.ToPaginatedList(pageNumber);
+                return logs.ToPaginatedList(orderby: (x => x.Timestamp), pageNumber);
             }
         }
 
