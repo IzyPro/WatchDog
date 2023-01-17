@@ -31,7 +31,7 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
                 filter &= builder.Where(l => l.Path.ToLower().Contains(searchString) || l.Method.ToLower().Contains(searchString) || (!string.IsNullOrEmpty(l.QueryString) && l.QueryString.ToLower().Contains(searchString)));
 
-            var result = _watchLogs.Find(filter).ToPaginatedList(pageNumber);
+            var result = _watchLogs.Find(filter).SortByDescending(x => x.StartTime).ToPaginatedList(pageNumber);
             return result;
         }
 
@@ -76,7 +76,7 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
                 filter &= builder.Where(l => l.Message.ToLower().Contains(searchString) || l.StackTrace.ToLower().Contains(searchString) || l.Source.ToLower().Contains(searchString));
 
-            var result = _watchExLogs.Find(filter).ToPaginatedList(pageNumber);
+            var result = _watchExLogs.Find(filter).SortByDescending(x => x.EncounteredAt).ToPaginatedList(pageNumber);
             return result;
         }
 
@@ -135,7 +135,7 @@ namespace WatchDog.src.Helpers
                filter &= builder.Eq(l => l.LogLevel, logLevelString);
             }
 
-            var result = _logs.Find(filter).ToPaginatedList(pageNumber);
+            var result = _logs.Find(filter).SortByDescending(x => x.Timestamp).ToPaginatedList(pageNumber);
             return result;
         }
 

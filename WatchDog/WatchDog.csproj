@@ -13,7 +13,7 @@
 		<PackageId>WatchDog.NET</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Version>1.4.0</Version>
-		<PackageReleaseNotes>- MongoDB Support, ILogger Support, Trace/Event ID</PackageReleaseNotes>
+		<PackageReleaseNotes>- MongoDB Support, ILogger Support, Trace/Event ID Support</PackageReleaseNotes>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	</PropertyGroup>
 

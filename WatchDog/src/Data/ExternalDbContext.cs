@@ -140,7 +140,7 @@ namespace WatchDog.src.Data
                               id              INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                               responseBody    TEXT(65535),
                               responseStatus  INT NOT NULL,
-                              requestBody     VARCHAR(65535),
+                              requestBody     TEXT(65535),
                               queryString     VARCHAR(65535),
                               path            VARCHAR(65535),
                               requestHeaders  TEXT(65535),
