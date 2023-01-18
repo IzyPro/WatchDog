@@ -16,6 +16,7 @@ namespace WatchDog.src.Helpers
         static IMongoCollection<WatchLoggerModel> _logs = database.GetCollection<WatchLoggerModel>(Constants.LogsTableName);
         static IMongoCollection<Sequence> _counter = database.GetCollection<Sequence>(Constants.WatchDogMongoCounterTableName);
 
+        //WATCH lOGS OPERATION
         public static Page<WatchLog> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber)
         {
             searchString = searchString?.ToLower();
@@ -31,33 +32,14 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
                 filter &= builder.Where(l => l.Path.ToLower().Contains(searchString) || l.Method.ToLower().Contains(searchString) || (!string.IsNullOrEmpty(l.QueryString) && l.QueryString.ToLower().Contains(searchString)));
 
-            var result = _watchLogs.Find(filter).SortByDescending(x => x.StartTime).ToPaginatedList(pageNumber);
+            var result = _watchLogs.Find(filter).SortByDescending(x => x.Id).ToPaginatedList(pageNumber);
             return result;
-        }
-
-        //WATCH lOGS OPERATION
-        public static async Task<WatchLog> GetWatchLogById(int id)
-        {
-            return await _watchLogs.Find(x => x.Id == id).Limit(1).SingleAsync();
         }
 
         public static async Task InsertWatchLog(WatchLog log)
         {
             log.Id = GetSequenceId();   
              await _watchLogs.InsertOneAsync(log);
-        }
-
-        public static async Task<bool> UpdateWatchLog(WatchLog log)
-        {
-            var filter = Builders<WatchLog>.Filter.Eq(s => s.Id, log.Id);
-            var updateResult = await _watchLogs.ReplaceOneAsync(filter, log);
-            return true;
-        }
-
-        public static async Task<bool> DeleteWatchLog(int id)
-        {
-            var deleteResult = await _watchLogs.DeleteOneAsync(x => x.Id == id);
-            return deleteResult.IsAcknowledged;
         }
 
         public static async Task<bool> ClearWatchLog()
@@ -76,32 +58,14 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
                 filter &= builder.Where(l => l.Message.ToLower().Contains(searchString) || l.StackTrace.ToLower().Contains(searchString) || l.Source.ToLower().Contains(searchString));
 
-            var result = _watchExLogs.Find(filter).SortByDescending(x => x.EncounteredAt).ToPaginatedList(pageNumber);
+            var result = _watchExLogs.Find(filter).SortByDescending(x => x.Id).ToPaginatedList(pageNumber);
             return result;
-        }
-
-        public static async Task<WatchExceptionLog> GetWatchExceptionLogById(int id)
-        {
-            return await _watchExLogs.Find(x => x.Id == id).Limit(1).SingleAsync();
         }
 
         public static async Task InsertWatchExceptionLog(WatchExceptionLog log)
         {
             log.Id = GetSequenceId();
             await _watchExLogs.InsertOneAsync(log);
-        }
-
-        public static async Task<bool> UpdateWatchExceptionLog(WatchExceptionLog log)
-        {
-            var filter = Builders<WatchExceptionLog>.Filter.Eq(s => s.Id, log.Id);
-            var updateResult = await _watchExLogs.ReplaceOneAsync(filter, log);
-            return true;
-        }
-
-        public static async Task<bool> DeleteWatchExceptionLog(int id)
-        {
-            var deleteResult = await _watchExLogs.DeleteOneAsync(x => x.Id == id);
-            return deleteResult.IsAcknowledged;
         }
         public static async Task<bool> ClearWatchExceptionLog()
         {
@@ -135,7 +99,7 @@ namespace WatchDog.src.Helpers
                filter &= builder.Eq(l => l.LogLevel, logLevelString);
             }
 
-            var result = _logs.Find(filter).SortByDescending(x => x.Timestamp).ToPaginatedList(pageNumber);
+            var result = _logs.Find(filter).SortByDescending(x => x.Id).ToPaginatedList(pageNumber);
             return result;
         }
 
