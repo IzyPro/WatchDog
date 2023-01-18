@@ -32,13 +32,13 @@ namespace WatchDog.src.Helpers
             {
                 query += $"{nameof(WatchLog.ResponseStatus)} LIKE '%{statusCode}%' ";
             }
-            //query += $"ORDER BY {nameof(WatchLog.StartTime)} DESC";
+            query += $"ORDER BY {nameof(WatchLog.Id)} DESC";
             using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 connection.Open();
                 var logs = await connection.QueryAsync<WatchLog>(query);
                 connection.Close();
-                return logs.ToPaginatedList(orderby: (x => x.StartTime), pageNumber);
+                return logs.ToPaginatedList(pageNumber);
             }
         }
 
@@ -91,11 +91,11 @@ namespace WatchDog.src.Helpers
                 searchString = searchString.ToLower();
                 query += $"WHERE {nameof(WatchExceptionLog.Source)} LIKE '%{searchString}%' OR {nameof(WatchExceptionLog.Message)} LIKE '%{searchString}%' OR {nameof(WatchExceptionLog.StackTrace)} LIKE '%{searchString}%' ";
             }
-            //query += $"ORDER BY {nameof(WatchExceptionLog.EncounteredAt)} DESC";
+            query += $"ORDER BY {nameof(WatchExceptionLog.Id)} DESC";
             using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 var logs = await connection.QueryAsync<WatchExceptionLog>(query);
-                return logs.ToPaginatedList(orderby: (x => x.EncounteredAt), pageNumber);
+                return logs.ToPaginatedList(pageNumber);
             }
         }
 
@@ -147,14 +147,14 @@ namespace WatchDog.src.Helpers
             {
                 query += $"{nameof(WatchLoggerModel.LogLevel)} LIKE '%{logLevelString}%' ";
             }
-            //query += $"ORDER BY {nameof(WatchLoggerModel.Timestamp)} DESC";
+            query += $"ORDER BY {nameof(WatchLoggerModel.Id)} DESC";
 
             using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 connection.Open();
                 var logs = await connection.QueryAsync<WatchLoggerModel>(query);
                 connection.Close();
-                return logs.ToPaginatedList(orderby: (x => x.Timestamp), pageNumber);
+                return logs.ToPaginatedList(pageNumber);
             }
         }
 
