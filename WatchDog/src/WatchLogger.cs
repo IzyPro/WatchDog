@@ -76,20 +76,27 @@ namespace WatchDog
     {
         public static async void Log(string message, [Optional] string eventId, [CallerMemberName] string callerName = "", [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0, string level = "Info")
         {
-            var log = new WatchLoggerModel
+            try
             {
-                Message = message,
-                EventId = eventId,
-                Timestamp = DateTime.Now,
-                CallingFrom = Path.GetFileName(filePath),
-                CallingMethod = callerName,
-                LineNumber = lineNumber,
-                LogLevel = level
-            }; 
+                var log = new WatchLoggerModel
+                {
+                    Message = message,
+                    EventId = eventId,
+                    Timestamp = DateTime.Now,
+                    CallingFrom = Path.GetFileName(filePath),
+                    CallingMethod = callerName,
+                    LineNumber = lineNumber,
+                    LogLevel = level
+                };
 
-            //Insert
-            await DynamicDBManager.InsertLog(log);
-            await ServiceProviderFactory.BroadcastHelper.BroadcastLog(log);
+                //Insert
+                await DynamicDBManager.InsertLog(log);
+                await ServiceProviderFactory.BroadcastHelper.BroadcastLog(log);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
         public static void LogError(string message, [Optional] string eventId, [CallerMemberName] string callerName = "", [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {

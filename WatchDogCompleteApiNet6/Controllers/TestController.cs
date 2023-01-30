@@ -63,5 +63,12 @@ namespace WatchDogCompleteApiNet6.Controllers
             WatchLogger.LogError("File Upload Error");
             return $"File with id {model.Id} created successfully"; 
         }
+
+
+        [HttpGet("simulate400")]
+        public IActionResult Simulate400()
+        {
+            return BadRequest();
+        }
     }
 }
