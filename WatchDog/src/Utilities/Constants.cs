@@ -4,8 +4,12 @@ namespace WatchDog.src.Utilities
 {
     internal static class Constants
     {
-        public static readonly string DbPrefix = Assembly.GetEntryAssembly().GetName().Name;
-        public static readonly string WatchDogDatabaseName = DbPrefix + "_WatchDogDB";
+        static Constants()
+        {
+            string DbPrefix = Assembly.GetEntryAssembly().GetName().Name;
+            WatchDogDatabaseName = DbPrefix + "_WatchDogDB";
+        }
+        public static readonly string WatchDogDatabaseName;
         public const string WatchLogTableName = "WatchDog_WatchLog";
         public const string WatchLogExceptionTableName = "WatchDog_WatchExceptionLog";
         public const string WatchDogMongoCounterTableName = "WatchDog_Counter";
