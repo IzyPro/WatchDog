@@ -58,7 +58,6 @@ namespace WatchDog.src.Data
         {
             try
             {
-
                 var mongoClient = CreateMongoDBConnection();
                 var database = mongoClient.GetDatabase(Constants.WatchDogDatabaseName);
                 _ = database.GetCollection<WatchLog>(Constants.WatchLogTableName);
