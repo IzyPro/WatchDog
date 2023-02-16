@@ -1,5 +1,4 @@
 ﻿using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 using System.Threading.Tasks;
 using WatchDog.src.Data;
 using WatchDog.src.Models;
