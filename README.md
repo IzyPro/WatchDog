@@ -208,3 +208,7 @@ Alternatively, open an issue and we'll get to it as soon as we can.
 Kelechi Onyekwere -  [Github](https://github.com/Khelechy) [Twitter](https://twitter.com/khelechy1337)
 
 Israel Ulelu - [Github](https://github.com/IzyPro) [Twitter](https://twitter.com/IzyPro_)
+
+
+
+### [Official Documentation](https://watchdog-3.gitbook.io/watchdog)
