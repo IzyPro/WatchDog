@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -14,10 +15,9 @@ namespace WatchDog.src.Controllers
     [AllowAnonymous]
     public class WatchPageController : Controller
     {
-        private readonly IMemoryCache _cache;
-        public WatchPageController(IMemoryCache cache)
+        public WatchPageController()
         {
-            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+
         }
 
         [CustomAuthenticationFilter]
@@ -55,7 +55,7 @@ namespace WatchDog.src.Controllers
 
             if (username.ToLower() == WatchDogConfigModel.UserName.ToLower() && password == WatchDogConfigModel.Password)
             {
-                _cache.Set("isAuth", "true", GeneralHelper.cacheEntryOptions);
+                HttpContext.Session.SetString("isAuth", "true");
                 return Json(true);
             }
             else
@@ -66,13 +66,14 @@ namespace WatchDog.src.Controllers
 
         public JsonResult LogOut()
         {
-            _cache.Remove("isAuth");
+            HttpContext.Session.Remove("isAuth");
             return Json(true); 
         }
 
         public JsonResult IsAuth()
         {
-            if (!_cache.TryGetValue("isAuth", out string isAuth))
+            
+            if (!HttpContext.Session.TryGetValue("isAuth", out var isAuth))
             {
                 return Json(false);
             }
