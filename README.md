@@ -43,12 +43,12 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 Install via .NET CLI
 
 ```bash
-dotnet add package WatchDog.NET --version 1.4.6
+dotnet add package WatchDog.NET --version 1.4.7
 ```
 Install via Package Manager
 
 ```bash
-Install-Package WatchDog.NET --version 1.4.6
+Install-Package WatchDog.NET --version 1.4.7
 ```
 
 
