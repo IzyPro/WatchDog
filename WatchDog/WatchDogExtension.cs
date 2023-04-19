@@ -40,6 +40,15 @@ namespace WatchDog
             if (WatchDogDatabaseDriverOption.DatabaseDriverOption != 0 && string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
                 throw new WatchDogDatabaseException("Missing connection string.");
 
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(5);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddSignalR();
             services.AddMvcCore(x =>
             {
@@ -102,6 +111,8 @@ namespace WatchDog
             app.Build();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             if (!string.IsNullOrEmpty(options.CorsPolicy))
                 app.UseCors(options.CorsPolicy);
