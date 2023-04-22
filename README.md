@@ -5,7 +5,7 @@
 [![Version](https://img.shields.io/nuget/vpre/WatchDog.NET?color=orange)](https://www.nuget.org/packages/WatchDog.NET#versions-tab)
 [![Downloads](https://img.shields.io/nuget/dt/WatchDog.NET?color=red)](https://www.nuget.org/packages/WatchDog.NET#versions-tab)
 [![MIT License](https://img.shields.io/github/license/IzyPro/WatchDog?color=Green)](https://github.com/IzyPro/WatchDog/blob/main/LICENSE) 
-[![WatchDog](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2FIzyPro%2FWatchDog)](https://twitter.com/intent/tweet?hashtags=WatchDog&original_referer=https%3A%2F%2Fdeveloper.twitter.com%2F&ref_src=twsrc%5Etfw%7Ctwcamp%5Ebuttonembed%7Ctwterm%5Eshare%7Ctwgr%5E&related=twitterapi%2Ctwitter&text=Hello%2C%20world!%0DCheck%20out%20this%20awesome%20developer%20tool&url=https%3A%2F%2Fgithub.com%2FIzyPro%2FWatchDog&via=WatchDogDotDev)
+[![WatchDog](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2FIzyPro%2FWatchDog)](https://twitter.com/intent/tweet?hashtags=WatchDog&original_referer=https%3A%2F%2Fdeveloper.twitter.com%2F&ref_src=twsrc%5Etfw%7Ctwcamp%5Ebuttonembed%7Ctwterm%5Eshare%7Ctwgr%5E&related=twitterapi%2Ctwitter&text=Hello%2C%20world!%0DCheck%20out%20this%20awesome%20developer%20tool&url=https%3A%2F%2Fgithub.com%2FIzyPro%2FWatchDog&via=HQWatchdog)
 
 ## Introduction
 
@@ -43,12 +43,12 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 Install via .NET CLI
 
 ```bash
-dotnet add package WatchDog.NET --version 1.4.6
+dotnet add package WatchDog.NET --version 1.4.7
 ```
 Install via Package Manager
 
 ```bash
-Install-Package WatchDog.NET --version 1.4.6
+Install-Package WatchDog.NET --version 1.4.7
 ```
 
 
