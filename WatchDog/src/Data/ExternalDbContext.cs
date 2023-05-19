@@ -54,12 +54,12 @@ namespace WatchDog.src.Data
 
         }
 
-        public static void MigrateNoSql()
+        public static void MigrateNoSql(string databaseName)
         {
             try
             {
                 var mongoClient = CreateMongoDBConnection();
-                var database = mongoClient.GetDatabase(Constants.WatchDogDatabaseName);
+                var database = mongoClient.GetDatabase(databaseName);
                 _ = database.GetCollection<WatchLog>(Constants.WatchLogTableName);
                 _ = database.GetCollection<WatchExceptionLog>(Constants.WatchLogExceptionTableName);
                 _ = database.GetCollection<WatchLoggerModel>(Constants.LogsTableName);

@@ -2,7 +2,6 @@
 {
     internal static class Constants
     {
-        public static string WatchDogDatabaseName = string.Empty;
         public const string WatchLogTableName = "WatchDog_WatchLog";
         public const string WatchLogExceptionTableName = "WatchDog_WatchExceptionLog";
         public const string WatchDogMongoCounterTableName = "WatchDog_Counter";
