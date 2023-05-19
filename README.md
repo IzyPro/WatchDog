@@ -26,9 +26,9 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 
 ## What's New
 
-- MongoDB Support
-- ILogger Support (Sink ILogger logs to WatchDog)
-- Trace/Event ID in Logs
+- Security Optimization
+- Query Filters Fixes and Optimizations
+- Package Assembly as DB Name Fix(MongoDB)
 
 ### Breaking Changes
 
@@ -43,12 +43,12 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 Install via .NET CLI
 
 ```bash
-dotnet add package WatchDog.NET --version 1.4.7
+dotnet add package WatchDog.NET --version 1.4.8
 ```
 Install via Package Manager
 
 ```bash
-Install-Package WatchDog.NET --version 1.4.7
+Install-Package WatchDog.NET --version 1.4.8
 ```
 
 

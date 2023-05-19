@@ -28,7 +28,11 @@ namespace WatchDogCompleteTestAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddWatchDogServices();
+            services.AddWatchDogServices(opt =>
+            {
+                opt.DbDriverOption = WatchDogDbDriverEnum.Mongo;
+                opt.SetExternalDbConnString = "mongodb://localhost:27017";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

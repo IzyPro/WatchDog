@@ -14,6 +14,7 @@ using WatchDog.src.Hubs;
 using WatchDog.src.Interfaces;
 using WatchDog.src.Models;
 using WatchDog.src.Services;
+using WatchDog.src.Utilities;
 
 namespace WatchDog
 {
@@ -26,6 +27,7 @@ namespace WatchDog
 
         public static IServiceCollection AddWatchDogServices(this IServiceCollection services, [Optional] Action<WatchDogSettings> configureOptions)
         {
+            Constants.WatchDogDatabaseName = Assembly.GetCallingAssembly().GetName().Name.Replace('.', '_') + "_WatchDogDB";
             var options = new WatchDogSettings();
             if (configureOptions != null)
                 configureOptions(options);
