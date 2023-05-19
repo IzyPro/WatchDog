@@ -49,6 +49,7 @@ Install via Package Manager
 
 ```bash
 Install-Package WatchDog.NET --version 1.4.9
+```
 
 
 

@@ -14,7 +14,6 @@ using WatchDog.src.Hubs;
 using WatchDog.src.Interfaces;
 using WatchDog.src.Models;
 using WatchDog.src.Services;
-using WatchDog.src.Utilities;
 
 namespace WatchDog
 {
