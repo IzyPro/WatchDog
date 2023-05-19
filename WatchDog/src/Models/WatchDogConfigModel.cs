@@ -20,7 +20,7 @@ namespace WatchDog.src.Models
     public static class WatchDogExternalDbConfig
     {
         public static string ConnectionString { get; set; } = string.Empty;
-        public static string MongoDbName { get; set; } = string.Empty;
+        public static string MongoDbName { get; set; } = "WatchDogDb";
     }
 
     public static class WatchDogDatabaseDriverOption
