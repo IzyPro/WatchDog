@@ -9,11 +9,12 @@ namespace WatchDog.src.Helpers
     internal class MongoDBHelper
     {
         public static MongoClient mongoClient = ExternalDbContext.CreateMongoDBConnection();
-        static IMongoDatabase database = mongoClient.GetDatabase(Constants.WatchDogDatabaseName);
+        static IMongoDatabase database = mongoClient.GetDatabase(WatchDogExternalDbConfig.MongoDbName);
         static IMongoCollection<WatchLog> _watchLogs = database.GetCollection<WatchLog>(Constants.WatchLogTableName);
         static IMongoCollection<WatchExceptionLog> _watchExLogs = database.GetCollection<WatchExceptionLog>(Constants.WatchLogExceptionTableName);
         static IMongoCollection<WatchLoggerModel> _logs = database.GetCollection<WatchLoggerModel>(Constants.LogsTableName);
         static IMongoCollection<Sequence> _counter = database.GetCollection<Sequence>(Constants.WatchDogMongoCounterTableName);
+
 
         //WATCH lOGS OPERATION
         public static Page<WatchLog> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber)

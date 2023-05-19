@@ -19,8 +19,10 @@ namespace WatchDog.src.Helpers
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                searchString = searchString.ToLower();
-                query += $"{nameof(WatchLog.Path)} LIKE '%{searchString}%' OR {nameof(WatchLog.Method)} LIKE '%{searchString}%' OR {nameof(WatchLog.ResponseStatus)} LIKE '%{searchString}%' OR {nameof(WatchLog.QueryString)} LIKE '%{searchString}%' " + (string.IsNullOrEmpty(statusCode) || string.IsNullOrEmpty(verbString) ? "" : "AND ");
+                if(GeneralHelper.IsPostgres())
+                    query += $"({nameof(WatchLog.Path)} LIKE '%{searchString}%' OR {nameof(WatchLog.Method)} LIKE '%{searchString}%' OR {nameof(WatchLog.ResponseStatus)}::text LIKE '%{searchString}%' OR {nameof(WatchLog.QueryString)} LIKE '%{searchString}%')" + (string.IsNullOrEmpty(statusCode) && string.IsNullOrEmpty(verbString) ? "" : " AND ");
+                else
+                    query += $"({nameof(WatchLog.Path)} LIKE '%{searchString}%' OR {nameof(WatchLog.Method)} LIKE '%{searchString}%' OR {nameof(WatchLog.ResponseStatus)} LIKE '%{searchString}%' OR {nameof(WatchLog.QueryString)} LIKE '%{searchString}%')" + (string.IsNullOrEmpty(statusCode) && string.IsNullOrEmpty(verbString) ? "" : " AND ");
             }
 
             if (!string.IsNullOrEmpty(verbString))
@@ -30,9 +32,9 @@ namespace WatchDog.src.Helpers
 
             if (!string.IsNullOrEmpty(statusCode))
             {
-                query += $"{nameof(WatchLog.ResponseStatus)} LIKE '%{statusCode}%' ";
+                query += $"{nameof(WatchLog.ResponseStatus)} = {statusCode}";
             }
-            query += $"ORDER BY {nameof(WatchLog.Id)} DESC";
+            query += $" ORDER BY {nameof(WatchLog.Id)} DESC";
             using (var connection = ExternalDbContext.CreateSQLConnection())
             {
                 connection.Open();

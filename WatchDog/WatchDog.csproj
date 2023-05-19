@@ -12,10 +12,10 @@
 		<Authors>Israel Ulelu, Kelechi Onyekwere</Authors>
 		<PackageId>WatchDog.NET</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.4.7</Version>
-		<PackageReleaseNotes>- MongoDB Support, 
-- ILogger Support
-- Trace/Event ID Support</PackageReleaseNotes>
+		<Version>1.4.9</Version>
+		<PackageReleaseNotes>- Security Optimization
+- Query Filters Fixes and Optimizations
+- Package Assembly as DB Name Fix(MongoDB)</PackageReleaseNotes>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>

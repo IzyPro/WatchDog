@@ -26,6 +26,7 @@ namespace WatchDog
 
         public static IServiceCollection AddWatchDogServices(this IServiceCollection services, [Optional] Action<WatchDogSettings> configureOptions)
         {
+            string mongoDbName = Assembly.GetCallingAssembly().GetName().Name.Replace('.', '_') + "_WatchDogDB";
             var options = new WatchDogSettings();
             if (configureOptions != null)
                 configureOptions(options);
@@ -34,6 +35,7 @@ namespace WatchDog
             AutoClearModel.ClearTimeSchedule = options.ClearTimeSchedule;
             WatchDogExternalDbConfig.ConnectionString = options.SetExternalDbConnString;
             WatchDogDatabaseDriverOption.DatabaseDriverOption = options.DbDriverOption;
+            WatchDogExternalDbConfig.MongoDbName = mongoDbName;
 
             if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogDatabaseDriverOption.DatabaseDriverOption == 0)
                 throw new WatchDogDBDriverException("Missing DB Driver Option: DbDriverOption is required at .AddWatchDogServices()");
@@ -62,7 +64,7 @@ namespace WatchDog
             {
                 if (WatchDogDatabaseDriverOption.DatabaseDriverOption == src.Enums.WatchDogDbDriverEnum.Mongo)
                 {
-                    ExternalDbContext.MigrateNoSql();
+                    ExternalDbContext.MigrateNoSql(mongoDbName);
                 }
                 else
                 {
