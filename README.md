@@ -169,7 +169,7 @@ WatchLogger.LogWarning(JsonConvert.Serialize(model));
 WatchLogger.LogError(res.Content, eventId: reference);
 ```
 
-# ![In-code log messages](https://github.com/IzyPro/WatchDog/blob/main/in-code.png)
+# ![In-code log messages](https://github.com/IzyPro/WatchDog/blob/main/static/images/in-code.png)
 
 #### Sink Logs from ILogger
 
