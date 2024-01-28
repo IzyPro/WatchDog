@@ -95,7 +95,7 @@ services.AddWatchDogServices(opt =>
 {
    opt.IsAutoClear = false; 
    opt.SetExternalDbConnString = "Server=localhost;Database=testDb;User Id=postgres;Password=root;"; 
-   opt.DbDriverOption = WatchDogSqlDriverEnum.PostgreSql; 
+   opt.DbDriverOption = WatchDogDbDriverEnum.PostgreSql; 
 });
 ```
 
