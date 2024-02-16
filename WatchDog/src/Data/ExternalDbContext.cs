@@ -1,4 +1,6 @@
 ﻿using Dapper;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using MySql.Data.MySqlClient;
 using Npgsql;
 using System;
@@ -16,15 +18,14 @@ namespace WatchDog.src.Data
     {
         private static string _connectionString = WatchDogExternalDbConfig.ConnectionString;
 
-        public static IDbConnection CreateConnection()
-            => WatchDogSqlDriverOption.SqlDriverOption switch
+        public static IDbConnection CreateSQLConnection()
+            => WatchDogDatabaseDriverOption.DatabaseDriverOption switch
             {
-                WatchDogSqlDriverEnum.MSSQL => CreateMSSQLConnection(),
-                WatchDogSqlDriverEnum.MySql => CreateMySQLConnection(),
-                WatchDogSqlDriverEnum.PostgreSql => CreatePostgresConnection(),
+                WatchDogDbDriverEnum.MSSQL => CreateMSSQLConnection(),
+                WatchDogDbDriverEnum.MySql => CreateMySQLConnection(),
+                WatchDogDbDriverEnum.PostgreSql => CreatePostgresConnection(),
                 _ => throw new NotSupportedException()
             };
-
 
         public static void Migrate() => BootstrapTables();
 
@@ -32,7 +33,7 @@ namespace WatchDog.src.Data
         {
             var createWatchTablesQuery = GetSqlQueryString();
 
-            using (var connection = CreateConnection())
+            using (var connection = CreateSQLConnection())
             {
                 try
                 {
@@ -50,12 +51,49 @@ namespace WatchDog.src.Data
                     throw new WatchDogDatabaseException(ex.Message);
                 }
             }
+
+        }
+
+        public static void MigrateNoSql()
+        {
+            try
+            {
+                var mongoClient = CreateMongoDBConnection();
+                var database = mongoClient.GetDatabase(WatchDogExternalDbConfig.MongoDbName);
+                _ = database.GetCollection<WatchLog>(Constants.WatchLogTableName);
+                _ = database.GetCollection<WatchExceptionLog>(Constants.WatchLogExceptionTableName);
+                _ = database.GetCollection<WatchLoggerModel>(Constants.LogsTableName);
+
+                //Seed counterDb
+                var filter = new BsonDocument("name", Constants.WatchDogMongoCounterTableName);
+
+                // Check if the collection exists
+                var collections = database.ListCollections(new ListCollectionsOptions { Filter = filter });
+
+                bool exists = collections.Any();
+                var _counter = database.GetCollection<Sequence>(Constants.WatchDogMongoCounterTableName);
+
+                if (!exists)
+                {
+                    var sequence = new Sequence
+                    {
+                        _Id = "sequenceId",
+                        Value = 0
+                    };
+                    _counter.InsertOne(sequence);
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message.ToString());
+                throw new WatchDogDatabaseException(ex.Message);
+            }
         }
 
         public static string GetSqlQueryString() =>
-            WatchDogSqlDriverOption.SqlDriverOption switch
+            WatchDogDatabaseDriverOption.DatabaseDriverOption switch
             {
-                WatchDogSqlDriverEnum.MSSQL => @$"
+                WatchDogDbDriverEnum.MSSQL => @$"
                                   IF OBJECT_ID('dbo.{Constants.WatchLogTableName}', 'U') IS NULL CREATE TABLE {Constants.WatchLogTableName} (
                                   id              INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
                                   responseBody    VARCHAR(max),
@@ -86,6 +124,7 @@ namespace WatchDog.src.Data
                              );
                                 IF OBJECT_ID('dbo.{Constants.LogsTableName}', 'U') IS NULL CREATE TABLE {Constants.LogsTableName} (
                                 id            INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                                eventId       VARCHAR(100),
                                 message       VARCHAR(max),
                                 timestamp     VARCHAR(100) NOT NULL,
                                 callingFrom   VARCHAR(100),
@@ -95,12 +134,12 @@ namespace WatchDog.src.Data
                              );
                         ",
 
-                WatchDogSqlDriverEnum.MySql => @$"
+                WatchDogDbDriverEnum.MySql => @$"
                              CREATE TABLE IF NOT EXISTS {Constants.WatchLogTableName} (
                               id              INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                               responseBody    TEXT(65535),
                               responseStatus  INT NOT NULL,
-                              requestBody     VARCHAR(65535),
+                              requestBody     TEXT(65535),
                               queryString     VARCHAR(65535),
                               path            VARCHAR(65535),
                               requestHeaders  TEXT(65535),
@@ -126,6 +165,7 @@ namespace WatchDog.src.Data
                              );
                            CREATE TABLE IF NOT EXISTS {Constants.LogsTableName} (
                                 id            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                eventId       VARCHAR(100),
                                 message       TEXT(65535),
                                 timestamp     VARCHAR(100) NOT NULL,
                                 callingFrom   VARCHAR(100),
@@ -135,7 +175,7 @@ namespace WatchDog.src.Data
                              );
                         ",
 
-                WatchDogSqlDriverEnum.PostgreSql => @$"
+                WatchDogDbDriverEnum.PostgreSql => @$"
                              CREATE TABLE IF NOT EXISTS {Constants.WatchLogTableName} (
                               id              SERIAL PRIMARY KEY,
                               responseBody    VARCHAR,
@@ -166,6 +206,7 @@ namespace WatchDog.src.Data
                              );
                            CREATE TABLE IF NOT EXISTS {Constants.LogsTableName} (
                                 id            SERIAL PRIMARY KEY,
+                                eventId       VARCHAR(100),
                                 message       VARCHAR,
                                 timestamp     TIMESTAMP with time zone NOT NULL,
                                 callingFrom   VARCHAR,
@@ -206,6 +247,18 @@ namespace WatchDog.src.Data
             try
             {
                 return new SqlConnection(_connectionString);
+            }
+            catch (Exception ex)
+            {
+                throw new WatchDogDatabaseException(ex.Message);
+            }
+        }
+
+        public static MongoClient CreateMongoDBConnection()
+        {
+            try
+            {
+                return new MongoClient(_connectionString);
             }
             catch (Exception ex)
             {

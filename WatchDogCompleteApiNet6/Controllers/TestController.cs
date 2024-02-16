@@ -9,12 +9,18 @@ namespace WatchDogCompleteApiNet6.Controllers
     [Route("[controller]")]
     public class TestController : Controller
     {
+        private readonly ILogger _logger;
+        public TestController(ILogger<TestController> logger)
+        {
+            _logger = logger;
+        }
         [HttpGet("testGet")]
         public Product TestGet(string reference)
         {
+            _logger.LogInformation("Omo");
             WatchLogger.Log("...TestGet Started...");
             // Some lines of code
-            WatchLogger.Log("...TestGet Ended...");
+            WatchLogger.Log("...TestGet Ended...", eventId: reference);
             return new Product { Id = 1, Name = "Get Test Product", Description = $"This is the response from testGet - {reference}", IsOnSale = true };
             throw new Exception("O get o, then forget");
 
@@ -56,6 +62,13 @@ namespace WatchDogCompleteApiNet6.Controllers
         {
             WatchLogger.LogError("File Upload Error");
             return $"File with id {model.Id} created successfully"; 
+        }
+
+
+        [HttpGet("simulate400")]
+        public IActionResult Simulate400()
+        {
+            return BadRequest();
         }
     }
 }

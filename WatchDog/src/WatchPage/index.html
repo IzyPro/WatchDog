@@ -4,14 +4,14 @@
     <title>WatchDog</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/x-icon" href="WTCHDGstatics/images/icons/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="./WTCHDGstatics/images/icons/favicon.ico" />
 
-    <script src="WTCHDGstatics/js/jquery-3.2.1.min.js"></script>
-    <script src="WTCHDGstatics/js/popper.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="WTCHDGstatics/css/bootstrap.min.css" />
-    <script src="WTCHDGstatics/js/bootstrap.min.js"></script>
-    <script src="WTCHDGstatics/signalr/signalr.js"></script>
-    <script src="WTCHDGstatics/js/moment.min.js"></script>
+    <script src="./WTCHDGstatics/js/jquery-3.2.1.min.js"></script>
+    <script src="./WTCHDGstatics/js/popper.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./WTCHDGstatics/css/bootstrap.min.css" />
+    <script src="./WTCHDGstatics/js/bootstrap.min.js"></script>
+    <script src="./WTCHDGstatics/signalr/signalr.js"></script>
+    <script src="./WTCHDGstatics/js/moment.min.js"></script>
 
     <style>
         body {
@@ -22,20 +22,18 @@
             background-repeat: no-repeat;
             font-family: 'Avenir Next LT Pro', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-            body[data-theme="dark"] {
-                --logo: url(WTCHDGstatics/images/watchdogLogo.png) no-repeat;
-            }
 
-        .container {
+        body[data-theme="dark"] {
+            --logo: url(./WTCHDGstatics/images/watchdogLogo.png) no-repeat;
         }
 
         fieldset {
             display: none
         }
 
-            fieldset.show {
-                display: block
-            }
+        fieldset.show {
+            display: block
+        }
 
         select:focus,
         input:focus {
@@ -60,10 +58,10 @@
             cursor: pointer
         }
 
-            .tabs:hover,
-            .tabs.active {
-                border-bottom: 1px solid #2196F3
-            }
+        .tabs:hover,
+        .tabs.active {
+            border-bottom: 1px solid #2196F3
+        }
 
         a:hover {
             text-decoration: none;
@@ -109,6 +107,28 @@
         .logo{
             height:35px;
         }
+
+        /*Skeleton Loader*/
+        .skeleton {
+            animation: skeleton-loading 1s linear infinite alternate;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-color: hsl(200, 20%, 80%);
+            }
+
+            100% {
+                background-color: hsl(200, 20%, 95%);
+            }
+        }
+
+        .skeleton-text {
+            width: 100%;
+            height: 3.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.3rem;
+        }
     </style>
 
 
@@ -134,7 +154,7 @@
                 </a>
             </div>
             <div class="row mb-3 mb-3 mt-5 text-left">
-                <img src="WTCHDGstatics/images/watchdogLogo.png" class="logo" alt="Watchdog Logo" />
+                <img src="./WTCHDGstatics/images/watchdogLogo.png" class="logo" alt="Watchdog Logo" />
             </div>
             <div class="text-right">
                 <button data-toggle="modal" data-target="#clearLogsModal" class="btn-sm btn btn-dark m-1 float-right">Clear Logs</button>
@@ -195,6 +215,14 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div id="rqLoader">
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                            </div>
                         </div>
                     </div>
                     <p class="lead text-center text-muted" id="pageMap"></p>
@@ -229,6 +257,14 @@
                                     <tbody id="tableBodyEx">
                                     </tbody>
                                 </table>
+                            </div>
+                            <div id="exLoader">
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
                             </div>
                         </div>
                     </div>
@@ -271,6 +307,14 @@
                                     <tbody id="tableBodyInCode">
                                     </tbody>
                                 </table>
+                            </div>
+                            <div id="incodeLoader">
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text"></div>
                             </div>
                         </div>
                     </div>
@@ -391,6 +435,7 @@
                     </button>
                     <h3 class="lead fa-underline mb-3">In-Code Log</h3>
                     <div class="">
+                        <p style="word-wrap: break-word"><b>Event Id: </b> <span id="incodeEventId"></span></p>
                         <p style="word-wrap: break-word"><b>From File: </b> <span id="incodeFrom"></span></p>
                         <p style="word-wrap: break-word"><b>Method: </b> <span id="incodeMethod"></span></p>
                         <p style="word-wrap: break-word"><b>Line: </b> <span id="incodeLine"></span></p>
@@ -474,37 +519,45 @@
                     }
                 });
             });
+
+            hasAuth().then(
+                (data) => {
+                    if (data === false) {
+                        $('#myLoginModal').modal('show');
+                    }
+                })
         });
 
         var pageIndex = 1;
         var exPageIndex = 1;
         var inCodePageIndex = 1;
         document.getElementById('reqLog').style.textDecoration = "underline";
-        var connection = new signalR.HubConnectionBuilder().withUrl("/wtchdlogger").build();
+        var connection = new signalR.HubConnectionBuilder().withUrl("./wtchdlogger").build();
 
         connection.on("getLogs", function (data) {
-            if (sessionStorage.getItem("loggedIn") !== null && sessionStorage.getItem("loggedIn") === sessionStorage.getItem("newloggedIn")) {
-                if (data.type === "rqLog") {
-                    const firstDigitStr = String(data.log.responseStatus)[0];
-                    var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
-                    const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                        "<td><b>" + data.log.method + "</b></td><td>" + truncate(data.log.path, 50) + "</td><td><b class='" + statusColor + "'> " + data.log.responseStatus + "</b></td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.startTime).format('LLL') + "</td></tr>");
-                    tr.on('click', populateModal.bind(null, data.log));
-                    $('#tableBody').prepend(tr);
-                } else if (data.type === "exLog") {
-                    const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                        "<td><b>" + data.log.source + "</b></td><td>" + truncate(data.log.message, 50) + "</td><td>" + data.log.typeOf + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
-                    tr.on('click', populateExceptionModal.bind(null, data.log));
-                    $('#tableBodyEx').prepend(tr);
-                } else if (data.type === "log") {
-                    const tr = $("<tr data-toggle='modal' data-target='#myInCodeModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                        "<td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + data.log.callingFrom + "\nLine:" + data.log.lineNumber + "</td><td>" + data.log.callingMethod + "</td><td>" + data.log.logLevel  + "</td><td>" + truncate(data.log.message, 50) + "</td></tr > ");
-                    tr.on('click', populateInCodeModal.bind(null, data.log));
-                    $('#tableBodyInCode').prepend(tr);
-                }
-
-            }
-
+            hasAuth().then(
+                (authData) => {
+                    if (authData === true) {
+                        if (data.type === "rqLog") {
+                            const firstDigitStr = String(data.log.responseStatus)[0];
+                            var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
+                            const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                                "<td><b>" + data.log.method + "</b></td><td>" + truncate(data.log.path, 50) + "</td><td><b class='" + statusColor + "'> " + data.log.responseStatus + "</b></td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.startTime).format('LLL') + "</td></tr>");
+                            tr.on('click', populateModal.bind(null, data.log));
+                            $('#tableBody').prepend(tr);
+                        } else if (data.type === "exLog") {
+                            const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                                "<td><b>" + data.log.source + "</b></td><td>" + truncate(data.log.message, 50) + "</td><td>" + data.log.typeOf + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
+                            tr.on('click', populateExceptionModal.bind(null, data.log));
+                            $('#tableBodyEx').prepend(tr);
+                        } else if (data.type === "log") {
+                            const tr = $("<tr data-toggle='modal' data-target='#myInCodeModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
+                                "<td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + (data.log.callingFrom ??= '') + "\nLine:" + data.log.lineNumber + "</td><td>" + (data.log.callingMethod ??= '') + "</td><td>" + data.log.logLevel + "</td><td>" + truncate(data.log.message, 50) + "</td></tr > ");
+                            tr.on('click', populateInCodeModal.bind(null, data.log));
+                            $('#tableBodyInCode').prepend(tr);
+                        }
+                    }
+                })
         });
 
         connection
@@ -548,9 +601,10 @@
         });
 
         function getLogs(searchString = "", verb = "", statusCode = "") {
+            $('#rqLoader').show();
             $.ajax({
                 type: "GET",
-                url: "/WTCHDwatchpage?pageNumber=" + pageIndex + "&searchString=" + searchString + "&verbString=" + verb + "&statusCode=" + statusCode,
+                url: "./WTCHDwatchpage?pageNumber=" + pageIndex + "&searchString=" + searchString + "&verbString=" + verb + "&statusCode=" + statusCode,
                 context: document.body,
                 success: function (data) {
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
@@ -569,31 +623,31 @@
                         $('#prev').show();
                     }
 
-                    if (sessionStorage.getItem("loggedIn") === null) {
-                        $('#myLoginModal').modal('show');
+                    $('#rqLoader').hide();
 
-                    } else {
-                        if (sessionStorage.getItem("loggedIn") !== sessionStorage.getItem("newloggedIn")) {
-                            $('#myLoginModal').modal('show');
-                        } else {
-                            for (var i = 0; i < data.logs.length; i++) {
-                                const firstDigitStr = String(data.logs[i].responseStatus)[0];
-                                var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
-                                const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                                    "<td><b>" + data.logs[i].method + "</b></td><td>" + truncate(data.logs[i].path, 50) + "</td><td><b class='" + statusColor + "'> " + data.logs[i].responseStatus + "</b ></td ><td>" + data.logs[i].timeSpent + "</td><td>" + moment(data.logs[i].startTime).format('LLL') + "</td></tr > ");
-                                tr.on('click', populateModal.bind(null, data.logs[i]));
-                                $('#tableBody').append(tr);
-                            }
-                        }
+                    for (var i = 0; i < data.logs.length; i++) {
+                        const firstDigitStr = String(data.logs[i].responseStatus)[0];
+                        var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
+                        const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
+                            "<td><b>" + data.logs[i].method + "</b></td><td>" + truncate(data.logs[i].path, 50) + "</td><td><b class='" + statusColor + "'> " + data.logs[i].responseStatus + "</b ></td ><td>" + data.logs[i].timeSpent + "</td><td>" + moment(data.logs[i].startTime).format('LLL') + "</td></tr > ");
+                        tr.on('click', populateModal.bind(null, data.logs[i]));
+                        $('#tableBody').append(tr);
                     }
-
+                },
+                error: function (error) {
+                    $('#rqLoader').hide();
+                    if (error.status === 401) {
+                        $('#myLoginModal').modal('show');
+                    }
                 }
             });
         }
+
         function getExceptionLogs(searchString = "") {
+            $('#exLoader').show();
             $.ajax({
                 type: "GET",
-                url: "/WTCHDwatchpage/Exceptions?pageNumber=" + exPageIndex + "&searchString=" + searchString,
+                url: "./WTCHDwatchpage/Exceptions?pageNumber=" + exPageIndex + "&searchString=" + searchString,
                 context: document.body,
                 success: function (data) {
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
@@ -613,19 +667,28 @@
                         $('#exPrev').show();
                     }
 
+                    $('#exLoader').hide();
+
                     for (var i = 0; i < data.logs.length; i++) {
                         const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
                             "<td><b>" + data.logs[i].source + "</b></td><td>" + truncate(data.logs[i].message, 50) + "</td><td>" + data.logs[i].typeOf + "</td><td>" + moment(data.logs[i].encounteredAt).format('LLL') + "</td></tr > ");
                         tr.on('click', populateExceptionModal.bind(null, data.logs[i]));
                         $('#tableBodyEx').append(tr);
                     }
+                },
+                error: function (error) {
+                    $('#exLoader').hide();
+                    if (error.status === 401) {
+                        $('#myLoginModal').modal('show');
+                    }
                 }
             });
         }
         function getInCodeLogs(searchString = "", logLevelString = "") {
+            $('#incodeLoader').show();
             $.ajax({
                 type: "GET",
-                url: "/WTCHDwatchpage/Logs?pageNumber=" + inCodePageIndex + "&searchString=" + searchString + "&logLevelString=" + logLevelString,
+                url: "./WTCHDwatchpage/Logs?pageNumber=" + inCodePageIndex + "&searchString=" + searchString + "&logLevelString=" + logLevelString,
                 context: document.body,
                 success: function (data) {
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
@@ -645,11 +708,19 @@
                         $('#inCodePrev').show();
                     }
 
+                    $('#incodeLoader').hide();
+
                     for (var i = 0; i < data.logs.length; i++) {
                         const tr = $("<tr data-toggle='modal' data-target='#myInCodeModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                            "<td><b>" + moment(data.logs[i].timestamp).format('LLL') + "</b></td><td>" + data.logs[i].callingFrom + "\nLine:" + data.logs[i].lineNumber + "</td><td>" + data.logs[i].callingMethod + "</td><td>" + data.logs[i].logLevel + "</td><td>" + truncate(data.logs[i].message, 50) + "</td></tr > ");
+                            "<td><b>" + moment(data.logs[i].timestamp).format('LLL') + "</b></td><td>" + (data.logs[i].callingFrom ??= '') + "\nLine:" + data.logs[i].lineNumber + "</td><td>" + (data.logs[i].callingMethod ??= '') + "</td><td>" + data.logs[i].logLevel + "</td><td>" + truncate(data.logs[i].message, 50) + "</td></tr > ");
                         tr.on('click', populateInCodeModal.bind(null, data.logs[i]));
                         $('#tableBodyInCode').append(tr);
+                    }
+                },
+                error: function (error) {
+                    $('#incodeLoader').hide();
+                    if (error.status === 401) {
+                        $('#myLoginModal').modal('show');
                     }
                 }
             });
@@ -659,9 +730,14 @@
         function clearLogs() {
             $.ajax({
                 type: "POST",
-                url: "/WTCHDwatchpage/ClearLogs",
+                url: "./WTCHDwatchpage/ClearLogs",
                 success: function (data) {
                     window.location.reload()
+                },
+                error: function (error) {
+                    if (error.status === 401) {
+                        $('#myLoginModal').modal('show');
+                    }
                 }
             });
         }
@@ -767,8 +843,13 @@
         }
 
         function logOut() {
-            sessionStorage.clear();
-            window.location.reload();
+            $.ajax({
+                type: "GET",
+                url: "./WTCHDwatchpage/LogOut",
+                success: function (data) {
+                    window.location.reload()
+                }
+            });
         }
 
         function login() {
@@ -777,19 +858,13 @@
             if (form.checkValidity()) {
                 $.ajax({
                     type: "POST",
-                    url: "/WTCHDwatchpage/Auth",
+                    url: "./WTCHDwatchpage/Auth",
                     data: {
                         username: $("#uname").val(),
                         password: $("#psw").val()
                     },
                     context: document.body,
                     success: function (data) {
-                        if (data === true) {
-                            sessionStorage.setItem("newloggedIn", generateUUID())
-                            sessionStorage.setItem("loggedIn", sessionStorage.getItem("newloggedIn"))
-                        } else {
-                            sessionStorage.setItem("loggedIn", null)
-                        }
 
                         window.location.reload()
                     }
@@ -797,6 +872,23 @@
             }
 
         }
+
+        function hasAuth() {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    type: "GET",
+                    url: "./WTCHDwatchpage/IsAuth",
+                    success: function (data) {
+                        resolve(data) // Resolve promise and when success
+                    },
+                    error: function (err) {
+                        reject(err) // Reject the promise and go to catch()
+                    }
+                });
+            });
+        }
+
+       
 
         function populateModal(data) {
             $('#host').text(data.host);
@@ -871,41 +963,19 @@
         }
 
         function populateInCodeModal(data) {
-            console.log(data);
             $('#incodeFrom').text(data.callingFrom);
             $('#incodeLine').text(data.lineNumber);
             $('#incodeMethod').text(data.callingMethod);
-            $('#incodeTime').text(moment(data.timeStamp).format('LLL'));
+            $('#incodeTime').text(moment(data.timestamp).format('LLL'));
             $('#incodeLogLevel').text(data.logLevel);
             $('#incodeMessage').text(data.message);
+            $('#incodeEventId').text(data.eventId);
 
             if (data.message != null && data.message !== "") {
                 document.getElementById("incodeMessageCopy").style.display = "block";
-                //var element = document.getElementById("incodeMessage");
-                //if (data.message.includes("{")) {
-                //    var obj = JSON.parse(element.innerText);
-                //    element.innerHTML = JSON.stringify(obj, undefined, 2);
-                //}
             } else {
                 document.getElementById("incodeMessageCopy").style.display = "none";
             }
-            
-        }
-
-        function generateUUID() { // Public Domain/MIT
-            var d = new Date().getTime();//Timestamp
-            var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                var r = Math.random() * 16;//random number between 0 and 16
-                if (d > 0) {//Use timestamp until depleted
-                    r = (d + r) % 16 | 0;
-                    d = Math.floor(d / 16);
-                } else {//Use microseconds since page-load if supported
-                    r = (d2 + r) % 16 | 0;
-                    d2 = Math.floor(d2 / 16);
-                }
-                return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-            });
         }
 
         function sleep(time) {

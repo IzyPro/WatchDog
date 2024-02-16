@@ -13,9 +13,13 @@ builder.Services.AddWatchDogServices(opt =>
 {
     opt.IsAutoClear = true;
     opt.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Monthly;
-    opt.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL;
-    opt.SetExternalDbConnString = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=test;";
+    opt.DbDriverOption = WatchDogDbDriverEnum.PostgreSql;
+    opt.SetExternalDbConnString = "Server=lucky.db.elephantsql.com;Database=kfmlwanq;User Id=kfmlwanq;Password=jYpwgweV43BUr51SDcPHWdCfEmhpvQPz;";
+    //opt.SetExternalDbConnString = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=test;";
+    //opt.SetExternalDbConnString = "mongodb://localhost:27017";
 });
+builder.Logging.AddWatchDogLogger();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

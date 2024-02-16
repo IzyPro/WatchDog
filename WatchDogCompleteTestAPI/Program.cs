@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WatchDog;
 
 namespace WatchDogCompleteTestAPI
 {
@@ -18,6 +19,10 @@ namespace WatchDogCompleteTestAPI
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureLogging( logging =>
+                {
+                    logging.AddWatchDogLogger();
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

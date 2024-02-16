@@ -14,17 +14,18 @@ namespace WatchDog.src.Models
         public bool IsAutoClear { get; set; }
         public WatchDogAutoClearScheduleEnum ClearTimeSchedule { get; set; } = WatchDogAutoClearScheduleEnum.Weekly;
         public string SetExternalDbConnString { get; set; } = string.Empty;
-        public WatchDogSqlDriverEnum SqlDriverOption { get; set; }
+        public WatchDogDbDriverEnum DbDriverOption { get; set; }
     }
 
     public static class WatchDogExternalDbConfig
     {
         public static string ConnectionString { get; set; } = string.Empty;
+        public static string MongoDbName { get; set; } = "WatchDogDb";
     }
 
-    public static class WatchDogSqlDriverOption
+    public static class WatchDogDatabaseDriverOption
     {
-        public static WatchDogSqlDriverEnum SqlDriverOption { get; set; }
+        public static WatchDogDbDriverEnum DatabaseDriverOption { get; set; }
     }
 
     public static class AutoClearModel

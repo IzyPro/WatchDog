@@ -10,6 +10,8 @@ namespace WatchDog.src.Helpers
         static ILiteCollection<WatchExceptionLog> _watchExLogs = db.GetCollection<WatchExceptionLog>("WatchExceptionLogs");
         static ILiteCollection<WatchLoggerModel> _logs = db.GetCollection<WatchLoggerModel>("Logs");
 
+
+        //WATCH lOGS OPERATION
         public static Page<WatchLog> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber)
         {
             var query = _watchLogs.Query();
@@ -28,39 +30,11 @@ namespace WatchDog.src.Helpers
             {
                 query.Where(l => l.ResponseStatus.ToString() == statusCode);
             }
-            return query.OrderByDescending(x => x.StartTime).ToPaginatedList(pageNumber);
+            return query.OrderByDescending(x => x.Id).ToPaginatedList(pageNumber);
         }
-
-        public static bool ClearAllLogs()
-        {
-            var watchLogs = ClearWatchLog();
-            var exLogs = ClearWatchExceptionLog();
-            var logs = ClearLogs();
-
-            db.Rebuild();
-
-            return watchLogs > 1 && exLogs > 1 && logs > 1;
-        }
-
-        //WATCH lOGS OPERATION
-        public static WatchLog GetWatchLogById(int id)
-        {
-            return _watchLogs.FindById(id);
-        }
-
         public static int InsertWatchLog(WatchLog log)
         {
             return _watchLogs.Insert(log);
-        }
-
-        public static bool UpdateWatchLog(WatchLog log)
-        {
-            return _watchLogs.Update(log);
-        }
-
-        public static bool DeleteWatchLog(int id)
-        {
-            return _watchLogs.Delete(id);
         }
 
         public static int ClearWatchLog()
@@ -78,27 +52,12 @@ namespace WatchDog.src.Helpers
                 searchString = searchString.ToLower();
                 query.Where(l => l.Message.ToLower().Contains(searchString) || l.StackTrace.ToLower().Contains(searchString) || l.Source.ToLower().Contains(searchString));
             }
-            return query.OrderByDescending(x => x.EncounteredAt).ToPaginatedList(pageNumber);
-        }
-
-        public static WatchExceptionLog GetWatchExceptionLogById(int id)
-        {
-            return _watchExLogs.FindById(id);
+            return query.OrderByDescending(x => x.Id).ToPaginatedList(pageNumber);
         }
 
         public static int InsertWatchExceptionLog(WatchExceptionLog log)
         {
             return _watchExLogs.Insert(log);
-        }
-
-        public static bool UpdateWatchExceptionLog(WatchExceptionLog log)
-        {
-            return _watchExLogs.Update(log);
-        }
-
-        public static bool DeleteWatchExceptionLog(int id)
-        {
-            return _watchExLogs.Delete(id);
         }
         public static int ClearWatchExceptionLog()
         {
@@ -120,13 +79,25 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToLower();
-                query.Where(l => l.Message.ToLower().Contains(searchString) || l.CallingMethod.ToLower().Contains(searchString) || l.CallingFrom.ToLower().Contains(searchString));
+                query.Where(l => l.Message.ToLower().Contains(searchString) || l.CallingMethod.ToLower().Contains(searchString) || l.CallingFrom.ToLower().Contains(searchString) || (!string.IsNullOrEmpty(l.EventId) && l.EventId.ToLower().Contains(searchString)));
             }
             if (!string.IsNullOrEmpty(logLevelString))
             {
                 query.Where(l => l.LogLevel.ToLower() == logLevelString.ToLower());
             }
-            return query.OrderByDescending(x => x.Timestamp).ToPaginatedList(pageNumber);
+            return query.OrderByDescending(x => x.Id).ToPaginatedList(pageNumber);
+        }
+
+        // CLEAR ALL LOGS
+        public static bool ClearAllLogs()
+        {
+            var watchLogs = ClearWatchLog();
+            var exLogs = ClearWatchExceptionLog();
+            var logs = ClearLogs();
+
+            db.Rebuild();
+
+            return watchLogs > 1 && exLogs > 1 && logs > 1;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System;
@@ -32,12 +33,23 @@ namespace WatchDog
             AutoClearModel.IsAutoClear = options.IsAutoClear;
             AutoClearModel.ClearTimeSchedule = options.ClearTimeSchedule;
             WatchDogExternalDbConfig.ConnectionString = options.SetExternalDbConnString;
-            WatchDogSqlDriverOption.SqlDriverOption = options.SqlDriverOption;
+            WatchDogDatabaseDriverOption.DatabaseDriverOption = options.DbDriverOption;
+            WatchDogExternalDbConfig.MongoDbName = Assembly.GetCallingAssembly().GetName().Name?.Replace('.', '_') + "_WatchDogDB";
 
-            if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogSqlDriverOption.SqlDriverOption == 0)
-                throw new WatchDogDBDriverException("Missing DB Driver Option: SQLDriverOption is required at .AddWatchDogServices()");
-            if (WatchDogSqlDriverOption.SqlDriverOption != 0 && string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
+            if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogDatabaseDriverOption.DatabaseDriverOption == 0)
+                throw new WatchDogDBDriverException("Missing DB Driver Option: DbDriverOption is required at .AddWatchDogServices()");
+            if (WatchDogDatabaseDriverOption.DatabaseDriverOption != 0 && string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
                 throw new WatchDogDatabaseException("Missing connection string.");
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(5);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddSignalR();
             services.AddMvcCore(x =>
             {
@@ -45,12 +57,19 @@ namespace WatchDog
             }).AddApplicationPart(typeof(WatchDogExtension).Assembly);
 
             services.AddSingleton<IBroadcastHelper, BroadcastHelper>();
+            services.AddSingleton<IMemoryCache, MemoryCache>();
 
             if (!string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString))
             {
-                ExternalDbContext.Migrate();
+                if (WatchDogDatabaseDriverOption.DatabaseDriverOption == src.Enums.WatchDogDbDriverEnum.Mongo)
+                {
+                    ExternalDbContext.MigrateNoSql();
+                }
+                else
+                {
+                    ExternalDbContext.Migrate();
+                }
             }
-
 
             if (AutoClearModel.IsAutoClear)
                 services.AddHostedService<AutoLogClearerBackgroundService>();
@@ -60,7 +79,6 @@ namespace WatchDog
 
         public static IApplicationBuilder UseWatchDogExceptionLogger(this IApplicationBuilder builder)
         {
-
             return builder.UseMiddleware<src.WatchDogExceptionLogger>();
         }
 
@@ -94,6 +112,8 @@ namespace WatchDog
             app.Build();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             if (!string.IsNullOrEmpty(options.CorsPolicy))
                 app.UseCors(options.CorsPolicy);
