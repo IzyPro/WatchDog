@@ -36,7 +36,11 @@ namespace WatchDog.src
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var requestPath = context.Request.Path.ToString().Remove(0,1);
+            var requestPath = context.Request.Path.ToString();
+
+            if(requestPath.StartsWith('/'))
+                requestPath = requestPath.Remove(0,1);
+
             if (!requestPath.Contains("WTCHDwatchpage") &&
                 !requestPath.Contains("watchdog") &&
                 !requestPath.Contains("WTCHDGstatics") &&

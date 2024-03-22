@@ -25,7 +25,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
+app.UsePathBase("/sub");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -45,7 +45,7 @@ app.UseWatchDog(conf =>
 {
     conf.WatchPageUsername = "admin";
     conf.WatchPagePassword = "Qwerty@123";
-    conf.Blacklist = "/auth";
+    conf.Blacklist = "/auth, user";
 });
 
 app.Run();
