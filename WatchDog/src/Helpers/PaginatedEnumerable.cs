@@ -41,7 +41,7 @@ namespace WatchDog.src.Helpers
         public static Page<T> ToPaginatedList<T>(this ILiteQueryable<T> source, int pageIndex, int pageSize = Constants.PageSize)
         {
             var count = source.LongCount();
-            var items = source.Skip((pageIndex - 1) * pageSize).Limit(pageSize).ToEnumerable();
+            var items = source.Skip((pageIndex - 1) * pageSize).Limit(pageSize).ToList();
             return new Page<T>(items, count, pageIndex, pageSize);
         }
     }

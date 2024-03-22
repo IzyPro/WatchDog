@@ -1,0 +1,6 @@
+@WatchDogCompleteTestApiNet8_HostAddress = http://localhost:5289
+
+GET {{WatchDogCompleteTestApiNet8_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
