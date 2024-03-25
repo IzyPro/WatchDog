@@ -12,6 +12,9 @@ namespace WatchDog.src.Helpers
         // WATCHLOG OPERATIONS
         public static async Task<Page<WatchLog>> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber)
         {
+            searchString = searchString?.ToLower();
+            verbString = verbString?.ToLower();
+
             var query = @$"SELECT * FROM {Constants.WatchLogTableName} ";
 
             if (!string.IsNullOrEmpty(searchString) || !string.IsNullOrEmpty(verbString) || !string.IsNullOrEmpty(statusCode))
@@ -20,14 +23,14 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
             {
                 if(GeneralHelper.IsPostgres())
-                    query += $"({nameof(WatchLog.Path)} LIKE '%{searchString}%' OR {nameof(WatchLog.Method)} LIKE '%{searchString}%' OR {nameof(WatchLog.ResponseStatus)}::text LIKE '%{searchString}%' OR {nameof(WatchLog.QueryString)} LIKE '%{searchString}%')" + (string.IsNullOrEmpty(statusCode) && string.IsNullOrEmpty(verbString) ? "" : " AND ");
+                    query += $"(LOWER( {nameof(WatchLog.Path)} ) LIKE '%{searchString}%' OR LOWER( {nameof(WatchLog.Method)} ) LIKE '%{searchString}%' OR {nameof(WatchLog.ResponseStatus)}::text LIKE '%{searchString}%' OR LOWER( {nameof(WatchLog.QueryString)} ) LIKE '%{searchString}%')" + (string.IsNullOrEmpty(statusCode) && string.IsNullOrEmpty(verbString) ? "" : " AND ");
                 else
-                    query += $"({nameof(WatchLog.Path)} LIKE '%{searchString}%' OR {nameof(WatchLog.Method)} LIKE '%{searchString}%' OR {nameof(WatchLog.ResponseStatus)} LIKE '%{searchString}%' OR {nameof(WatchLog.QueryString)} LIKE '%{searchString}%')" + (string.IsNullOrEmpty(statusCode) && string.IsNullOrEmpty(verbString) ? "" : " AND ");
+                    query += $"(LOWER( {nameof(WatchLog.Path)} ) LIKE '%{searchString}%' OR LOWER( {nameof(WatchLog.Method)} ) LIKE '%{searchString}%' OR {nameof(WatchLog.ResponseStatus)} LIKE '%{searchString}%' OR LOWER( {nameof(WatchLog.QueryString)} ) LIKE '%{searchString}%')" + (string.IsNullOrEmpty(statusCode) && string.IsNullOrEmpty(verbString) ? "" : " AND ");
             }
 
             if (!string.IsNullOrEmpty(verbString))
             {
-                query += $"{nameof(WatchLog.Method)} LIKE '%{verbString}%' " + (string.IsNullOrEmpty(statusCode) ? "" : "AND ");
+                query += $"LOWER( {nameof(WatchLog.Method)} ) LIKE '%{verbString}%' " + (string.IsNullOrEmpty(statusCode) ? "" : "AND ");
             }
 
             if (!string.IsNullOrEmpty(statusCode))
@@ -91,7 +94,7 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToLower();
-                query += $"WHERE {nameof(WatchExceptionLog.Source)} LIKE '%{searchString}%' OR {nameof(WatchExceptionLog.Message)} LIKE '%{searchString}%' OR {nameof(WatchExceptionLog.StackTrace)} LIKE '%{searchString}%' ";
+                query += $"WHERE LOWER ( {nameof(WatchExceptionLog.Source)} ) LIKE '%{searchString}%' OR LOWER ( {nameof(WatchExceptionLog.Message)} ) LIKE '%{searchString}%' OR LOWER( {nameof(WatchExceptionLog.StackTrace)} ) LIKE '%{searchString}%' ";
             }
             query += $"ORDER BY {nameof(WatchExceptionLog.Id)} DESC";
             using (var connection = ExternalDbContext.CreateSQLConnection())
@@ -142,12 +145,13 @@ namespace WatchDog.src.Helpers
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToLower();
-                query += $"{nameof(WatchLoggerModel.CallingFrom)} LIKE '%{searchString}%' OR {nameof(WatchLoggerModel.CallingMethod)} LIKE '%{searchString}%' OR {nameof(WatchLoggerModel.Message)} LIKE '%{searchString}%' OR {nameof(WatchLoggerModel.EventId)} LIKE '%{searchString}%' " + (string.IsNullOrEmpty(logLevelString) ? "" : "AND ");
+                query += $"LOWER( {nameof(WatchLoggerModel.CallingFrom)} ) LIKE '%{searchString}%' OR LOWER( {nameof(WatchLoggerModel.CallingMethod)} ) LIKE '%{searchString}%' OR LOWER ( {nameof(WatchLoggerModel.Message)} ) LIKE '%{searchString}%' OR {nameof(WatchLoggerModel.EventId)} LIKE '%{searchString}%' " + (string.IsNullOrEmpty(logLevelString) ? "" : "AND ");
             }
 
             if (!string.IsNullOrEmpty(logLevelString))
             {
-                query += $"{nameof(WatchLoggerModel.LogLevel)} LIKE '%{logLevelString}%' ";
+                logLevelString = logLevelString?.ToLower();
+                query += $"LOWER( {nameof(WatchLoggerModel.LogLevel)} ) LIKE '%{logLevelString}%' ";
             }
             query += $"ORDER BY {nameof(WatchLoggerModel.Id)} DESC";
 
