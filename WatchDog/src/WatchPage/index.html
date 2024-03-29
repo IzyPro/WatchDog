@@ -544,17 +544,24 @@
                             const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
                                 "<td><b>" + data.log.method + "</b></td><td>" + truncate(data.log.path, 50) + "</td><td><b class='" + statusColor + "'> " + data.log.responseStatus + "</b></td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.startTime).format('LLL') + "</td></tr>");
                             tr.on('click', populateModal.bind(null, data.log));
-                            $('#tableBody').prepend(tr);
+                            if (shouldShowOnFiltered(data.type, data.log)) {
+                                $('#tableBody').prepend(tr);
+                            }
+                            
                         } else if (data.type === "exLog") {
                             const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
                                 "<td><b>" + data.log.source + "</b></td><td>" + truncate(data.log.message, 50) + "</td><td>" + data.log.typeOf + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
                             tr.on('click', populateExceptionModal.bind(null, data.log));
-                            $('#tableBodyEx').prepend(tr);
+                            if (shouldShowOnFiltered(data.type, data.log)) {
+                                $('#tableBodyEx').prepend(tr);
+                            }
                         } else if (data.type === "log") {
                             const tr = $("<tr data-toggle='modal' data-target='#myInCodeModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
                                 "<td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + (data.log.callingFrom ??= '') + "\nLine:" + data.log.lineNumber + "</td><td>" + (data.log.callingMethod ??= '') + "</td><td>" + data.log.logLevel + "</td><td>" + truncate(data.log.message, 50) + "</td></tr > ");
                             tr.on('click', populateInCodeModal.bind(null, data.log));
-                            $('#tableBodyInCode').prepend(tr);
+                            if (shouldShowOnFiltered(data.type, data.log)) {
+                                $('#tableBodyInCode').prepend(tr);
+                            }
                         }
                     }
                 })
@@ -599,6 +606,83 @@
                 filterLogLevel($(this).val());
             }
         });
+
+        function shouldShowOnFiltered(logType, log) {
+            shouldShow = true
+
+            if (logType === "rqLog") {
+                // check if searchString, verb and statusCode has a current value
+
+                searchString = $('#searchString').val()
+                statusCodeString = $('#myStatusCodeDropDown').val()
+                verbString = $('#myVerbDropDown').val()
+
+                if (!searchString && statusCodeString === "ALL" && verbString === "ALL") {
+                    return true;
+                }
+
+                searchString = searchString.toLowerCase();
+
+                if (searchString && (log.path?.toLowerCase().includes(searchString) || log.method?.toLowerCase().includes(searchString) ||
+                    (log.queryString && log.queryString?.toLowerCase().includes(searchString)))) {
+
+                    shouldShow &= true;
+
+                }
+
+                if (verbString !== "ALL") {
+                    if (log.method?.toLowerCase() !== verbString.toLowerCase()) {
+                        shouldShow &= false
+                    }
+                }
+
+                if (statusCodeString !== "ALL") {
+                    if (log.responseStatus != statusCodeString) {
+                        shouldShow &= false
+                    }
+                }
+
+
+            } else if (logType === "exLog") {
+
+               // check if searchString has a current value
+
+                searchString = $('#exSearchString').val()
+
+                if (!searchString) {
+                    return true;
+                }
+
+                searchString = searchString.toLowerCase()
+                if (log.message.toLowerCase().includes(searchString) || log.stackTrace.includes(searchString) || log.source.includes(searchString)) {
+                    return true;
+                }
+
+            } else if (logType === "log") {
+
+                 // check if searchString and logLevelString has a current value
+
+                searchString = $('#inCodeSearchString').val()
+                logLevelString = $('#myLogLevelDropDown').val()
+
+                if (!searchString && logLevelString === "ALL") {
+                    return true;
+                }
+
+                searchString = searchString.toLowerCase();
+                logLevelString = logLevelString.toLowerCase();
+
+                if ((searchString && (log.message.toLowerCase().includes(searchString) || log.callingMethod.toLowerCase().includes(searchString) ||
+                    log.callingFrom.toLowerCase().includes(searchString) ||
+                    (log.eventId && log.eventId.toLowerCase().includes(searchString)))) && (logLevelString !== "ALL" && log.logLevel.toLowerCase() === logLevelString))
+                {
+                    return true;
+                }
+
+            }
+
+            return shouldShow
+        }
 
         function getLogs(searchString = "", verb = "", statusCode = "") {
             $('#rqLoader').show();
@@ -778,7 +862,7 @@
         function filterLogLevel(logLevelString) {
             inCodePageIndex = 1;
             $('#tableBodyInCode').empty();
-            getInCodeLogs($('#searchString').val(), logLevelString);
+            getInCodeLogs($('#inCodeSearchString').val(), logLevelString);
         }
 
         function nextPage() {
