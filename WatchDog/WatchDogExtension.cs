@@ -118,6 +118,11 @@ namespace WatchDog
             if (!string.IsNullOrEmpty(options.CorsPolicy))
                 app.UseCors(options.CorsPolicy);
 
+            #if NET8_0_OR_GREATER
+            if (options.UseOutputCache)
+                app.UseOutputCache();
+            #endif
+
             return app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<LoggerHub>("/wtchdlogger");
@@ -140,7 +145,6 @@ namespace WatchDog
         public static IFileInfo GetFile()
         {
             return Provider.GetFileInfo("src.WatchPage.index.html");
-
         }
 
         public static string GetFolder()

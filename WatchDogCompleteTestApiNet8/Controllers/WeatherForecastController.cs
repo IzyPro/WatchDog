@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using WatchDog;
 
 namespace WatchDogCompleteTestApiNet8.Controllers
@@ -20,6 +21,7 @@ namespace WatchDogCompleteTestApiNet8.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
+        [OutputCache]
         public IEnumerable<WeatherForecast> Get()
         {
             WatchLogger.Log(".....INFO......");
