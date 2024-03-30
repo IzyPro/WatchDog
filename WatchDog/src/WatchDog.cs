@@ -3,6 +3,7 @@ using Microsoft.IO;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WatchDog.src.Enums;
 using WatchDog.src.Helpers;
@@ -46,7 +47,7 @@ namespace WatchDog.src
                 !requestPath.Contains("WTCHDGstatics") &&
                 !requestPath.Contains("favicon") &&
                 !requestPath.Contains("wtchdlogger") &&
-                !WatchDogConfigModel.Blacklist.Contains(requestPath, StringComparer.OrdinalIgnoreCase))
+                !ShouldBlacklist(requestPath))
             {
                 //Request handling comes here
                 var requestLog = await LogRequest(context);
@@ -148,6 +149,20 @@ namespace WatchDog.src
                     context.Response.Body = originalBodyStream;
                 }
             }
+        }
+
+        private bool ShouldBlacklist(string requestPath)
+        {
+            if (_options.UseRegexForBlacklisting)
+            {
+                for (int i = 0; i < WatchDogConfigModel.Blacklist.Length; i++)
+                {
+                    if (Regex.IsMatch(requestPath, WatchDogConfigModel.Blacklist[i], RegexOptions.IgnoreCase))
+                        return true;
+                }
+                return false;
+            }
+            return WatchDogConfigModel.Blacklist.Contains(requestPath, StringComparer.OrdinalIgnoreCase);
         }
     }
 }

@@ -16,6 +16,8 @@ builder.Services.AddWatchDogServices(opt => { opt.IsAutoClear = true; opt.SetExt
 var app = builder.Build();
 
 app.UseWatchDogExceptionLogger();
+app.MapGet("api/user", (HttpResponse response) => "User");
+app.MapGet("api/userRole", (HttpResponse response) => "UserRole");
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -28,7 +30,7 @@ app.UseWatchDog(conf =>
 {
     conf.WatchPageUsername = "admin";
     conf.WatchPagePassword = "Qwerty@123";
-    conf.Blacklist = "/auth, user";
+    conf.Blacklist = "/auth, api/user";
     conf.UseOutputCache = true;
 });
 
