@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+		<TargetFrameworks>netcoreapp3.1;net6.0;net8.0</TargetFrameworks>
 		<Description>WatchDog is a Realtime Message, Event, HTTP (Request &amp; Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view messages, events, http requests made to their web application and also exception caught during runtime in their web applications, all in Realtime. It leverages SignalR for real-time monitoring and LiteDb a Serverless MongoDB-like database with no configuration with the option of using your external databases.</Description>
 		<PackageProjectUrl>https://github.com/IzyPro/WatchDog</PackageProjectUrl>
 		<PackageIcon>favicon.png</PackageIcon>
@@ -12,10 +12,13 @@
 		<Authors>Israel Ulelu, Kelechi Onyekwere</Authors>
 		<PackageId>WatchDog.NET</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.4.10</Version>
-		<PackageReleaseNotes>- Security Optimization
-- Query Filters Fixes and Optimizations
-- Package Assembly as DB Name Fix(MongoDB)</PackageReleaseNotes>
+		<Version>1.4.11</Version>
+		<PackageReleaseNotes>
+			- Official support for .NET8
+			- Support for .NET8 UseOutputCache
+			- Blacklisting using Regex
+			- Bug Fixes
+		</PackageReleaseNotes>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -53,6 +56,7 @@
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="3.1.22" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.22" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="3.1.22" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" Condition="'$(TargetFramework)' == 'net8.0'" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.22" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.0" />
 		<PackageReference Include="MongoDB.Driver" Version="2.18.0" />
@@ -60,6 +64,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Npgsql" Version="[5.0.0,5.0.10]" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
 		<PackageReference Include="Npgsql" Version="6.0.4" Condition="'$(TargetFramework)' == 'net6.0'" />
+		<PackageReference Include="Npgsql" Version="8.0.2" Condition="'$(TargetFramework)' == 'net8.0'" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
 	</ItemGroup>
 

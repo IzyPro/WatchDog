@@ -3,6 +3,7 @@ using Microsoft.IO;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WatchDog.src.Enums;
 using WatchDog.src.Helpers;
@@ -36,13 +37,17 @@ namespace WatchDog.src
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var requestPath = context.Request.Path.ToString().Remove(0,1);
+            var requestPath = context.Request.Path.ToString();
+
+            if(requestPath.StartsWith('/'))
+                requestPath = requestPath.Remove(0,1);
+
             if (!requestPath.Contains("WTCHDwatchpage") &&
                 !requestPath.Contains("watchdog") &&
                 !requestPath.Contains("WTCHDGstatics") &&
                 !requestPath.Contains("favicon") &&
                 !requestPath.Contains("wtchdlogger") &&
-                !WatchDogConfigModel.Blacklist.Contains(requestPath, StringComparer.OrdinalIgnoreCase))
+                !ShouldBlacklist(requestPath))
             {
                 //Request handling comes here
                 var requestLog = await LogRequest(context);
@@ -144,6 +149,20 @@ namespace WatchDog.src
                     context.Response.Body = originalBodyStream;
                 }
             }
+        }
+
+        private bool ShouldBlacklist(string requestPath)
+        {
+            if (_options.UseRegexForBlacklisting)
+            {
+                for (int i = 0; i < WatchDogConfigModel.Blacklist.Length; i++)
+                {
+                    if (Regex.IsMatch(requestPath, WatchDogConfigModel.Blacklist[i], RegexOptions.IgnoreCase))
+                        return true;
+                }
+                return false;
+            }
+            return WatchDogConfigModel.Blacklist.Contains(requestPath, StringComparer.OrdinalIgnoreCase);
         }
     }
 }

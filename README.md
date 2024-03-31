@@ -26,13 +26,14 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 
 ## What's New
 
-- Security Optimization
-- Query Filters Fixes and Optimizations
-- Package Assembly as DB Name Fix(MongoDB)
+- Official support for .NET8
+- Support for .NET8 UseOutputCache
+- Blacklisting using Regex
+- Bug Fixes
 
 ### Breaking Changes
 
-- SqlDriverOption is now DbDriverOption (>= 1.4.0)
+- SqlDriverOption is now DbDriverOption (>= v1.4.0)
 
 
 ## Support
@@ -43,12 +44,12 @@ It leverages `SignalR` for real-time monitoring and `LiteDb` a Serverless MongoD
 Install via .NET CLI
 
 ```bash
-dotnet add package WatchDog.NET --version 1.4.10
+dotnet add package WatchDog.NET --version 1.4.11
 ```
 Install via Package Manager
 
 ```bash
-Install-Package WatchDog.NET --version 1.4.10
+Install-Package WatchDog.NET --version 1.4.11
 ```
 
 
@@ -93,9 +94,9 @@ Add Database Connection String and Choose DbDriver Option
 ```c#
 services.AddWatchDogServices(opt => 
 {
-   opt.IsAutoClear = false; 
+   opt.IsAutoClear = true; 
    opt.SetExternalDbConnString = "Server=localhost;Database=testDb;User Id=postgres;Password=root;"; 
-   opt.DbDriverOption = WatchDogSqlDriverEnum.PostgreSql; 
+   opt.DbDriverOption = WatchDogDbDriverEnum.PostgreSql; 
 });
 ```
 
@@ -127,8 +128,10 @@ app.UseWatchDog(opt =>
 
 #### Optional Configurations: `Optional`
 - Blacklist: List of routes, paths or endpoints to be ignored (should be a comma separated string like below).
-- Serializer: If not default, specify the type of global json serializer/converter used
-- CorsPolicy: Policy Name if project uses CORS
+- Serializer: If not default, specify the type of global json serializer/converter used.
+- CorsPolicy: Policy Name if project uses CORS.
+- UseOutputCache: If your application uses [ASP.NET Output Cache](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output). This feature is only available for .NET8 and above.
+- UseRegexForBlacklisting: Enables the use of Regex to blacklist request routes, paths or endpoints.
 
 ```c#
 app.UseWatchDog(opt => 
@@ -138,7 +141,9 @@ app.UseWatchDog(opt =>
    //Optional
    opt.Blacklist = "Test/testPost, api/auth/login"; //Prevent logging for specified endpoints
    opt.Serializer = WatchDogSerializerEnum.Newtonsoft; //If your project use a global json converter
-   opt.CorsPolicy = "MyCorsPolicy"
+   opt.CorsPolicy = "MyCorsPolicy";
+   opt.UseOutputCache = true;
+   opt.UseRegexForBlacklisting = true;
  });
 ```
 
@@ -210,5 +215,5 @@ Kelechi Onyekwere -  [Github](https://github.com/Khelechy) [Twitter](https://twi
 Israel Ulelu - [Github](https://github.com/IzyPro) [Twitter](https://twitter.com/IzyPro_)
 
 
-
+<!--
 ### [Official Documentation](https://watchdog-3.gitbook.io/watchdog)
