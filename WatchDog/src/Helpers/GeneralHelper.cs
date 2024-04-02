@@ -34,6 +34,11 @@ namespace WatchDog.src.Helpers
             return !string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogDatabaseDriverOption.DatabaseDriverOption == Enums.WatchDogDbDriverEnum.PostgreSql;
         }
 
+        public static bool IsMySql()
+        {
+            return !string.IsNullOrEmpty(WatchDogExternalDbConfig.ConnectionString) && WatchDogDatabaseDriverOption.DatabaseDriverOption == Enums.WatchDogDbDriverEnum.MySql;
+        }
+
         public static dynamic CamelCaseSerializer
             => WatchDog.Serializer switch
             {

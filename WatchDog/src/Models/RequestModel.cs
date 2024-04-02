@@ -12,5 +12,7 @@ namespace WatchDog.src.Models
         public string? Host { get; set; }
         public string? IpAddress { get; set; }
         public DateTime StartTime { get; set; }
+        public string? Tag { get; set; }
+        public string? EventId { get; set; }
     }
 }

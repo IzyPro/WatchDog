@@ -44,5 +44,11 @@ namespace WatchDog.src.Helpers
             var items = source.Skip((pageIndex - 1) * pageSize).Limit(pageSize).ToEnumerable();
             return new Page<T>(items, count, pageIndex, pageSize);
         }
+
+        public static Page<T> ToPaginatedList<T>(this IEnumerable<T> source, int pageIndex, int count, int pageSize = Constants.PageSize)
+        {
+            var items = source;
+            return new Page<T>(items, count, pageIndex, pageSize);
+        }
     }
 }

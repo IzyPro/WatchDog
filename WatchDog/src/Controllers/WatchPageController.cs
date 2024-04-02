@@ -21,23 +21,24 @@ namespace WatchDog.src.Controllers
         }
 
         [CustomAuthenticationFilter]
-        public async Task<JsonResult> Index(string searchString = "", string verbString = "", string statusCode = "", int pageNumber = 1)
+        public async Task<JsonResult> Index(string searchString = "", string verbString = "", string statusCode = "", int pageNumber = 1, string tag = "", string eventId = "", 
+            string ipAddress = "", DateTime? initialTimeStamp = null, DateTime? finalTimeStamp = null)
         {
-            var result = await DynamicDBManager.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber);
+            var result = await DynamicDBManager.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber, tag, eventId, ipAddress, initialTimeStamp, finalTimeStamp);
             return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result.Data }, GeneralHelper.CamelCaseSerializer);
         }
 
         [CustomAuthenticationFilter]
-        public async Task<JsonResult> Exceptions(string searchString = "", int pageNumber = 1)
+        public async Task<JsonResult> Exceptions(string searchString = "", int pageNumber = 1, bool negateTypeOf = false, string typeOf = "", string tag = "", string eventId = "", string ipAddress = "", DateTime? initialEncounteredAt = null, DateTime? finalEncounteredAt = null)
         {
-            var result = await DynamicDBManager.GetAllWatchExceptionLogs(searchString, pageNumber);
+            var result = await DynamicDBManager.GetAllWatchExceptionLogs(searchString, pageNumber, negateTypeOf, typeOf, tag, eventId, ipAddress, initialEncounteredAt, finalEncounteredAt);
             return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result.Data }, GeneralHelper.CamelCaseSerializer);
         }
 
         [CustomAuthenticationFilter]
-        public async Task<JsonResult> Logs(string searchString = "", string logLevelString = "", int pageNumber = 1)
+        public async Task<JsonResult> Logs(string searchString = "", string logLevelString = "", int pageNumber = 1, string tag = "", DateTime? initialEncounteredAt = null, DateTime? finalEncounteredAt = null)
         {
-            var result = await DynamicDBManager.GetAllLogs(searchString, logLevelString, pageNumber);
+            var result = await DynamicDBManager.GetAllLogs(searchString, logLevelString, pageNumber, tag, initialEncounteredAt, finalEncounteredAt);
             return Json(new { PageIndex = result.PageIndex, TotalPages = result.TotalPages, HasNext = result.HasNextPage, HasPrevious = result.HasPreviousPage, logs = result.Data }, GeneralHelper.CamelCaseSerializer);
         }
 

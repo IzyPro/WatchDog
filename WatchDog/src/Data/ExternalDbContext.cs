@@ -89,7 +89,10 @@ namespace WatchDog.src.Data
                 throw new WatchDogDatabaseException(ex.Message);
             }
         }
-
+        
+        // When there are more than 20 million records the creation date is necessary to find records within a time range in an optimal way 
+        //  and it is also necessary in the SQL database to debug keeping a history instead of using truncate.
+        // WatchLogExceptionTableName.timeSpent - This information is important for timeout type exceptions.
         public static string GetSqlQueryString() =>
             WatchDogDatabaseDriverOption.DatabaseDriverOption switch
             {
@@ -108,7 +111,10 @@ namespace WatchDog.src.Data
                                   ipAddress       VARCHAR(30),
                                   timeSpent       VARCHAR(100),
                                   startTime       VARCHAR(100) NOT NULL,
-                                  endTime         VARCHAR(100) NOT NULL
+                                  endTime         VARCHAR(100) NOT NULL,
+                                  tag             VARCHAR(100),
+                                  eventId         VARCHAR(36),
+                                  creation_date    DATETIME DEFAULT GETDATE()
                             );
                                 IF OBJECT_ID('dbo.{Constants.WatchLogExceptionTableName}', 'U') IS NULL CREATE TABLE {Constants.WatchLogExceptionTableName} (
                                 id            INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -120,7 +126,13 @@ namespace WatchDog.src.Data
                                 method        VARCHAR(30),
                                 queryString   VARCHAR(max),
                                 requestBody   VARCHAR(max),
-                                encounteredAt VARCHAR(100) NOT NULL
+                                encounteredAt VARCHAR(100) NOT NULL,
+                                host          VARCHAR(max),
+                                ipAddress     VARCHAR(30),
+                                timeSpent     VARCHAR(100),
+                                tag           VARCHAR(100),
+                                eventId       VARCHAR(36),
+                                creation_date    DATETIME DEFAULT GETDATE()
                              );
                                 IF OBJECT_ID('dbo.{Constants.LogsTableName}', 'U') IS NULL CREATE TABLE {Constants.LogsTableName} (
                                 id            INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -130,7 +142,9 @@ namespace WatchDog.src.Data
                                 callingFrom   VARCHAR(100),
                                 callingMethod VARCHAR(100),
                                 lineNumber    INT,
-                                logLevel      VARCHAR(30)
+                                logLevel      VARCHAR(30),
+                                tag           VARCHAR(100),
+                                creation_date    DATETIME DEFAULT GETDATE()
                              );
                         ",
 
@@ -149,7 +163,10 @@ namespace WatchDog.src.Data
                               ipAddress       VARCHAR(30),
                               timeSpent       VARCHAR(100),
                               startTime       VARCHAR(100) NOT NULL,
-                              endTime         VARCHAR(100) NOT NULL
+                              endTime         VARCHAR(100) NOT NULL,
+                              tag             VARCHAR(100),
+                              eventId         VARCHAR(36),
+                              creation_date    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                             );
                            CREATE TABLE IF NOT EXISTS {Constants.WatchLogExceptionTableName} (
                                 id            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -162,6 +179,12 @@ namespace WatchDog.src.Data
                                 queryString   VARCHAR(65535),
                                 requestBody   TEXT(65535),
                                 encounteredAt VARCHAR(100) NOT NULL
+                                host          VARCHAR(65535),
+                                ipAddress     VARCHAR(30),
+                                timeSpent     VARCHAR(100),
+                                tag           VARCHAR(100),
+                                eventId       VARCHAR(36),
+                                creation_date    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                              );
                            CREATE TABLE IF NOT EXISTS {Constants.LogsTableName} (
                                 id            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -171,7 +194,9 @@ namespace WatchDog.src.Data
                                 callingFrom   VARCHAR(100),
                                 callingMethod VARCHAR(100),
                                 lineNumber    INT,
-                                logLevel      VARCHAR(30)
+                                logLevel      VARCHAR(30),
+                                tag           VARCHAR(100),
+                                creation_date    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                              );
                         ",
 
@@ -190,7 +215,9 @@ namespace WatchDog.src.Data
                               ipAddress       VARCHAR(30),
                               timeSpent       VARCHAR,
                               startTime       TIMESTAMP with time zone NOT NULL,
-                              endTime         TIMESTAMP with time zone NOT NULL
+                              endTime         TIMESTAMP with time zone NOT NULL,
+                              tag             VARCHAR,
+                              eventId         VARCHAR(36)
                             );
                            CREATE TABLE IF NOT EXISTS {Constants.WatchLogExceptionTableName} (
                                 id            SERIAL PRIMARY KEY,
@@ -202,7 +229,12 @@ namespace WatchDog.src.Data
                                 method        VARCHAR(30),
                                 queryString   VARCHAR,
                                 requestBody   VARCHAR,
-                                encounteredAt TIMESTAMP with time zone NOT NULL
+                                encounteredAt TIMESTAMP with time zone NOT NULL,
+                                host          VARCHAR,
+                                ipAddress     VARCHAR(30),
+                                timeSpent     VARCHAR,
+                                tag           VARCHAR,
+                                eventId       VARCHAR(36)
                              );
                            CREATE TABLE IF NOT EXISTS {Constants.LogsTableName} (
                                 id            SERIAL PRIMARY KEY,
@@ -212,7 +244,8 @@ namespace WatchDog.src.Data
                                 callingFrom   VARCHAR,
                                 callingMethod VARCHAR(100),
                                 lineNumber    INTEGER,
-                                logLevel      VARCHAR(30)
+                                logLevel      VARCHAR(30),
+                                tag           VARCHAR
                              );
                         ",
                 _ => ""

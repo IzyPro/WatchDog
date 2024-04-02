@@ -18,5 +18,7 @@ namespace WatchDog.src.Models
         public string TimeSpent { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        public string Tag { get; set; } = string.Empty;
+        public string EventId { get; set; } = string.Empty;
     }
 }

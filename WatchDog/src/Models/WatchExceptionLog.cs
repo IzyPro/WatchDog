@@ -14,5 +14,10 @@ namespace WatchDog.src.Models
         public string QueryString { get; set; }
         public string RequestBody { get; set; }
         public DateTime EncounteredAt { get; set; }
+        public string Host { get; set; } = string.Empty;
+        public string IpAddress { get; set; } = string.Empty; 
+        public string TimeSpent { get; set; }
+        public string Tag { get; set; } = string.Empty;
+        public string EventId { get; set; } = string.Empty;
     }
 }

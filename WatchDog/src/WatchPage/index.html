@@ -164,7 +164,7 @@
 
             <div class="tab-content">
                 <div id="requestTab" class="tab-pane fade in active show">
-                    <div class="mb-5 row">
+                    <div class="mb-1 row">
                         <select id="myVerbDropDown" class="form-control col-md-1 m-1" aria-label="Default select HTTP Verb">
                             <option selected>ALL</option>
                             <option value="POST">POST</option>
@@ -187,6 +187,7 @@
                             <option value="410">410</option>
                             <option value="415">415</option>
                             <option value="500">500</option>
+                            <option value="502">502</option>
                             <option value="503">503</option>
                         </select>
                         <input type="text" name="search" class="form-control col-md-2 m-1" id="searchString" />
@@ -194,16 +195,38 @@
                         <a href="#" onclick="backToList(event)" class="m-1 mx-auto text-right col-md-6">Back to Full List</a>
                         <hr />
 
-                    </div>
+                        <input type="text" name="txtTag" class="form-control col-md-3 m-1" id="searchTag" placeholder="Tag" />
+                        <input type="text" name="txtEventId" class="form-control col-md-4 m-1" id="searchEventId" placeholder="Event Id" />
+                        <input type="text" name="txtIpAddress" class="form-control col-md-2 m-1" id="searchIpAddress" placeholder="IP Address" />                                       
+                    </div>      
+                    
+                    <div class="mb-3 row">
+                        <label for="searchInitialTimeStamp">Time Stamp</label>
+                        <input type="datetime-local" name="txtInitialTimeStamp" class="form-control col-md-3 m-1" id="searchInitialTimeStamp" />
+                        <input type="datetime-local" name="txtFinalTimeStamp" class="form-control col-md-3 m-1" id="searchFinalTimeStamp" /> 
+                    </div> 
+
                     <div class="my-auto mb-5">
                         <b>Realtime Connection: <span id="dot" name="dot" class="dot" style="background-color: dodgerblue"></span></b>
                     </div>
+
+                    <div class="mb-5">
+                        <button id="prev0" class="text-left mr-5 btn-sm btn btn-dark float-left" onclick="prevPage()">Previous</button>
+                        <button id="next0" class="text-right ml-5 btn-sm btn btn-dark float-right" onclick="nextPage()">Next</button>
+                    </div>
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <label class="lead text-center text-muted">Page </label>
+                        <input type="number" id="pageMap0" min="1" onkeyup="if(event.keyCode == 13) goToPage(this.value)" class="text-center" style="width: 100px;">
+                        <label class="lead text-center text-muted" id="totalPages0"> of 0</label>
+                    </div>
+
                     <div class="mt-3 row">
                         <div class="col-md-12">
                             <div class="table">
                                 <table class="table table-hover table-responsive-lg table-lg shadow p-3 mb-5 bg-light rounded">
                                     <thead class="thead-light">
                                         <tr>
+                                            <th scope="col">Tag</th>
                                             <th scope="col">Method</th>
                                             <th scope="col">Path</th>
                                             <th scope="col">Status Code</th>
@@ -232,25 +255,52 @@
                     </div>
                 </div>
                 <div id="exceptionTab" class="tab-pane fade">
-                    <div class="mb-5 row">
+                    
+                    <div class="mb-1 row">
+                        <input type="checkbox" id="exNegateTypeOf"/>
+                        <label class="m-1" for="exNegateTypeOf">!</label>     
+                        <input type="text" name="txtTypeOf" class="form-control col-md-2 m-1" id="exSearchTypeOf" placeholder="TypeOf" />                        
                         <input type="text" name="search" class="form-control col-md-2 m-1" id="exSearchString" />
                         <button onclick="exSearch()" class="btn-sm btn btn-dark m-1">Search</button>
-                        <a href="#" onclick="backToList(event)" class="m-1 mx-auto text-right col-md-8">Back to Full List</a>
-                        <hr />
+                        <a href="#" onclick="backToList(event)" class="m-1 mx-auto text-right col-md-6">Back to Full List</a>
+                        <hr />  
+                        <input type="text" name="txtTag" class="form-control col-md-3 m-1" id="exSearchTag" placeholder="Tag" />
+                        <input type="text" name="txtEventId" class="form-control col-md-4 m-1" id="exSearchEventId" placeholder="Event Id" />
+                        <input type="text" name="txtIpAddress" class="form-control col-md-2 m-1" id="exSearchIpAddress" placeholder="IP Address" />                                               
+                    </div>                
+                    
+                    <div class="mb-3 row">
+                        <label for="exInitialEncounteredAt">Encountered At</label>
+                        <input type="datetime-local" name="txtInitialEncounteredAt" class="form-control col-md-3 m-1" id="exInitialEncounteredAt" />
+                        <input type="datetime-local" name="txtFinalEncounteredAt" class="form-control col-md-3 m-1" id="exFinalEncounteredAt" /> 
+                    </div> 
 
-                    </div>
                     <div class="my-auto mb-5">
                         <b>Realtime Connection: <span id="dot" name="dot" class="dot" style="background-color: dodgerblue"></span></b>
                     </div>
+                    
+                    <div class="mb-5">
+                        <button id="exPrev0" class="text-left mr-5 btn-sm btn btn-dark float-left" onclick="exPrevPage(event)">Previous</button>
+                        <button id="exNext0" class="text-right ml-5 btn-sm btn btn-dark float-right" onclick="exNextPage(event)">Next</button>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <label class="lead text-center text-muted">Page </label>
+                        <input type="number" id="exPageMap0" min="1" onkeyup="if(event.keyCode == 13) exGoToPage(this.value)" class="text-center" style="width: 100px;">
+                        <label class="lead text-center text-muted" id="exTotalPages0"> of 0</label>
+                    </div>
+                    
                     <div class="mt-3 row">
                         <div class="col-md-12">
                             <div class="table">
                                 <table class="table table-hover table-responsive-lg table-lg shadow p-3 mb-5 bg-light rounded">
                                     <thead class="thead-light">
                                         <tr>
+                                            <th scope="col">Tag</th>
                                             <th scope="col">Source</th>
                                             <th scope="col">Message</th>
                                             <th scope="col">TypeOf</th>
+                                            <th scope="col">Time Spent</th>
                                             <th scope="col">Encountered At</th>
                                         </tr>
                                     </thead>
@@ -272,10 +322,10 @@
                     <div class="mb-5">
                         <button id="exPrev" class="text-left mr-5 btn-sm btn btn-dark float-left" onclick="exPrevPage(event)">Previous</button>
                         <button id="exNext" class="text-right ml-5 btn-sm btn btn-dark float-right" onclick="exNextPage(event)">Next</button>
-                    </div>
+                    </div>                                   
                 </div>
                 <div id="incodeTab" class="tab-pane fade">
-                    <div class="mb-5 row">
+                    <div class="mb-1 row">
                         <select id="myLogLevelDropDown" class="form-control col-md-2 m-1" aria-label="Default select Log Level">
                             <option selected>ALL</option>
                             <option value="Info">Info</option>
@@ -286,17 +336,37 @@
                         <button onclick="inCodeSearch()" class="btn-sm btn btn-dark m-1">Search</button>
                         <a href="#" onclick="backToList(event)" class="m-1 mx-auto text-right col-md-6">Back to Full List</a>
                         <hr />
-
+                        <input type="text" name="txtTag" class="form-control col-md-3 m-1" id="inCodeSearchTag" placeholder="Tag" />
                     </div>
+                   
+                    <div class="mb-3 row">
+                        <label for="inCodeInitialEncounteredAt">Encountered At</label>
+                        <input type="datetime-local" name="txtInitialEncounteredAt" class="form-control col-md-3 m-1" id="inCodeInitialEncounteredAt" />
+                        <input type="datetime-local" name="txtFinalEncounteredAt" class="form-control col-md-3 m-1" id="inCodeFinalEncounteredAt" /> 
+                    </div> 
+                   
                     <div class="my-auto mb-5">
                         <b>Realtime Connection: <span id="dot" name="dot" class="dot" style="background-color: dodgerblue"></span></b>
                     </div>
+
+                    <div class="mb-5">
+                        <button id="inCodePrev0" class="text-left mr-5 btn-sm btn btn-dark float-left" onclick="inCodePrevPage(event)">Previous</button>
+                        <button id="inCodeNext0" class="text-right ml-5 btn-sm btn btn-dark float-right" onclick="inCodeNextPage(event)">Next</button>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <label class="lead text-center text-muted">Page </label>
+                        <input type="number" id="inCodePageMap0" min="1" onkeyup="if(event.keyCode == 13) inCodeGoToPage(this.value)" class="text-center" style="width: 100px;">
+                        <label class="lead text-center text-muted" id="inCodeTotalPages0"> of 0</label>
+                    </div> 
+                    
                     <div class="mt-3 row">
                         <div class="col-md-12">
                             <div class="table table-responsive">
                                 <table class="table table-hover table-lg shadow p-3 mb-5 bg-light rounded">
                                     <thead class="thead-light">
                                         <tr>
+                                            <th scope="col">Tag</th>
                                             <th scope="col">Encountered At</th>
                                             <th scope="col">Origin</th>
                                             <th scope="col">Method</th>
@@ -337,6 +407,7 @@
                     <h3 class="lead fa-underline">WatchLog</h3>
                     <div class="row">
                         <div class="col-md-12 m">
+                            <p><b>Event Id: </b> <span id="eventId"></span></p>
                             <p><b>Host: </b> <span id="host"></span></p>
                             <p style="word-wrap: break-word;"><b>Path: </b> <span id="path"></span></p>
                             <p style="word-wrap: break-word;"><b>Query: </b> <span id="query"></span></p>
@@ -403,6 +474,9 @@
                     </button>
                     <h3 class="lead fa-underline">WatchLog Exceptions</h3>
                     <div class="">
+                        <p style="word-wrap: break-word"><b>Event Id: </b> <span id="exceptionEventId"></span></p>
+                        <p style="word-wrap: break-word"><b>Host: </b> <span id="exceptionHost"></span></p>
+                        <p style="word-wrap: break-word"><b>Ip Address: </b> <span id="exceptionIp"></span></p>
                         <p style="word-wrap: break-word"><b>Message: </b> <span id="exMessage"></span></p>
                         <p style="word-wrap: break-word"><b>TypeOf: </b> <span id="exTypeOf"></span></p>
                         <p style="word-wrap: break-word"><b>Source: </b> <span id="exSource"></span></p>
@@ -542,17 +616,17 @@
                             const firstDigitStr = String(data.log.responseStatus)[0];
                             var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
                             const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                                "<td><b>" + data.log.method + "</b></td><td>" + truncate(data.log.path, 50) + "</td><td><b class='" + statusColor + "'> " + data.log.responseStatus + "</b></td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.startTime).format('LLL') + "</td></tr>");
+                                "<td><b>" + data.log.tag + "</b></td><td><b>" + data.log.method + "</b></td><td>" + truncate(data.log.path, 50) + "</td><td><b class='" + statusColor + "'> " + data.log.responseStatus + "</b></td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.startTime).format('LLL') + "</td></tr>");
                             tr.on('click', populateModal.bind(null, data.log));
                             $('#tableBody').prepend(tr);
                         } else if (data.type === "exLog") {
                             const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                                "<td><b>" + data.log.source + "</b></td><td>" + truncate(data.log.message, 50) + "</td><td>" + data.log.typeOf + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
+                                "<td><b>" + data.log.tag + "</b></td><td><b>" + data.log.source + "</b></td><td>" + truncate(data.log.message, 50) + "</td><td>" + data.log.typeOf + "</td><td>" + data.log.timeSpent + "</td><td>" + moment(data.log.encounteredAt).format('LLL') + "</td></tr > ");
                             tr.on('click', populateExceptionModal.bind(null, data.log));
                             $('#tableBodyEx').prepend(tr);
                         } else if (data.type === "log") {
                             const tr = $("<tr data-toggle='modal' data-target='#myInCodeModal' aria-expanded='false' aria-controls='collapse' class='collapsed'>" +
-                                "<td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + (data.log.callingFrom ??= '') + "\nLine:" + data.log.lineNumber + "</td><td>" + (data.log.callingMethod ??= '') + "</td><td>" + data.log.logLevel + "</td><td>" + truncate(data.log.message, 50) + "</td></tr > ");
+                                "<td><b>" + data.log.tag + "</b></td><td><b>" + moment(data.log.timestamp).format('LLL') + "</b></td><td>" + (data.log.callingFrom ??= '') + "\nLine:" + data.log.lineNumber + "</td><td>" + (data.log.callingMethod ??= '') + "</td><td>" + data.log.logLevel + "</td><td>" + truncate(data.log.message, 50) + "</td></tr > ");
                             tr.on('click', populateInCodeModal.bind(null, data.log));
                             $('#tableBodyInCode').prepend(tr);
                         }
@@ -577,7 +651,8 @@
         $("#myVerbDropDown").change(function (event) {
             $('#tableBody').empty();
             if ($("#myVerbDropDown")[0].selectedIndex === 0) {
-                getLogs($('#searchString').val(), "", $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val())
+                getLogs($('#searchString').val(), "", $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val(), 
+                    $('#searchTag').val(), $('#searchEventId').val(), $('#searchIpAddress').val(), $('#searchInitialTimeStamp').val(), $('#searchFinalTimeStamp').val())
             } else {
                 filterVerb($(this).val());
             }
@@ -586,7 +661,8 @@
         $("#myStatusCodeDropDown").change(function (event) {
             $('#tableBody').empty();
             if ($("#myStatusCodeDropDown")[0].selectedIndex === 0) {
-                getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), "")
+                getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), "",
+                    $('#searchTag').val(), $('#searchEventId').val(), $('#searchIpAddress').val(), $('#searchInitialTimeStamp').val(), $('#searchFinalTimeStamp').val())
             } else {
                 filterStatusCode($(this).val());
             }
@@ -600,26 +676,34 @@
             }
         });
 
-        function getLogs(searchString = "", verb = "", statusCode = "") {
+        function getLogs(searchString = "", verb = "", statusCode = "", tag = "", eventId = "", ipAddress = "", initialTimeStamp = "", finalTimeStamp = "") {
             $('#rqLoader').show();
             $.ajax({
                 type: "GET",
-                url: "./WTCHDwatchpage?pageNumber=" + pageIndex + "&searchString=" + searchString + "&verbString=" + verb + "&statusCode=" + statusCode,
+                url: "./WTCHDwatchpage?pageNumber=" + pageIndex + "&searchString=" + searchString + "&verbString=" + verb + "&statusCode=" + statusCode + "&tag=" + tag + "&eventId=" + eventId 
+                    + "&ipAddress=" + ipAddress + "&initialTimeStamp=" + initialTimeStamp + "&finalTimeStamp=" + finalTimeStamp,
                 context: document.body,
                 success: function (data) {
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
+                    $('#pageMap0').val(data.pageIndex);
+                    $('#totalPages0').text(" of " + totalPages);
                     $('#pageMap').text("Page " + data.pageIndex + " of " + totalPages);
+
                     if (data.hasNext === false) {
+                        $('#next0').hide();
                         $('#next').hide();
                     }
                     else {
+                        $('#next0').show();
                         $('#next').show();
                     }
 
                     if (data.hasPrevious === false) {
+                        $('#prev0').hide();
                         $('#prev').hide();
                     }
                     else {
+                        $('#prev0').show();
                         $('#prev').show();
                     }
 
@@ -629,7 +713,7 @@
                         const firstDigitStr = String(data.logs[i].responseStatus)[0];
                         var statusColor = firstDigitStr === '2' ? "text-success" : firstDigitStr === '1' || firstDigitStr === '3' ? "text-primary" : "text-danger";
                         const tr = $("<tr data-toggle='modal' data-target='#myModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                            "<td><b>" + data.logs[i].method + "</b></td><td>" + truncate(data.logs[i].path, 50) + "</td><td><b class='" + statusColor + "'> " + data.logs[i].responseStatus + "</b ></td ><td>" + data.logs[i].timeSpent + "</td><td>" + moment(data.logs[i].startTime).format('LLL') + "</td></tr > ");
+                            "<td><b>" + data.logs[i].tag + "</b></td><td><b>" + data.logs[i].method + "</b></td><td>" + truncate(data.logs[i].path, 50) + "</td><td><b class='" + statusColor + "'> " + data.logs[i].responseStatus + "</b ></td ><td>" + data.logs[i].timeSpent + "</td><td>" + moment(data.logs[i].startTime).format('LLL') + "</td></tr > ");
                         tr.on('click', populateModal.bind(null, data.logs[i]));
                         $('#tableBody').append(tr);
                     }
@@ -643,35 +727,43 @@
             });
         }
 
-        function getExceptionLogs(searchString = "") {
+        function getExceptionLogs(searchString = "", negateTypeOf = false, typeOf = "", tag = "", eventId = "", ipAddress = "", initialEncounteredAt = "", finalEncounteredAt = "") {
             $('#exLoader').show();
             $.ajax({
                 type: "GET",
-                url: "./WTCHDwatchpage/Exceptions?pageNumber=" + exPageIndex + "&searchString=" + searchString,
+                url: "./WTCHDwatchpage/Exceptions?pageNumber=" + exPageIndex + "&searchString=" + searchString + "&negateTypeOf=" + negateTypeOf + "&typeOf=" + typeOf + "&tag=" + tag 
+                    + "&eventId=" + eventId + "&ipAddress=" + ipAddress + "&initialEncounteredAt=" + initialEncounteredAt + "&finalEncounteredAt=" + finalEncounteredAt,
                 context: document.body,
                 success: function (data) {
-                    var totalPages = data.totalPages === 0 ? 1 : data.totalPages
+                    var totalPages = data.totalPages === 0 ? 1 : data.totalPages                  
+                    $('#exPageMap0').val(data.pageIndex);
+                    $('#exTotalPages0').text(" of " + totalPages);
                     $('#exPageMap').text("Page " + data.pageIndex + " of " + totalPages);
+
                     if (data.hasNext === false) {
+                        $('#exNext0').hide();
                         $('#exNext').hide();
                     }
                     else {
+                        $('#exNext0').show();
                         $('#exNext').show();
 
                     }
 
                     if (data.hasPrevious === false) {
+                        $('#exPrev0').hide();
                         $('#exPrev').hide();
                     }
                     else {
+                        $('#exPrev0').show();
                         $('#exPrev').show();
                     }
 
                     $('#exLoader').hide();
-
+                
                     for (var i = 0; i < data.logs.length; i++) {
                         const tr = $("<tr data-toggle='modal' data-target='#myExceptionModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                            "<td><b>" + data.logs[i].source + "</b></td><td>" + truncate(data.logs[i].message, 50) + "</td><td>" + data.logs[i].typeOf + "</td><td>" + moment(data.logs[i].encounteredAt).format('LLL') + "</td></tr > ");
+                            "<td><b>" + data.logs[i].tag + "</b></td><td><b>" + data.logs[i].source + "</b></td><td>" + truncate(data.logs[i].message, 50) + "</td><td>" + data.logs[i].typeOf + "</td><td>" + data.logs[i].timeSpent + "</td><td>" + moment(data.logs[i].encounteredAt).format('LLL') + "</td></tr > ");
                         tr.on('click', populateExceptionModal.bind(null, data.logs[i]));
                         $('#tableBodyEx').append(tr);
                     }
@@ -684,27 +776,34 @@
                 }
             });
         }
-        function getInCodeLogs(searchString = "", logLevelString = "") {
+        function getInCodeLogs(searchString = "", logLevelString = "", tag = "", initialEncounteredAt = "", finalEncounteredAt = "") {
             $('#incodeLoader').show();
             $.ajax({
                 type: "GET",
-                url: "./WTCHDwatchpage/Logs?pageNumber=" + inCodePageIndex + "&searchString=" + searchString + "&logLevelString=" + logLevelString,
+                url: "./WTCHDwatchpage/Logs?pageNumber=" + inCodePageIndex + "&searchString=" + searchString + "&logLevelString=" + logLevelString + "&tag=" + tag + "&initialEncounteredAt=" + initialEncounteredAt + "&finalEncounteredAt=" + finalEncounteredAt,
                 context: document.body,
                 success: function (data) {
                     var totalPages = data.totalPages === 0 ? 1 : data.totalPages
+                    $('#inCodePageMap0').val(data.pageIndex);
+                    $('#inCodeTotalPages0').text(" of " + totalPages);
                     $('#inCodePageMap').text("Page " + data.pageIndex + " of " + totalPages);
+                    
                     if (data.hasNext === false) {
+                        $('#inCodeNext0').hide();
                         $('#inCodeNext').hide();
                     }
                     else {
+                        $('#inCodeNext0').show();
                         $('#inCodeNext').show();
 
                     }
 
                     if (data.hasPrevious === false) {
+                        $('#inCodePrev0').hide();
                         $('#inCodePrev').hide();
                     }
                     else {
+                        $('#inCodePrev0').show();
                         $('#inCodePrev').show();
                     }
 
@@ -712,7 +811,7 @@
 
                     for (var i = 0; i < data.logs.length; i++) {
                         const tr = $("<tr data-toggle='modal' data-target='#myInCodeModal' aria-expanded='false' aria-controls='collapse" + i + "' class='collapsed'>" +
-                            "<td><b>" + moment(data.logs[i].timestamp).format('LLL') + "</b></td><td>" + (data.logs[i].callingFrom ??= '') + "\nLine:" + data.logs[i].lineNumber + "</td><td>" + (data.logs[i].callingMethod ??= '') + "</td><td>" + data.logs[i].logLevel + "</td><td>" + truncate(data.logs[i].message, 50) + "</td></tr > ");
+                            "<td><b>" + data.logs[i].tag + "</b></td><td><b>" + moment(data.logs[i].timestamp).format('LLL') + "</b></td><td>" + (data.logs[i].callingFrom ??= '') + "\nLine:" + data.logs[i].lineNumber + "</td><td>" + (data.logs[i].callingMethod ??= '') + "</td><td>" + data.logs[i].logLevel + "</td><td>" + truncate(data.logs[i].message, 50) + "</td></tr > ");
                         tr.on('click', populateInCodeModal.bind(null, data.logs[i]));
                         $('#tableBodyInCode').append(tr);
                     }
@@ -746,27 +845,29 @@
             pageIndex = 1;
             $('#tableBody').empty();
             var ss = $('#searchString').val();
-            getLogs(ss, $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val());
+            getLogs(ss, $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val(), 
+                $('#searchTag').val(), $('#searchEventId').val(), $('#searchIpAddress').val(), $('#searchInitialTimeStamp').val(), $('#searchFinalTimeStamp').val());
         }
 
         function exSearch() {
             $('#tableBodyEx').empty();
             exPageIndex = 1;
             var ss = $('#exSearchString').val();
-            getExceptionLogs(ss, $('#myLogLevelDropDown').val() == "ALL" ? "" : $('#myLogLevelDropDown').val());
+            getExceptionLogs(ss, $('#exNegateTypeOf').prop('checked'), $('#exSearchTypeOf').val(), $('#exSearchTag').val(), $('#exSearchEventId').val(), $('#exSearchIpAddress').val(), $('#exInitialEncounteredAt').val(), $('#exFinalEncounteredAt').val());
         }
 
         function inCodeSearch() {
             $('#tableBodyInCode').empty();
             inCodePageIndex = 1;
             var ss = $('#inCodeSearchString').val();
-            getInCodeLogs(ss);
+            getInCodeLogs(ss, $('#myLogLevelDropDown').val() == "ALL" ? "" : $('#myLogLevelDropDown').val(), $('#inCodeSearchTag').val(), $('#inCodeInitialEncounteredAt').val(), $('#inCodeFinalEncounteredAt').val());
         }
 
         function filterVerb(verbString) {
             pageIndex = 1;
             $('#tableBody').empty();
-            getLogs($('#searchString').val(), verbString, $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val());
+            getLogs($('#searchString').val(), verbString, $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val(),
+                $('#searchTag').val(), $('#searchEventId').val(), $('#searchIpAddress').val(), $('#searchInitialTimeStamp').val(), $('#searchFinalTimeStamp').val());
         }
 
         function filterStatusCode(statusCodeString) {
@@ -778,46 +879,67 @@
         function filterLogLevel(logLevelString) {
             inCodePageIndex = 1;
             $('#tableBodyInCode').empty();
-            getInCodeLogs($('#searchString').val(), logLevelString);
+            getInCodeLogs($('#inCodeSearchString').val(), logLevelString, $('#inCodeSearchTag').val(), $('#inCodeInitialEncounteredAt').val(), $('#inCodeFinalEncounteredAt').val());
         }
 
         function nextPage() {
             ++pageIndex;
             $('#tableBody').empty();
-            getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val());
+            getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val(), 
+                $('#searchTag').val(), $('#searchEventId').val(), $('#searchIpAddress').val(), $('#searchInitialTimeStamp').val(), $('#searchFinalTimeStamp').val());
         }
 
         function prevPage() {
             if (pageIndex > 1)
                 --pageIndex;
             $('#tableBody').empty();
-            getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val());
+            getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val(), 
+                $('#searchTag').val(), $('#searchEventId').val(), $('#searchIpAddress').val(), $('#searchInitialTimeStamp').val(), $('#searchFinalTimeStamp').val());
+        }
+
+        function goToPage(pageNumber) {
+            pageIndex = pageNumber;
+            $('#tableBody').empty();
+            getLogs($('#searchString').val(), $('#myVerbDropDown').val() == "ALL" ? "" : $('#myVerbDropDown').val(), $('#myStatusCodeDropDown').val() == "ALL" ? "" : $('#myStatusCodeDropDown').val(), 
+                $('#searchTag').val(), $('#searchEventId').val(), $('#searchIpAddress').val(), $('#searchInitialTimeStamp').val(), $('#searchFinalTimeStamp').val());
         }
 
         function exNextPage(e) {
             ++exPageIndex;
             $('#tableBodyEx').empty();
-            getExceptionLogs($('#searchString').val());
+            getExceptionLogs($('#exSearchString').val(), $('#exNegateTypeOf').prop('checked'), $('#exSearchTypeOf').val(), $('#exSearchTag').val(), $('#exSearchEventId').val(), $('#exSearchIpAddress').val(), $('#exInitialEncounteredAt').val(), $('#exFinalEncounteredAt').val());
         }
 
         function exPrevPage(e) {
             if (exPageIndex > 1)
                 --exPageIndex;
             $('#tableBodyEx').empty();
-            getExceptionLogs($('#searchString').val());
+            getExceptionLogs($('#exSearchString').val(), $('#exNegateTypeOf').prop('checked'), $('#exSearchTypeOf').val(), $('#exSearchTag').val(), $('#exSearchEventId').val(), $('#exSearchIpAddress').val(), $('#exInitialEncounteredAt').val(), $('#exFinalEncounteredAt').val());
+        }
+
+        function exGoToPage(pageNumber) {
+            exPageIndex = pageNumber;
+            $('#tableBodyEx').empty();
+            getExceptionLogs($('#exSearchString').val(), $('#exNegateTypeOf').prop('checked'), $('#exSearchTypeOf').val(), $('#exSearchTag').val(), $('#exSearchEventId').val(), $('#exSearchIpAddress').val(), $('#exInitialEncounteredAt').val(), $('#exFinalEncounteredAt').val());
         }
 
         function inCodeNextPage(e) {
             ++inCodePageIndex;
             $('#tableBodyInCode').empty();
-            getInCodeLogs($('#searchString').val());
+            getInCodeLogs($('#inCodeSearchString').val(), $('#myLogLevelDropDown').val() == "ALL" ? "" : $('#myLogLevelDropDown').val(), $('#inCodeSearchTag').val(), $('#inCodeInitialEncounteredAt').val(), $('#inCodeFinalEncounteredAt').val());
         }
 
         function inCodePrevPage(e) {
             if (inCodePageIndex > 1)
                 --inCodePageIndex;
             $('#tableBodyInCode').empty();
-            getInCodeLogs($('#searchString').val());
+            getInCodeLogs($('#inCodeSearchString').val(), $('#myLogLevelDropDown').val() == "ALL" ? "" : $('#myLogLevelDropDown').val(), $('#inCodeSearchTag').val(), $('#inCodeInitialEncounteredAt').val(), $('#inCodeFinalEncounteredAt').val());
+        }
+
+        function inCodeGoToPage(pageNumber) {
+            inCodePageIndex = pageNumber;
+            $('#tableBodyInCode').empty();
+            getInCodeLogs($('#inCodeSearchString').val(), $('#myLogLevelDropDown').val() == "ALL" ? "" : $('#myLogLevelDropDown').val(), $('#inCodeSearchTag').val(), $('#inCodeInitialEncounteredAt').val(), $('#inCodeFinalEncounteredAt').val());
         }
 
         function backToList(e) {
@@ -837,6 +959,21 @@
             $('#myVerbDropDown').val("ALL");
             $('#myStatusCodeDropDown').val("ALL");
             $('#myLogLevelDropDown').val("ALL");
+            $('#searchTag').val("");
+            $('#searchEventId').val("");
+            $('#searchIpAddress').val("");
+            $('#searchInitialTimeStamp').val("");
+            $('#searchFinalTimeStamp').val("");
+            $('#exSearchNegateTypeOf').val("");
+            $('#exSearchTypeOf').val("");
+            $('#exSearchTag').val("");
+            $('#exSearchEventId').val("");
+            $('#exSearchIpAddress').val("");
+            $('#exInitialEncounteredAt').val("");
+            $('#exFinalEncounteredAt').val("");
+            $('#inCodeSearchTag').val("");
+            $('#inCodeInitialEncounteredAt').val("");
+            $('#inCodeFinalEncounteredAt').val("");
 
             e = e || window.event;
             e.preventDefault();
@@ -891,6 +1028,7 @@
        
 
         function populateModal(data) {
+            $('#eventId').text(data.eventId);
             $('#host').text(data.host);
             $('#path').text(data.path);
             $('#query').text(data.queryString);
@@ -928,8 +1066,11 @@
                 document.getElementById("reqBodyCopy").style.display = "none";
             }
         }
-
+        
         function populateExceptionModal(data) {
+            $('#exceptionEventId').text(data.eventId);
+            $('#exceptionHost').text(data.host);
+            $('#exceptionIp').text(data.ipAddress);
             $('#exMessage').text(data.message);
             $('#exTypeOf').text(data.typeOf);
             $('#exSource').text(data.source);

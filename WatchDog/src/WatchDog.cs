@@ -32,11 +32,17 @@ namespace WatchDog.src
             WatchDogConfigModel.UserName = _options.WatchPageUsername;
             WatchDogConfigModel.Password = _options.WatchPagePassword;
             WatchDogConfigModel.Blacklist = String.IsNullOrEmpty(_options.Blacklist) ? new string[] { } : _options.Blacklist.Replace(" ", string.Empty).Split(',');
+            WatchDogConfigModel.Tag = _options.Tag; // Allows you to tag your microservices with a specific value.
+            WatchDogConfigModel.HeaderNameEventId = _options.HeaderNameEventId; // Allows you to correlate logging events across different services that are part of the same transaction.
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var requestPath = context.Request.Path.ToString().Remove(0,1);
+            // bug fix for the leading slash          
+            var requestPath = context.Request.Path.ToString();
+            if (!string.IsNullOrEmpty(requestPath) && requestPath.Length > 1)
+                requestPath = requestPath.Remove(0, 1);            
+            
             if (!requestPath.Contains("WTCHDwatchpage") &&
                 !requestPath.Contains("watchdog") &&
                 !requestPath.Contains("WTCHDGstatics") &&
@@ -53,7 +59,7 @@ namespace WatchDog.src
 
                 var watchLog = new WatchLog
                 {
-                    IpAddress = context.Connection.RemoteIpAddress.ToString(),
+                    IpAddress = requestLog.IpAddress,
                     ResponseStatus = responseLog.ResponseStatus,
                     QueryString = requestLog.QueryString,
                     Method = requestLog.Method,
@@ -65,7 +71,9 @@ namespace WatchDog.src
                     RequestHeaders = requestLog.Headers,
                     ResponseHeaders = responseLog.Headers,
                     StartTime = requestLog.StartTime,
-                    EndTime = responseLog.FinishTime
+                    EndTime = responseLog.FinishTime,
+                    Tag = requestLog.Tag,
+                    EventId = requestLog.EventId
                 };
 
                 await DynamicDBManager.InsertWatchLog(watchLog);
@@ -80,18 +88,35 @@ namespace WatchDog.src
         private async Task<RequestModel> LogRequest(HttpContext context)
         {
             var startTime = DateTime.Now;
+            var eventId = string.Empty;
+
+            // Allows you to correlate logging events across different services that are part of the same transaction.
+            if(!string.IsNullOrEmpty(WatchDogConfigModel.HeaderNameEventId))
+            {
+                if (context.Request.Headers.ContainsKey(WatchDogConfigModel.HeaderNameEventId))
+                {
+                    eventId = context.Request.Headers[WatchDogConfigModel.HeaderNameEventId];
+                }   
+                else
+                {
+                    eventId = Guid.NewGuid().ToString();
+                    context.Request.Headers.Add(WatchDogConfigModel.HeaderNameEventId, eventId);
+                }
+            }               
 
             var requestBodyDto = new RequestModel()
             {
                 RequestBody = string.Empty,
                 Host = context.Request.Host.ToString(),
+                IpAddress = context.Connection.RemoteIpAddress.ToString(),
                 Path = context.Request.Path.ToString(),
                 Method = context.Request.Method.ToString(),
                 QueryString = context.Request.QueryString.ToString(),
                 StartTime = startTime,
                 Headers = context.Request.Headers.Select(x => x.ToString()).Aggregate((a, b) => a + ": " + b),
-            };
-
+                Tag = WatchDogConfigModel.Tag,
+                EventId = eventId
+            };      
 
             if (context.Request.ContentLength > 1)
             {

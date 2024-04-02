@@ -42,12 +42,13 @@ namespace WatchDog.src.Managers
             };
 
         // WATCHLOG OPERATIONS
-        public static async Task<Page<WatchLog>> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber) =>
+        public static async Task<Page<WatchLog>> GetAllWatchLogs(string searchString, string verbString, string statusCode, int pageNumber, 
+            string tag, string eventId, string ipAddress, DateTime? initialTimeStamp, DateTime? finalTimeStamp) =>
             GetTargetDbEnum switch
             {
-                TargetDbEnum.SqlDb => await SQLDbHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber),
-                TargetDbEnum.LiteDb => LiteDBHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber),
-                TargetDbEnum.MongoDb => MongoDBHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber),
+                TargetDbEnum.SqlDb => await SQLDbHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber, tag, eventId, ipAddress, initialTimeStamp, finalTimeStamp),
+                TargetDbEnum.LiteDb => LiteDBHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber, tag, eventId, ipAddress, initialTimeStamp, finalTimeStamp),
+                TargetDbEnum.MongoDb => MongoDBHelper.GetAllWatchLogs(searchString, verbString, statusCode, pageNumber, tag, eventId, ipAddress, initialTimeStamp, finalTimeStamp),
                 _ => throw new NotImplementedException()
             };
 
@@ -68,12 +69,13 @@ namespace WatchDog.src.Managers
         }
 
         // WATCH EXCEPTION OPERATIONS
-        public static async Task<Page<WatchExceptionLog>> GetAllWatchExceptionLogs(string searchString, int pageNumber) =>
+        public static async Task<Page<WatchExceptionLog>> GetAllWatchExceptionLogs(string searchString, int pageNumber, bool negateTypeOf, 
+            string typeOf, string tag, string eventId, string ipAddress, DateTime? initialEncounteredAt, DateTime? finalEncounteredAt) =>
             GetTargetDbEnum switch
             {
-                TargetDbEnum.SqlDb => await SQLDbHelper.GetAllWatchExceptionLogs(searchString, pageNumber),
-                TargetDbEnum.LiteDb => LiteDBHelper.GetAllWatchExceptionLogs(searchString, pageNumber),
-                TargetDbEnum.MongoDb => MongoDBHelper.GetAllWatchExceptionLogs(searchString, pageNumber),
+                TargetDbEnum.SqlDb => await SQLDbHelper.GetAllWatchExceptionLogs(searchString, pageNumber, negateTypeOf, typeOf, tag, eventId, ipAddress, initialEncounteredAt, finalEncounteredAt),
+                TargetDbEnum.LiteDb => LiteDBHelper.GetAllWatchExceptionLogs(searchString, pageNumber, negateTypeOf, typeOf, tag, eventId, ipAddress, initialEncounteredAt, finalEncounteredAt),
+                TargetDbEnum.MongoDb => MongoDBHelper.GetAllWatchExceptionLogs(searchString, pageNumber, negateTypeOf, typeOf, tag, eventId, ipAddress, initialEncounteredAt, finalEncounteredAt),
                 _ => throw new NotImplementedException()
             };
 
@@ -94,12 +96,12 @@ namespace WatchDog.src.Managers
         }
 
         // LOG OPERATIONS
-        public static async Task<Page<WatchLoggerModel>> GetAllLogs(string searchString, string logLevelString, int pageNumber) =>
+        public static async Task<Page<WatchLoggerModel>> GetAllLogs(string searchString, string logLevelString, int pageNumber, string tag, DateTime? initialEncounteredAt, DateTime? finalEncounteredAt) =>
             GetTargetDbEnum switch
             {
-                TargetDbEnum.SqlDb => await SQLDbHelper.GetAllLogs(searchString, logLevelString, pageNumber),
-                TargetDbEnum.LiteDb => LiteDBHelper.GetAllLogs(searchString, logLevelString, pageNumber),
-                TargetDbEnum.MongoDb => MongoDBHelper.GetAllLogs(searchString, logLevelString, pageNumber),
+                TargetDbEnum.SqlDb => await SQLDbHelper.GetAllLogs(searchString, logLevelString, pageNumber, tag, initialEncounteredAt, finalEncounteredAt),
+                TargetDbEnum.LiteDb => LiteDBHelper.GetAllLogs(searchString, logLevelString, pageNumber, tag, initialEncounteredAt, finalEncounteredAt),
+                TargetDbEnum.MongoDb => MongoDBHelper.GetAllLogs(searchString, logLevelString, pageNumber, tag, initialEncounteredAt, finalEncounteredAt),
                 _ => throw new NotImplementedException()
             };
 

@@ -86,7 +86,8 @@ namespace WatchDog
                     CallingFrom = Path.GetFileName(filePath),
                     CallingMethod = callerName,
                     LineNumber = lineNumber,
-                    LogLevel = level
+                    LogLevel = level,
+                    Tag = WatchDogConfigModel.Tag
                 };
 
                 //Insert
