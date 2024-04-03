@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+		<TargetFrameworks>netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
 		<Description>WatchDog is a Realtime Message, Event, HTTP (Request &amp; Response) and Exception logger and viewer for ASP.Net Core Web Apps and APIs. It allows developers log and view messages, events, http requests made to their web application and also exception caught during runtime in their web applications, all in Realtime. It leverages SignalR for real-time monitoring and LiteDb a Serverless MongoDB-like database with no configuration with the option of using your external databases.</Description>
 		<PackageProjectUrl>https://github.com/IzyPro/WatchDog</PackageProjectUrl>
 		<PackageIcon>favicon.png</PackageIcon>
@@ -42,25 +42,36 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Dapper" Version="2.0.123" />
-		<PackageReference Include="LiteDB" Version="5.0.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.0" />		
+		<PackageReference Include="MongoDB.Driver" Version="2.24.0" />
+		<PackageReference Include="MySql.Data" Version="8.3.0" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Dapper" Version="2.1.35" />
+		<PackageReference Include="LiteDB" Version="5.0.19" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' != 'net7.0'">
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="3.1.22" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.22" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="3.1.22" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.22" />
-		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.0" />
-		<PackageReference Include="MongoDB.Driver" Version="2.18.0" />
-		<PackageReference Include="MySql.Data" Version="8.0.29" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Npgsql" Version="[5.0.0,5.0.10]" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
 		<PackageReference Include="Npgsql" Version="6.0.4" Condition="'$(TargetFramework)' == 'net6.0'" />
-		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+		<PackageReference Include="MongoDB.Driver" Version="2.18.0" />
 	</ItemGroup>
 
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.14" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />	
+		<PackageReference Include="Npgsql" Version="7.0.6" />
+	</ItemGroup>	
 </Project>

@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchDogCompleteTestAPI", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchDogCompleteApiNet6", "WatchDogCompleteApiNet6\WatchDogCompleteApiNet6.csproj", "{B0EA2031-4C36-442F-BC82-618AB0A5DA16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatchDogCompleteMVCTest", "WatchDogCompleteMVCTest\WatchDogCompleteMVCTest.csproj", "{0DCCA957-8A36-405D-8092-233A3759732D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchDogCompleteMVCTest", "WatchDogCompleteMVCTest\WatchDogCompleteMVCTest.csproj", "{0DCCA957-8A36-405D-8092-233A3759732D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchDogCompleteApiNet7", "WatchDogCompleteApiNet7\WatchDogCompleteApiNet7.csproj", "{C0139FA9-FFAC-4E8B-B545-4F3761F91094}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{0DCCA957-8A36-405D-8092-233A3759732D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DCCA957-8A36-405D-8092-233A3759732D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DCCA957-8A36-405D-8092-233A3759732D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0139FA9-FFAC-4E8B-B545-4F3761F91094}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0139FA9-FFAC-4E8B-B545-4F3761F91094}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0139FA9-FFAC-4E8B-B545-4F3761F91094}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0139FA9-FFAC-4E8B-B545-4F3761F91094}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
