@@ -1,11 +1,11 @@
 ﻿using Dapper;
+using Microsoft.Data.SqlClient;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MySql.Data.MySqlClient;
 using Npgsql;
 using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using WatchDog.src.Enums;
 using WatchDog.src.Exceptions;
@@ -38,7 +38,7 @@ namespace WatchDog.src.Data
                 try
                 {
                     connection.Open();
-                    _ =  connection.Query(createWatchTablesQuery);
+                    _ = connection.Query(createWatchTablesQuery);
                     connection.Close();
                 }
                 catch (SqlException ae)
@@ -83,7 +83,7 @@ namespace WatchDog.src.Data
                     _counter.InsertOne(sequence);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message.ToString());
                 throw new WatchDogDatabaseException(ex.Message);
