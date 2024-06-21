@@ -53,6 +53,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="3.1.22" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.22" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="3.1.22" />
@@ -65,7 +66,6 @@
 		<PackageReference Include="Npgsql" Version="[5.0.0,5.0.10]" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
 		<PackageReference Include="Npgsql" Version="6.0.4" Condition="'$(TargetFramework)' == 'net6.0'" />
 		<PackageReference Include="Npgsql" Version="8.0.2" Condition="'$(TargetFramework)' == 'net8.0'" />
-		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
 	</ItemGroup>
 
 </Project>
