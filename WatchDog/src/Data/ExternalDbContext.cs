@@ -5,12 +5,12 @@ using MySql.Data.MySqlClient;
 using Npgsql;
 using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using WatchDog.src.Enums;
 using WatchDog.src.Exceptions;
 using WatchDog.src.Models;
 using WatchDog.src.Utilities;
+using Microsoft.Data.SqlClient;
 
 namespace WatchDog.src.Data
 {
@@ -44,7 +44,9 @@ namespace WatchDog.src.Data
                 catch (SqlException ae)
                 {
                     Debug.WriteLine(ae.Message.ToString());
+#pragma warning disable CA2200 // Rethrow to preserve stack details
                     throw ae;
+#pragma warning restore CA2200 // Rethrow to preserve stack details
                 }
                 catch (Exception ex)
                 {
