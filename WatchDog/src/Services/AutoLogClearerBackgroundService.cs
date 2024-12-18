@@ -96,7 +96,7 @@ namespace WatchDog.src.Services
             }
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public override Task StopAsync(CancellationToken cancellationToken)
         {
             logger.LogInformation("Log Clearer Background service is stopping");
             return Task.CompletedTask;

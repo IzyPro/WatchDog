@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.IO;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -136,6 +137,7 @@ namespace WatchDog.src
                 }
                 catch (OutOfMemoryException ex)
                 {
+                    Debug.WriteLine(ex.Message.ToString());
                     return new ResponseModel
                     {
                         ResponseBody = "OutOfMemoryException occured while trying to read response body",
